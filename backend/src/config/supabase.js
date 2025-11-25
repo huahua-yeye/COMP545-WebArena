@@ -3,11 +3,23 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// 调试：打印所有环境变量（生产环境请移除）
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+console.log('🔍 Environment Variables Check:');
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('PORT:', process.env.PORT);
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? '✅ EXISTS (length: ' + process.env.SUPABASE_URL.length + ')' : '❌ MISSING');
+console.log('SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? '✅ EXISTS (length: ' + process.env.SUPABASE_ANON_KEY.length + ')' : '❌ MISSING');
+console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
 // Validate environment variables
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('❌ SUPABASE_URL:', supabaseUrl || 'undefined');
+  console.error('❌ SUPABASE_ANON_KEY:', supabaseAnonKey || 'undefined');
   throw new Error('Missing Supabase environment variables. Please check your .env file.');
 }
 
