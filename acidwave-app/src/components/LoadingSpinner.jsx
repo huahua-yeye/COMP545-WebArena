@@ -1,6 +1,7 @@
 // Loading spinner component
 import React from 'react';
 import { Disc } from 'lucide-react';
+import { API_CONFIG } from '../services/api';
 
 export default function LoadingSpinner({ message = "LOADING_DATA..." }) {
   return (
@@ -34,9 +35,13 @@ export function ErrorDisplay({ error, retry }) {
           RETRY_CONNECTION
         </button>
       )}
-      <p className="text-xs text-gray-700 font-mono mt-4">
-        Backend URL: http://localhost:3000/api
-      </p>
+      <div className="text-xs text-gray-700 font-mono mt-4 text-center">
+        <p className="mb-1">Backend URL:</p>
+        <p className="text-[#CCFF00] font-bold">{API_CONFIG.baseURL}</p>
+        <p className="text-gray-600 mt-2 text-[10px]">
+          {API_CONFIG.baseURL.includes('localhost') ? '🔴 LOCAL' : '🟢 PRODUCTION'}
+        </p>
+      </div>
     </div>
   );
 }
