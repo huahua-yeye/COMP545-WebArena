@@ -1,5 +1,5 @@
 -- ============================================
--- Mock Data for acidwave Clone
+-- Mock Data for acidwave
 -- ============================================
 -- This file contains realistic mock data with free music
 -- All music URLs are from legitimate free sources (Bensound, Pixabay, etc.)

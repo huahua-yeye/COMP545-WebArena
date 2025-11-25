@@ -1,7 +1,7 @@
 {
   "name": "acidwave-backend",
   "version": "1.0.0",
-  "description": "acidwave clone backend API with Supabase",
+  "description": "acidwave backend API with Supabase",
   "type": "module",
   "main": "src/server.js",
   "scripts": {

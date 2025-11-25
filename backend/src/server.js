@@ -32,7 +32,7 @@ app.use('/api/playlists', playlistsRouter);
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
-    message: 'acidwave Clone API',
+    message: 'acidwave API',
     version: '2.0.0',
     endpoints: {
       health: '/api/health',
