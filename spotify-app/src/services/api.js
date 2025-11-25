@@ -1,8 +1,22 @@
 // API service layer for backend integration
 
 // API base URL - switches by environment
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// 添加环境变量支持
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+console.log('🔗 API URL:', API_BASE_URL); // 调试用
+
+// 导出配置
+export const API_CONFIG = {
+  baseURL: API_BASE_URL
+};
+
+// 你的 API 方法...
+export const fetchSongs = async () => {
+  const response = await fetch(`${API_CONFIG.baseURL}/api/songs`);
+  return response.json();
+};
 /**
  * Generic fetch wrapper
  */
