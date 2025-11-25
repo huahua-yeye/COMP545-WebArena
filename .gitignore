@@ -1,0 +1,42 @@
+# =========================
+node_modules/
+# =========================
+.pnpm-store/
+.yarn/
+.yarn-cache/
+# =========================
+dist/
+build/
+coverage/
+# =========================
+*.tsbuildinfo
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+# =========================
+# keep *.env.example，
+# =========================
+.env
+.env.*        
+**/.env
+**/.env.*     
+# =========================
+#  DE 
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+.cursor/
+# =========================
+.DS_Store
+Thumbs.db
+# =========================
+*.local
+.claude
+
+comment/
