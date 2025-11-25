@@ -1,5 +1,5 @@
 -- ============================================
--- Spotify Clone Database Schema v2.0
+-- acidwave Clone Database Schema v2.0
 -- ============================================
 -- Run this file in Supabase SQL Editor
 -- This will create all tables, indexes, triggers, and functions

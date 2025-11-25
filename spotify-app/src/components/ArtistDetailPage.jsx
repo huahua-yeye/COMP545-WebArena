@@ -284,15 +284,15 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
                 )}
                 {artist.social_links && Object.keys(artist.social_links).length > 0 && (
                   <>
-                    {artist.social_links.spotify && (
+                    {artist.social_links.acidwave && (
                       <a
-                        href={artist.social_links.spotify}
+                        href={artist.social_links.acidwave}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 px-3 py-1 bg-[#111] border border-[#333] rounded hover:border-[#1DB954] hover:text-[#1DB954] text-gray-400 text-sm transition-colors"
                       >
                         <ExternalLink size={14} />
-                        Spotify
+                        acidwave
                       </a>
                     )}
                   </>

@@ -1,5 +1,5 @@
 -- ============================================
--- Mock Data for Spotify Clone
+-- Mock Data for acidwave Clone
 -- ============================================
 -- This file contains realistic mock data with free music
 -- All music URLs are from legitimate free sources (Bensound, Pixabay, etc.)
