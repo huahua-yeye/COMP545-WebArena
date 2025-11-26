@@ -43,7 +43,8 @@ import {
   Star,
   Filter,
   LogOut,
-  User
+  User,
+  Menu
 } from 'lucide-react';
 import AuthPage from './AuthPage';
 import { useSongs, usePlaylists } from './hooks/useAPI';
@@ -414,6 +415,9 @@ export default function App() {
   // Auth State
   const [currentUser, setCurrentUser] = useState(null);
   const [showAuthPage, setShowAuthPage] = useState(false);
+  
+  // Mobile Sidebar State
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // API Data Hooks
   const { data: apiSongs, loading: songsLoading, error: songsError, execute: reloadSongs } = useSongs();
@@ -831,8 +835,21 @@ export default function App() {
 
       <div className="flex-1 flex overflow-hidden relative z-10">
         
+        {/* Mobile Sidebar Overlay */}
+        {isSidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+        
         {/* --- LEFT SIDEBAR --- */}
-        <div className="w-64 bg-black flex flex-col shrink-0 border-r border-[#333]">
+        <div className={`
+          w-64 bg-black flex flex-col shrink-0 border-r border-[#333]
+          fixed lg:relative inset-y-0 left-0 z-50
+          transform transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}>
           <div className="h-20 flex items-center justify-center border-b border-[#333] bg-[#0a0a0a] relative overflow-hidden group">
              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
              <h1 className="text-3xl font-black italic tracking-tighter text-white" style={{ textShadow: '2px 2px 0px #CCFF00' }}>ACID<span className="text-transparent bg-clip-text bg-gradient-to-b from-gray-100 to-gray-500">WAVE</span></h1>
@@ -932,13 +949,22 @@ export default function App() {
         <div className="flex-1 overflow-y-auto bg-[#050505] relative custom-scrollbar">
           
           {/* Top Bar */}
-          <div className="sticky top-0 z-20 px-8 py-5 flex justify-end items-center bg-[#050505]/90 backdrop-blur-md border-b border-[#333]">
-             <div className="flex gap-4 items-center">
+          <div className="sticky top-0 z-20 px-4 sm:px-8 py-5 flex justify-between items-center bg-[#050505]/90 backdrop-blur-md border-b border-[#333]">
+             {/* Mobile Menu Button */}
+             <button
+               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+               className="lg:hidden text-gray-400 hover:text-[#CCFF00] transition-colors p-2 border border-[#333] hover:border-[#CCFF00]"
+             >
+               <Menu size={20} />
+             </button>
+             
+             {/* Right Side Icons */}
+             <div className="flex gap-4 items-center ml-auto">
                 <Bell size={18} className="hover:text-[#CCFF00] cursor-pointer" />
              </div>
           </div>
 
-          <div className="p-8 pb-32 h-full">
+          <div className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-32 h-full">
 
              {/* Loading and error states */}
              {songsLoading && (currentView === 'songs' || currentView === 'albums') && (
@@ -992,43 +1018,43 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Songs Table */}
-                  <div className="w-full text-left border border-[#333] bg-[#0a0a0a]">
-                     {/* Table Header */}
-                     <div className="grid grid-cols-[40px_3fr_2fr_2fr_60px_60px_40px] gap-4 p-3 border-b border-[#333] bg-black text-[#CCFF00] text-[10px] font-bold uppercase tracking-widest sticky top-0">
-                        <div className="flex justify-center"><Square size={14} /></div>
-                        <div>Title</div>
-                        <div className="hidden md:block">Album</div>
-                        <div className="hidden sm:block">Artist</div>
-                        <div className="hidden lg:block">Year</div>
-                        <div>Time</div>
-                        <div className="text-center"><Heart size={12} /></div>
-                     </div>
+                   {/* Songs Table */}
+                   <div className="w-full text-left border border-[#333] bg-[#0a0a0a] overflow-x-auto">
+                      {/* Table Header */}
+                      <div className="grid grid-cols-[32px_minmax(120px,3fr)_minmax(100px,2fr)_minmax(100px,2fr)_50px_50px_32px] sm:grid-cols-[40px_3fr_2fr_2fr_60px_60px_40px] gap-2 sm:gap-4 p-2 sm:p-3 border-b border-[#333] bg-black text-[#CCFF00] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest sticky top-0">
+                         <div className="flex justify-center"><Square size={12} className="sm:w-[14px] sm:h-[14px]" /></div>
+                         <div>Title</div>
+                         <div className="hidden md:block">Album</div>
+                         <div className="hidden sm:block">Artist</div>
+                         <div className="hidden lg:block">Year</div>
+                         <div>Time</div>
+                         <div className="text-center"><Heart size={10} className="sm:w-3 sm:h-3" /></div>
+                      </div>
 
-                     {/* Table Rows */}
-                     <div className="divide-y divide-[#222]">
-                        {songsData.items.map((track) => (
-                           <div
-                              key={track.id}
-                              onClick={() => playSong(track)}
-                              className={`grid grid-cols-[40px_3fr_2fr_2fr_60px_60px_40px] gap-4 p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-xs font-mono ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-gray-400'}`}
-                           >
-                              <div className="flex justify-center">
-                                 <div className={`w-3 h-3 border border-[#444] ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'group-hover:border-[#CCFF00]'}`}></div>
-                              </div>
-                              <div className="font-bold truncate text-white">{track.title}</div>
-                              <div className="hidden md:block truncate group-hover:text-white">{track.album}</div>
-                              <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
-                              <div className="hidden lg:block opacity-50">{track.year}</div>
-                              <div>{formatTime(track.duration)}</div>
-                              <div className="flex justify-center" onClick={(e) => toggleFavorite(e, track.id)}>
-                                <Heart
-                                  size={14}
-                                  className={`transition-all hover:scale-125 ${favorites.includes(track.id) ? 'text-[#FF00FF] fill-[#FF00FF]' : 'text-gray-700 hover:text-[#FF00FF]'}`}
-                                />
-                              </div>
-                           </div>
-                        ))}
+                      {/* Table Rows */}
+                      <div className="divide-y divide-[#222]">
+                         {songsData.items.map((track) => (
+                            <div
+                               key={track.id}
+                               onClick={() => playSong(track)}
+                               className={`grid grid-cols-[32px_minmax(120px,3fr)_minmax(100px,2fr)_minmax(100px,2fr)_50px_50px_32px] sm:grid-cols-[40px_3fr_2fr_2fr_60px_60px_40px] gap-2 sm:gap-4 p-2 sm:p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-[10px] sm:text-xs font-mono ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-gray-400'}`}
+                            >
+                               <div className="flex justify-center">
+                                  <div className={`w-2 h-2 sm:w-3 sm:h-3 border border-[#444] ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'group-hover:border-[#CCFF00]'}`}></div>
+                               </div>
+                               <div className="font-bold truncate text-white">{track.title}</div>
+                               <div className="hidden md:block truncate group-hover:text-white">{track.album}</div>
+                               <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
+                               <div className="hidden lg:block opacity-50">{track.year}</div>
+                               <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
+                               <div className="flex justify-center" onClick={(e) => toggleFavorite(e, track.id)}>
+                                 <Heart
+                                   size={12}
+                                   className={`sm:w-[14px] sm:h-[14px] transition-all hover:scale-125 ${favorites.includes(track.id) ? 'text-[#FF00FF] fill-[#FF00FF]' : 'text-gray-700 hover:text-[#FF00FF]'}`}
+                                 />
+                               </div>
+                            </div>
+                         ))}
                         {songsData.items.length === 0 && (
                           <div className="p-8 text-center text-gray-600 text-xs font-mono">NO_DATA_FOUND</div>
                         )}
@@ -1054,35 +1080,35 @@ export default function App() {
                     <p className="font-mono text-xs text-gray-500">[ ENCRYPTED COLLECTION // {favorites.length} ITEMS ]</p>
                   </div>
 
-                  <div className="w-full text-left border border-[#333] bg-[#0a0a0a]">
-                     <div className="grid grid-cols-[40px_3fr_2fr_2fr_60px_40px] gap-4 p-3 border-b border-[#333] bg-black text-[#FF00FF] text-[10px] font-bold uppercase tracking-widest sticky top-0">
-                        <div className="flex justify-center"><Square size={14} /></div>
-                        <div>Title</div>
-                        <div className="hidden md:block">Album</div>
-                        <div className="hidden sm:block">Artist</div>
-                        <div>Time</div>
-                        <div className="text-center"><Heart size={12} /></div>
-                     </div>
+                   <div className="w-full text-left border border-[#333] bg-[#0a0a0a] overflow-x-auto">
+                      <div className="grid grid-cols-[32px_minmax(120px,3fr)_minmax(100px,2fr)_minmax(100px,2fr)_50px_32px] sm:grid-cols-[40px_3fr_2fr_2fr_60px_40px] gap-2 sm:gap-4 p-2 sm:p-3 border-b border-[#333] bg-black text-[#FF00FF] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest sticky top-0">
+                         <div className="flex justify-center"><Square size={12} className="sm:w-[14px] sm:h-[14px]" /></div>
+                         <div>Title</div>
+                         <div className="hidden md:block">Album</div>
+                         <div className="hidden sm:block">Artist</div>
+                         <div>Time</div>
+                         <div className="text-center"><Heart size={10} className="sm:w-3 sm:h-3" /></div>
+                      </div>
 
-                     <div className="divide-y divide-[#222]">
-                        {getFavorites().map((track) => (
-                           <div
-                              key={track.id}
-                              onClick={() => playSong(track)}
-                              className={`grid grid-cols-[40px_3fr_2fr_2fr_60px_40px] gap-4 p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-xs font-mono ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-gray-400'}`}
-                           >
-                              <div className="flex justify-center">
-                                 <div className={`w-3 h-3 border border-[#444] ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'group-hover:border-[#CCFF00]'}`}></div>
-                              </div>
-                              <div className="font-bold truncate text-white">{track.title}</div>
-                              <div className="hidden md:block truncate group-hover:text-white">{track.album}</div>
-                              <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
-                              <div>{formatTime(track.duration)}</div>
-                              <div className="flex justify-center" onClick={(e) => toggleFavorite(e, track.id)}>
-                                <Heart size={14} className="text-[#FF00FF] fill-[#FF00FF] transition-all hover:scale-125" />
-                              </div>
-                           </div>
-                        ))}
+                      <div className="divide-y divide-[#222]">
+                         {getFavorites().map((track) => (
+                            <div
+                               key={track.id}
+                               onClick={() => playSong(track)}
+                               className={`grid grid-cols-[32px_minmax(120px,3fr)_minmax(100px,2fr)_minmax(100px,2fr)_50px_32px] sm:grid-cols-[40px_3fr_2fr_2fr_60px_40px] gap-2 sm:gap-4 p-2 sm:p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-[10px] sm:text-xs font-mono ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-gray-400'}`}
+                            >
+                               <div className="flex justify-center">
+                                  <div className={`w-2 h-2 sm:w-3 sm:h-3 border border-[#444] ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'group-hover:border-[#CCFF00]'}`}></div>
+                               </div>
+                               <div className="font-bold truncate text-white">{track.title}</div>
+                               <div className="hidden md:block truncate group-hover:text-white">{track.album}</div>
+                               <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
+                               <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
+                               <div className="flex justify-center" onClick={(e) => toggleFavorite(e, track.id)}>
+                                 <Heart size={12} className="sm:w-[14px] sm:h-[14px] text-[#FF00FF] fill-[#FF00FF] transition-all hover:scale-125" />
+                               </div>
+                            </div>
+                         ))}
                         {favorites.length === 0 && (
                           <div className="p-12 text-center flex flex-col items-center justify-center text-gray-600 font-mono border-2 border-dashed border-[#333] m-4 bg-[#050505]">
                              <Heart size={48} className="mb-4 text-[#333]" />
@@ -1109,7 +1135,7 @@ export default function App() {
                           ))}
                       </div>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
                     {albumsData.items.map(song => (
                        <SongCard
                          key={song.id}
@@ -1166,7 +1192,7 @@ export default function App() {
                   )}
 
                   {!artistsLoading && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8">
                       {artistsData.items.map(artist => (
                         <div 
                           key={artist.id} 
@@ -1295,35 +1321,35 @@ export default function App() {
                         </span>
                      </div>
                   </div>
-                  <div className="w-full text-left border border-[#333] bg-[#0a0a0a]">
-                     <div className="grid grid-cols-[40px_40px_2fr_1.5fr_1.5fr_80px] gap-4 p-3 border-b border-[#333] bg-black text-[#CCFF00] text-[10px] font-bold uppercase tracking-widest sticky top-0">
-                        <div className="flex justify-center"><Square size={14} /></div>
-                        <div>#</div>
-                        <div>Title</div>
-                        <div>Album</div>
-                        <div>Artist</div>
-                        <div>Time</div>
-                     </div>
-                     <div className="divide-y divide-[#222]">
-                        {playlistData.items.length > 0 ? (
-                          playlistData.items.map((track, i) => (
-                            <div 
-                              key={track.id} 
-                              onClick={() => playSong(track)} 
-                              onContextMenu={(e) => handlePlaylistTrackContextMenu(e, track)}
-                              className={`grid grid-cols-[40px_40px_2fr_1.5fr_1.5fr_80px] gap-4 p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-xs font-mono ${currentSong?.id === track.id ? 'bg-[#CCFF00]/10 text-[#CCFF00]' : 'text-gray-400'}`}
-                            >
-                              <div className="flex justify-center">
-                                <div className={`w-3 h-3 border ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'border-[#444] group-hover:border-[#CCFF00]'}`}></div>
-                              </div>
-                              <div className={currentSong?.id === track.id ? 'text-[#CCFF00]' : 'group-hover:text-white'}>{(playlistPage - 1) * PLAYLIST_ITEMS_PER_PAGE + i + 1}</div>
-                              <div className={`font-bold truncate ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-white'}`}>{track.title}</div>
-                              <div className="truncate hover:text-white">{track.album}</div>
-                              <div className="truncate hover:text-white">{track.artist}</div>
-                              <div>{formatTime(track.duration)}</div>
-                            </div>
-                          ))
-                        ) : (
+                   <div className="w-full text-left border border-[#333] bg-[#0a0a0a] overflow-x-auto">
+                      <div className="grid grid-cols-[32px_32px_minmax(120px,2fr)_minmax(100px,1.5fr)_minmax(100px,1.5fr)_60px] sm:grid-cols-[40px_40px_2fr_1.5fr_1.5fr_80px] gap-2 sm:gap-4 p-2 sm:p-3 border-b border-[#333] bg-black text-[#CCFF00] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest sticky top-0">
+                         <div className="flex justify-center"><Square size={12} className="sm:w-[14px] sm:h-[14px]" /></div>
+                         <div>#</div>
+                         <div>Title</div>
+                         <div className="hidden sm:block">Album</div>
+                         <div className="hidden md:block">Artist</div>
+                         <div>Time</div>
+                      </div>
+                      <div className="divide-y divide-[#222]">
+                         {playlistData.items.length > 0 ? (
+                           playlistData.items.map((track, i) => (
+                             <div 
+                               key={track.id} 
+                               onClick={() => playSong(track)} 
+                               onContextMenu={(e) => handlePlaylistTrackContextMenu(e, track)}
+                               className={`grid grid-cols-[32px_32px_minmax(120px,2fr)_minmax(100px,1.5fr)_minmax(100px,1.5fr)_60px] sm:grid-cols-[40px_40px_2fr_1.5fr_1.5fr_80px] gap-2 sm:gap-4 p-2 sm:p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-[10px] sm:text-xs font-mono ${currentSong?.id === track.id ? 'bg-[#CCFF00]/10 text-[#CCFF00]' : 'text-gray-400'}`}
+                             >
+                               <div className="flex justify-center">
+                                 <div className={`w-2 h-2 sm:w-3 sm:h-3 border ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'border-[#444] group-hover:border-[#CCFF00]'}`}></div>
+                               </div>
+                               <div className={currentSong?.id === track.id ? 'text-[#CCFF00]' : 'group-hover:text-white'}>{(playlistPage - 1) * PLAYLIST_ITEMS_PER_PAGE + i + 1}</div>
+                               <div className={`font-bold truncate ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-white'}`}>{track.title}</div>
+                               <div className="hidden sm:block truncate hover:text-white">{track.album}</div>
+                               <div className="hidden md:block truncate hover:text-white">{track.artist}</div>
+                               <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
+                             </div>
+                           ))
+                         ) : (
                           <div className="p-12 text-center text-gray-500">
                             <ListMusic size={48} className="mx-auto mb-4 text-gray-600" />
                             <p className="text-sm font-mono">EMPTY_PLAYLIST</p>
@@ -1404,56 +1430,97 @@ export default function App() {
         </div>
       </div>
 
-      {/* --- BOTTOM PLAYER (CHROME BAR) --- */}
-      {currentSong && (
-      <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-[#111] to-black border-t border-[#333] flex items-center justify-between px-6 z-[100]">
-         <div className="w-[30%] flex items-center gap-4 group cursor-pointer" onClick={() => handleOpenAlbumDetail(currentSong)}>
-            <div className={`w-14 h-14 border border-[#333] relative overflow-hidden ${isPlaying ? 'animate-pulse' : ''} group-hover:border-[#CCFF00] transition-colors`}>
-               <img src={currentSong.cover} className="w-full h-full object-cover saturate-50 group-hover:saturate-100 opacity-80 group-hover:opacity-100 transition-all" alt=""/>
-               <div className="absolute inset-0 bg-gradient-to-tr from-[#CCFF00]/20 to-transparent"></div>
-               <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                 <Album size={24} className="text-[#CCFF00]" />
-               </div>
-            </div>
-            <div className="hidden sm:block">
-               <div className="text-white text-sm font-bold font-mono tracking-wide group-hover:text-[#CCFF00] transition-colors">{currentSong.title}</div>
-               <div className="text-[10px] text-[#CCFF00] uppercase tracking-widest group-hover:text-white transition-colors">{currentSong.artist}</div>
-            </div>
-            <Heart size={16} className={`transition-all hover:scale-125 ml-2 ${favorites.includes(currentSong.id) ? 'text-[#FF00FF] fill-[#FF00FF]' : 'text-[#333] hover:text-[#FF00FF]'}`} onClick={(e) => toggleFavorite(e, currentSong.id)} />
-         </div>
-         <div className="w-[40%] flex flex-col items-center gap-2">
-            <div className="flex items-center gap-6">
-               <Shuffle size={16} className="text-gray-500 hover:text-white cursor-pointer" />
-               <SkipBack onClick={skipPrev} size={20} className="text-gray-300 hover:text-[#CCFF00] cursor-pointer" />
-               <button onClick={togglePlay} className="w-12 h-12 bg-gradient-to-b from-gray-200 via-white to-gray-400 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-105 transition-transform active:scale-95">
-                 {isPlaying ? <Pause size={20} fill="black" /> : <Play size={20} fill="black" className="ml-1" />}
-               </button>
-               <SkipForward onClick={skipNext} size={20} className="text-gray-300 hover:text-[#CCFF00] cursor-pointer" />
-               <Repeat size={16} className="text-gray-500 hover:text-white cursor-pointer" />
-            </div>
-            <div className="w-full flex items-center gap-3 text-[10px] font-mono font-bold text-gray-500">
-               <span>{formatTime(progress)}</span>
-               <div className="flex-1 h-2 bg-[#111] border border-[#333] relative cursor-pointer group">
-                  <div className="h-full bg-[#CCFF00] relative shadow-[0_0_8px_#CCFF00]" style={{ width: `${(progress / (duration || 1)) * 100}%` }}></div>
-                  <input type="range" min={0} max={duration || 0} value={progress} onChange={handleSeek} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-               </div>
-               <span>{formatTime(duration || currentSong.duration)}</span>
-            </div>
-         </div>
-         <div className="w-[30%] flex items-center justify-end gap-4">
-            <SongAttributionButton song={currentSong} />
-            <Mic2 size={16} className="hidden sm:block text-gray-600" />
-            <ListMusic size={16} className="hidden sm:block text-gray-600" />
-            <div className="flex items-center gap-2 w-28 group">
-               <Volume2 size={16} className="text-gray-400" />
-               <div className="flex-1 h-1 bg-[#333] relative">
-                  <div className="h-full bg-white group-hover:bg-[#CCFF00]" style={{ width: `${volume * 100}%` }}></div>
-                  <input type="range" min={0} max={1} step={0.01} value={volume} onChange={(e) => setVolume(parseFloat(e.target.value))} className="absolute inset-0 opacity-0 cursor-pointer" />
-               </div>
-            </div>
-         </div>
-      </div>
-      )}
+       {/* --- BOTTOM PLAYER (CHROME BAR) --- */}
+       {currentSong && (
+       <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-b from-[#111] to-black border-t border-[#333] z-[100]">
+          {/* Mobile Layout - Compact */}
+          <div className="lg:hidden">
+             {/* Progress Bar on Top for Mobile */}
+             <div className="w-full h-1 bg-[#111] border-b border-[#333] relative">
+                <div className="h-full bg-[#CCFF00] relative shadow-[0_0_8px_#CCFF00]" style={{ width: `${(progress / (duration || 1)) * 100}%` }}></div>
+                <input type="range" min={0} max={duration || 0} value={progress} onChange={handleSeek} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+             </div>
+             
+             {/* Compact Player Controls */}
+             <div className="flex items-center justify-between px-3 py-2 h-16">
+                {/* Left: Song Info */}
+                <div className="flex items-center gap-2 flex-1 min-w-0 group cursor-pointer" onClick={() => handleOpenAlbumDetail(currentSong)}>
+                   <div className={`w-10 h-10 border border-[#333] relative overflow-hidden flex-shrink-0 ${isPlaying ? 'animate-pulse' : ''} group-hover:border-[#CCFF00] transition-colors`}>
+                      <img src={currentSong.cover} className="w-full h-full object-cover saturate-50 group-hover:saturate-100 opacity-80 group-hover:opacity-100 transition-all" alt=""/>
+                   </div>
+                   <div className="flex-1 min-w-0">
+                      <div className="text-white text-xs font-bold font-mono tracking-wide truncate">{currentSong.title}</div>
+                      <div className="text-[9px] text-[#CCFF00] uppercase tracking-widest truncate">{currentSong.artist}</div>
+                   </div>
+                </div>
+                
+                {/* Center: Play Controls */}
+                <div className="flex items-center gap-3 px-2">
+                   <SkipBack onClick={skipPrev} size={18} className="text-gray-300 hover:text-[#CCFF00] cursor-pointer flex-shrink-0" />
+                   <button onClick={togglePlay} className="w-10 h-10 bg-gradient-to-b from-gray-200 via-white to-gray-400 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-105 transition-transform active:scale-95 flex-shrink-0">
+                     {isPlaying ? <Pause size={16} fill="black" /> : <Play size={16} fill="black" className="ml-0.5" />}
+                   </button>
+                   <SkipForward onClick={skipNext} size={18} className="text-gray-300 hover:text-[#CCFF00] cursor-pointer flex-shrink-0" />
+                </div>
+                
+                {/* Right: Attribution & Heart */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                   <SongAttributionButton song={currentSong} />
+                   <Heart size={16} className={`transition-all hover:scale-125 ${favorites.includes(currentSong.id) ? 'text-[#FF00FF] fill-[#FF00FF]' : 'text-[#333] hover:text-[#FF00FF]'}`} onClick={(e) => toggleFavorite(e, currentSong.id)} />
+                </div>
+             </div>
+          </div>
+
+          {/* Desktop Layout - Full */}
+          <div className="hidden lg:flex items-center justify-between px-6 h-24">
+             <div className="w-[30%] flex items-center gap-4 group cursor-pointer" onClick={() => handleOpenAlbumDetail(currentSong)}>
+                <div className={`w-14 h-14 border border-[#333] relative overflow-hidden ${isPlaying ? 'animate-pulse' : ''} group-hover:border-[#CCFF00] transition-colors`}>
+                   <img src={currentSong.cover} className="w-full h-full object-cover saturate-50 group-hover:saturate-100 opacity-80 group-hover:opacity-100 transition-all" alt=""/>
+                   <div className="absolute inset-0 bg-gradient-to-tr from-[#CCFF00]/20 to-transparent"></div>
+                   <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                     <Album size={24} className="text-[#CCFF00]" />
+                   </div>
+                </div>
+                <div>
+                   <div className="text-white text-sm font-bold font-mono tracking-wide group-hover:text-[#CCFF00] transition-colors">{currentSong.title}</div>
+                   <div className="text-[10px] text-[#CCFF00] uppercase tracking-widest group-hover:text-white transition-colors">{currentSong.artist}</div>
+                </div>
+                <Heart size={16} className={`transition-all hover:scale-125 ml-2 ${favorites.includes(currentSong.id) ? 'text-[#FF00FF] fill-[#FF00FF]' : 'text-[#333] hover:text-[#FF00FF]'}`} onClick={(e) => toggleFavorite(e, currentSong.id)} />
+             </div>
+             <div className="w-[40%] flex flex-col items-center gap-2">
+                <div className="flex items-center gap-6">
+                   <Shuffle size={16} className="text-gray-500 hover:text-white cursor-pointer" />
+                   <SkipBack onClick={skipPrev} size={20} className="text-gray-300 hover:text-[#CCFF00] cursor-pointer" />
+                   <button onClick={togglePlay} className="w-12 h-12 bg-gradient-to-b from-gray-200 via-white to-gray-400 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-105 transition-transform active:scale-95">
+                     {isPlaying ? <Pause size={20} fill="black" /> : <Play size={20} fill="black" className="ml-1" />}
+                   </button>
+                   <SkipForward onClick={skipNext} size={20} className="text-gray-300 hover:text-[#CCFF00] cursor-pointer" />
+                   <Repeat size={16} className="text-gray-500 hover:text-white cursor-pointer" />
+                </div>
+                <div className="w-full flex items-center gap-3 text-[10px] font-mono font-bold text-gray-500">
+                   <span>{formatTime(progress)}</span>
+                   <div className="flex-1 h-2 bg-[#111] border border-[#333] relative cursor-pointer group">
+                      <div className="h-full bg-[#CCFF00] relative shadow-[0_0_8px_#CCFF00]" style={{ width: `${(progress / (duration || 1)) * 100}%` }}></div>
+                      <input type="range" min={0} max={duration || 0} value={progress} onChange={handleSeek} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                   </div>
+                   <span>{formatTime(duration || currentSong.duration)}</span>
+                </div>
+             </div>
+             <div className="w-[30%] flex items-center justify-end gap-4">
+                <SongAttributionButton song={currentSong} />
+                <Mic2 size={16} className="text-gray-600" />
+                <ListMusic size={16} className="text-gray-600" />
+                <div className="flex items-center gap-2 w-28 group">
+                   <Volume2 size={16} className="text-gray-400" />
+                   <div className="flex-1 h-1 bg-[#333] relative">
+                      <div className="h-full bg-white group-hover:bg-[#CCFF00]" style={{ width: `${volume * 100}%` }}></div>
+                      <input type="range" min={0} max={1} step={0.01} value={volume} onChange={(e) => setVolume(parseFloat(e.target.value))} className="absolute inset-0 opacity-0 cursor-pointer" />
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+       )}
 
       {currentSong && (
         <audio ref={audioRef} src={currentSong.url} onTimeUpdate={handleTimeUpdate} onEnded={skipNext} />
