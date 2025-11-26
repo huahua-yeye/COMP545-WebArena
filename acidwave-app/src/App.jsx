@@ -433,6 +433,7 @@ export default function App() {
 
   // State to store playlist tracks (can be modified by removing songs)
   const [playlistTracks, setPlaylistTracks] = useState({});
+  const [playlistLoading, setPlaylistLoading] = useState(false);
 
   const [currentView, setCurrentView] = useState('albums');
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
@@ -670,9 +671,21 @@ export default function App() {
 
   const openPlaylist = async (name) => {
     setSelectedPlaylist(name);
-    setCurrentView('playlist-detail');
     
-    // Load playlist tracks from API if available
+    // Check if playlist data is already cached
+    if (playlistTracks[name] && playlistTracks[name].length > 0) {
+      // Data already loaded, switch view immediately with smooth transition
+      setCurrentView('playlist-detail');
+      return;
+    }
+    
+    setPlaylistLoading(true);
+    
+    // Minimum loading time to prevent flash (300ms)
+    const minLoadingTime = 300;
+    const startTime = Date.now();
+    
+    // Load playlist tracks from API if available BEFORE switching view
     try {
       const playlistObj = apiPlaylists?.find(p => p.name === name);
       if (playlistObj && playlistObj.id) {
@@ -689,6 +702,16 @@ export default function App() {
             ...playlistTracks,
             [name]: tracks
           });
+          
+          // Ensure minimum loading time for smooth transition
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+          
+          await new Promise(resolve => setTimeout(resolve, remainingTime));
+          
+          // Switch to playlist view AFTER data is loaded
+          setPlaylistLoading(false);
+          setCurrentView('playlist-detail');
           return;
         }
       }
@@ -703,6 +726,15 @@ export default function App() {
         [name]: [...MOCK_PLAYLIST_TRACKS]
       });
     }
+    
+    // Ensure minimum loading time even for fallback
+    const elapsedTime = Date.now() - startTime;
+    const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+    await new Promise(resolve => setTimeout(resolve, remainingTime));
+    
+    // Switch to playlist view after data is ready
+    setPlaylistLoading(false);
+    setCurrentView('playlist-detail');
   }
 
   const handleContextMenu = (e, playlist) => {
@@ -1328,19 +1360,65 @@ export default function App() {
                </div>
              )}
 
-             {currentView === 'playlist-detail' && (() => {
-               const playlistData = getPlaylistTracks();
-               
-               // Handle right-click on playlist track
-               const handlePlaylistTrackContextMenu = (e, track) => {
-                 e.preventDefault();
-                 setPlaylistTrackMenu({
-                   x: e.clientX,
-                   y: e.clientY,
-                   track,
-                   playlistName: selectedPlaylist
-                 });
-               };
+            {currentView === 'playlist-detail' && (() => {
+              // Show loading skeleton while fetching playlist data
+              if (playlistLoading) {
+                return (
+                  <div className="animate-in fade-in duration-500">
+                    <div className="flex flex-col gap-6 mb-8">
+                      <div className="flex items-end gap-4 mb-2">
+                        <h2 className="text-5xl md:text-6xl font-black text-white italic tracking-tighter uppercase break-all line-clamp-2">{selectedPlaylist}</h2>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-6 border-b border-[#333] pb-6">
+                        <div className="w-16 h-10 bg-[#CCFF00]/20 animate-pulse"></div>
+                        <span className="text-gray-500 text-xs font-mono">LOADING_TRACKS...</span>
+                      </div>
+                    </div>
+                    
+                    {/* Skeleton Table */}
+                    <div className="w-full border border-[#333] bg-[#0a0a0a]">
+                      {/* Table Header */}
+                      <div className="grid grid-cols-[32px_32px_minmax(120px,2fr)_minmax(100px,1.5fr)_minmax(100px,1.5fr)_60px] sm:grid-cols-[40px_40px_2fr_1.5fr_1.5fr_80px] gap-2 sm:gap-4 p-2 sm:p-3 border-b border-[#333] bg-black text-[#CCFF00] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest">
+                        <div className="flex justify-center"><Square size={12} className="sm:w-[14px] sm:h-[14px]" /></div>
+                        <div>#</div>
+                        <div>Title</div>
+                        <div className="hidden sm:block">Album</div>
+                        <div className="hidden md:block">Artist</div>
+                        <div>Time</div>
+                      </div>
+                      
+                      {/* Skeleton Rows */}
+                      <div className="divide-y divide-[#222]">
+                        {[...Array(8)].map((_, i) => (
+                          <div key={i} className="grid grid-cols-[32px_32px_minmax(120px,2fr)_minmax(100px,1.5fr)_minmax(100px,1.5fr)_60px] sm:grid-cols-[40px_40px_2fr_1.5fr_1.5fr_80px] gap-2 sm:gap-4 p-2 sm:p-3 items-center">
+                            <div className="flex justify-center">
+                              <div className="w-2 h-2 sm:w-3 sm:h-3 bg-[#333] animate-pulse"></div>
+                            </div>
+                            <div className="text-gray-700">{i + 1}</div>
+                            <div className="h-4 bg-[#222] animate-pulse rounded" style={{ animationDelay: `${i * 50}ms` }}></div>
+                            <div className="hidden sm:block h-4 bg-[#222] animate-pulse rounded w-3/4" style={{ animationDelay: `${i * 50 + 100}ms` }}></div>
+                            <div className="hidden md:block h-4 bg-[#222] animate-pulse rounded w-2/3" style={{ animationDelay: `${i * 50 + 200}ms` }}></div>
+                            <div className="h-4 bg-[#222] animate-pulse rounded w-12" style={{ animationDelay: `${i * 50 + 300}ms` }}></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              const playlistData = getPlaylistTracks();
+              
+              // Handle right-click on playlist track
+              const handlePlaylistTrackContextMenu = (e, track) => {
+                e.preventDefault();
+                setPlaylistTrackMenu({
+                  x: e.clientX,
+                  y: e.clientY,
+                  track,
+                  playlistName: selectedPlaylist
+                });
+              };
 
                // Handle download track
                const handleDownloadTrack = (track) => {
@@ -1392,13 +1470,13 @@ export default function App() {
                 }
               };
 
-               return (
-               <div className="animate-in fade-in duration-300">
+              return (
+              <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex flex-col gap-6 mb-8">
-                     <div className="flex items-end gap-4 mb-2">
+                     <div className="flex items-end gap-4 mb-2 animate-in fade-in slide-in-from-left-4 duration-700">
                         <h2 className="text-5xl md:text-6xl font-black text-white italic tracking-tighter uppercase break-all line-clamp-2">{selectedPlaylist}</h2>
                      </div>
-                     <div className="flex flex-wrap items-center gap-6 border-b border-[#333] pb-6">
+                     <div className="flex flex-wrap items-center gap-6 border-b border-[#333] pb-6 animate-in fade-in slide-in-from-left-4 duration-700" style={{ animationDelay: '100ms' }}>
                         <button 
                           onClick={() => {
                             const tracks = playlistTracks[selectedPlaylist] || MOCK_PLAYLIST_TRACKS;
