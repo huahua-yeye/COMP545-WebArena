@@ -206,6 +206,56 @@ export async function deletePlaylist(id) {
   });
 }
 
+/**
+ * Remove song from playlist
+ */
+export async function removeSongFromPlaylist(playlistId, songId) {
+  await fetchAPI(`/playlists/${playlistId}/songs/${songId}`, {
+    method: 'DELETE',
+  });
+}
+
+// ==================== Favorites APIs ====================
+
+/**
+ * Get all favorite songs for a user
+ */
+export async function getUserFavorites(userId = 'guest') {
+  const response = await fetchAPI(`/favorites?user_id=${userId}`);
+  return response.data || [];
+}
+
+/**
+ * Add song to favorites
+ */
+export async function addToFavorites(songId, userId = 'guest') {
+  const response = await fetchAPI('/favorites', {
+    method: 'POST',
+    body: JSON.stringify({ song_id: songId, user_id: userId }),
+  });
+  return response.data;
+}
+
+/**
+ * Remove song from favorites
+ */
+export async function removeFromFavorites(songId, userId = 'guest') {
+  await fetchAPI(`/favorites/${songId}?user_id=${userId}`, {
+    method: 'DELETE',
+  });
+}
+
+/**
+ * Check if song is favorited
+ */
+export async function checkFavorite(songId, userId = 'guest') {
+  const response = await fetchAPI('/favorites/check', {
+    method: 'POST',
+    body: JSON.stringify({ song_id: songId, user_id: userId }),
+  });
+  return response.is_favorited;
+}
+
 // ==================== Health check API ====================
 
 /**
@@ -308,7 +358,14 @@ export default {
   getPlaylistById,
   createPlaylist,
   addSongToPlaylist,
+  removeSongFromPlaylist,
   deletePlaylist,
+
+  // Favorites
+  getUserFavorites,
+  addToFavorites,
+  removeFromFavorites,
+  checkFavorite,
 
   // Health
   checkHealth,

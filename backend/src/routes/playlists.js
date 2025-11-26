@@ -135,6 +135,32 @@ router.post('/:id/songs', async (req, res) => {
   }
 });
 
+// DELETE song from playlist
+router.delete('/:id/songs/:song_id', async (req, res) => {
+  try {
+    const { id, song_id } = req.params;
+
+    const { error } = await supabase
+      .from('playlist_songs')
+      .delete()
+      .eq('playlist_id', id)
+      .eq('song_id', song_id);
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      message: 'Song removed from playlist successfully'
+    });
+  } catch (error) {
+    console.error('Error removing song from playlist:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 // DELETE playlist
 router.delete('/:id', async (req, res) => {
   try {

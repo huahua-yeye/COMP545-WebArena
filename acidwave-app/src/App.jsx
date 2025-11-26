@@ -48,7 +48,7 @@ import {
 } from 'lucide-react';
 import AuthPage from './AuthPage';
 import { useSongs, usePlaylists } from './hooks/useAPI';
-import { createPlaylist as apiCreatePlaylist, deletePlaylist as apiDeletePlaylist, transformPlaylistData, getAllArtists, addSongToPlaylist } from './services/api';
+import { createPlaylist as apiCreatePlaylist, deletePlaylist as apiDeletePlaylist, transformPlaylistData, getAllArtists, addSongToPlaylist, removeSongFromPlaylist, getUserFavorites, addToFavorites, removeFromFavorites, getPlaylistById, transformSongData } from './services/api';
 import LoadingSpinner, { ErrorDisplay } from './components/LoadingSpinner';
 import { SongAttributionButton } from './components/SongAttributionButton';
 import { AlbumDetailPage } from './components/AlbumDetailPage';
@@ -469,6 +469,7 @@ export default function App() {
 
   // Favorites
   const [favorites, setFavorites] = useState([]);
+  const [favoritesLoading, setFavoritesLoading] = useState(false);
 
   // Filters
   const [albumFilter, setAlbumFilter] = useState('ALL');
@@ -497,6 +498,32 @@ export default function App() {
       setCurrentUser(JSON.parse(savedUser));
     }
   }, []);
+
+  // Load user favorites from database
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        setFavoritesLoading(true);
+        const userId = currentUser?.id || 'guest';
+        const favoritesData = await getUserFavorites(userId);
+        
+        // Extract song IDs from the favorites data
+        const favoriteIds = favoritesData.map(fav => fav.song_id);
+        setFavorites(favoriteIds);
+      } catch (error) {
+        console.error('Failed to load favorites:', error);
+        // Try to load from localStorage as fallback
+        const savedFavorites = localStorage.getItem('acidwave_favorites');
+        if (savedFavorites) {
+          setFavorites(JSON.parse(savedFavorites));
+        }
+      } finally {
+        setFavoritesLoading(false);
+      }
+    };
+
+    loadFavorites();
+  }, [currentUser]);
 
   // Set default song
   useEffect(() => {
@@ -641,11 +668,35 @@ export default function App() {
     }
   };
 
-  const openPlaylist = (name) => {
+  const openPlaylist = async (name) => {
     setSelectedPlaylist(name);
     setCurrentView('playlist-detail');
     
-    // Initialize playlist tracks if not already initialized
+    // Load playlist tracks from API if available
+    try {
+      const playlistObj = apiPlaylists?.find(p => p.name === name);
+      if (playlistObj && playlistObj.id) {
+        const playlistDetail = await getPlaylistById(playlistObj.id);
+        
+        // Transform playlist_songs data to song format
+        if (playlistDetail && playlistDetail.playlist_songs) {
+          const tracks = playlistDetail.playlist_songs
+            .map(ps => ps.songs)
+            .filter(Boolean)
+            .map(song => transformSongData(song));
+          
+          setPlaylistTracks({
+            ...playlistTracks,
+            [name]: tracks
+          });
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load playlist tracks:', error);
+    }
+    
+    // Fallback: Initialize with mock data if not already initialized
     if (!playlistTracks[name]) {
       setPlaylistTracks({
         ...playlistTracks,
@@ -681,12 +732,40 @@ export default function App() {
     }
   };
 
-  const toggleFavorite = (e, songId) => {
+  const toggleFavorite = async (e, songId) => {
     e.stopPropagation();
-    if (favorites.includes(songId)) {
+    
+    const userId = currentUser?.id || 'guest';
+    const isFavorited = favorites.includes(songId);
+    
+    // Optimistically update UI
+    if (isFavorited) {
       setFavorites(favorites.filter(id => id !== songId));
     } else {
       setFavorites([...favorites, songId]);
+    }
+    
+    try {
+      // Sync with database
+      if (isFavorited) {
+        await removeFromFavorites(songId, userId);
+      } else {
+        await addToFavorites(songId, userId);
+      }
+      
+      // Also save to localStorage as backup
+      const newFavorites = isFavorited 
+        ? favorites.filter(id => id !== songId)
+        : [...favorites, songId];
+      localStorage.setItem('acidwave_favorites', JSON.stringify(newFavorites));
+    } catch (error) {
+      console.error('Failed to sync favorite:', error);
+      // Revert on error
+      if (isFavorited) {
+        setFavorites([...favorites, songId]);
+      } else {
+        setFavorites(favorites.filter(id => id !== songId));
+      }
     }
   };
 
@@ -1279,25 +1358,39 @@ export default function App() {
                  document.body.removeChild(a);
                };
 
-               // Handle remove from playlist
-               const handleRemoveFromPlaylist = (track) => {
-                 setPlaylistTrackMenu(null);
-                 
-                 // Get current tracks for this playlist
-                 const currentTracks = playlistTracks[selectedPlaylist] || MOCK_PLAYLIST_TRACKS;
-                 
-                 // Remove the track
-                 const updatedTracks = currentTracks.filter(t => t.id !== track.id);
-                 
-                 // Update the state
-                 setPlaylistTracks({
-                   ...playlistTracks,
-                   [selectedPlaylist]: updatedTracks
-                 });
-                 
-                 // TODO: Call API to remove from playlist
-                 // await removeSongFromPlaylist(playlistId, track.id);
-               };
+              // Handle remove from playlist
+              const handleRemoveFromPlaylist = async (track) => {
+                setPlaylistTrackMenu(null);
+                
+                // Get current tracks for this playlist
+                const currentTracks = playlistTracks[selectedPlaylist] || MOCK_PLAYLIST_TRACKS;
+                
+                // Optimistically update UI
+                const updatedTracks = currentTracks.filter(t => t.id !== track.id);
+                setPlaylistTracks({
+                  ...playlistTracks,
+                  [selectedPlaylist]: updatedTracks
+                });
+                
+                try {
+                  // Find the playlist ID from apiPlaylists
+                  const playlistObj = apiPlaylists?.find(p => p.name === selectedPlaylist);
+                  
+                  if (playlistObj && playlistObj.id) {
+                    // Call API to remove from playlist
+                    await removeSongFromPlaylist(playlistObj.id, track.id);
+                  } else {
+                    console.warn('Playlist ID not found, changes only saved locally');
+                  }
+                } catch (error) {
+                  console.error('Failed to remove song from playlist:', error);
+                  // Revert on error
+                  setPlaylistTracks({
+                    ...playlistTracks,
+                    [selectedPlaylist]: currentTracks
+                  });
+                }
+              };
 
                return (
                <div className="animate-in fade-in duration-300">
