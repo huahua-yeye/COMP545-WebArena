@@ -859,6 +859,24 @@ export default function App() {
     setShowArtistDetail(true);
   };
 
+  // Handle clicking artist name from song data
+  const handleClickArtistFromSong = (e, song) => {
+    e.stopPropagation(); // Prevent song from playing
+
+    // If song has full artist data object, use it
+    if (song.artistData && typeof song.artistData === 'object' && song.artistData.id) {
+      handleOpenArtistDetail(song.artistData);
+    } else {
+      // Try to find artist by name in artists list
+      const artistName = typeof song.artist === 'string' ? song.artist : song.artist?.name;
+      if (artistName) {
+        const foundArtist = artists.find(a => a.name.toUpperCase() === artistName.toUpperCase());
+        if (foundArtist) {
+          handleOpenArtistDetail(foundArtist);
+        }
+      }
+    }
+  };
 
   // Handle playing album
   const handlePlayAlbum = (tracks) => {
@@ -1202,7 +1220,12 @@ export default function App() {
                                </div>
                                <div className="font-bold truncate text-white">{track.title}</div>
                                <div className="hidden md:block truncate group-hover:text-white">{track.album}</div>
-                               <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
+                               <div
+                                 className="hidden sm:block truncate group-hover:text-white hover:text-[#CCFF00] hover:underline cursor-pointer"
+                                 onClick={(e) => handleClickArtistFromSong(e, track)}
+                               >
+                                 {track.artist}
+                               </div>
                                <div className="hidden lg:block opacity-50">{track.year}</div>
                                <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
                                <div
@@ -1270,7 +1293,12 @@ export default function App() {
                                </div>
                                <div className="font-bold truncate text-white">{track.title}</div>
                                <div className="hidden md:block truncate group-hover:text-white">{track.album}</div>
-                               <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
+                               <div
+                                 className="hidden sm:block truncate group-hover:text-white hover:text-[#CCFF00] hover:underline cursor-pointer"
+                                 onClick={(e) => handleClickArtistFromSong(e, track)}
+                               >
+                                 {track.artist}
+                               </div>
                                <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
                                <div
                                  className="flex justify-center"
@@ -1374,7 +1402,7 @@ export default function App() {
                         >
                            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden border-2 border-[#333] group-hover:border-[#CCFF00] group-hover:shadow-[0_0_15px_#CCFF00] transition-all relative duration-300">
                               <img src={artist.image} alt={artist.name} className="w-full h-full object-cover saturate-50 group-hover:saturate-100 transition-all duration-300" />
-                              <div className="absolute inset-0 bg-[#CCFF00]/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                              <div className="absolute inset-0 bg-[#CCFF00]/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                            </div>
                            <span className="mt-4 font-bold text-sm text-gray-400 group-hover:text-white font-mono tracking-widest text-center transition-colors">{artist.name}</span>
                         </div>
@@ -1588,7 +1616,12 @@ export default function App() {
                                  {track.title}
                                </div>
                                <div className="hidden sm:block truncate hover:text-white">{track.album}</div>
-                               <div className="hidden md:block truncate hover:text-white">{track.artist}</div>
+                               <div
+                                 className="hidden md:block truncate hover:text-white hover:text-[#CCFF00] hover:underline cursor-pointer"
+                                 onClick={(e) => handleClickArtistFromSong(e, track)}
+                               >
+                                 {track.artist}
+                               </div>
                                <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
                              </div>
                            ))
@@ -1697,7 +1730,12 @@ export default function App() {
                    </div>
                    <div className="flex-1 min-w-0">
                       <div className="text-white text-xs font-bold font-mono tracking-wide truncate">{currentSong.title}</div>
-                      <div className="text-[9px] text-[#CCFF00] uppercase tracking-widest truncate">{currentSong.artist}</div>
+                      <div
+                        className="text-[9px] text-[#CCFF00] uppercase tracking-widest truncate hover:underline cursor-pointer"
+                        onClick={(e) => handleClickArtistFromSong(e, currentSong)}
+                      >
+                        {currentSong.artist}
+                      </div>
                    </div>
                 </div>
                 
@@ -1730,7 +1768,12 @@ export default function App() {
                 </div>
                 <div>
                    <div className="text-white text-sm font-bold font-mono tracking-wide group-hover:text-[#CCFF00] transition-colors">{currentSong.title}</div>
-                   <div className="text-[10px] text-[#CCFF00] uppercase tracking-widest group-hover:text-white transition-colors">{currentSong.artist}</div>
+                   <div
+                     className="text-[10px] text-[#CCFF00] uppercase tracking-widest group-hover:text-white transition-colors hover:underline cursor-pointer"
+                     onClick={(e) => handleClickArtistFromSong(e, currentSong)}
+                   >
+                     {currentSong.artist}
+                   </div>
                 </div>
                 <Heart size={16} className={`transition-all hover:scale-125 ml-2 ${favorites.includes(currentSong.id) ? 'text-[#FF00FF] fill-[#FF00FF]' : 'text-[#333] hover:text-[#FF00FF]'}`} onClick={(e) => toggleFavorite(e, currentSong.id)} />
              </div>

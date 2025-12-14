@@ -345,23 +345,50 @@
     "sites": [
       "acidwave"
     ],
-    "intent": "Play the first song in the SONGS list, then pause it and verify the player bar shows the song details",
+    "intent": "Play the first song in the SONGS list, then pause it and click the player bar information button to show the song details",
     "difficulty": "medium",
     "eval": {
       "eval_types": [
+        "string_match",
         "program_html"
       ],
       "reference_answers": {
         "exact_match": "",
-        "must_include": [],
+        "must_include": [
+          "Song Information",
+          "Watch and Learn",
+          "Mise Darling"
+        ],
         "must_exclude": []
       },
       "program_html": [
         {
-          "locator": "div.fixed.bottom-0:has-text('Sneaky Snitch'):has-text('Kevin MacLeod'), div:has(button:has(svg[class*='Play'])):has-text('Sneaky Snitch')",
-          "required_contents": "SNEAKY SNITCH"
+          "locator": "div.fixed.bottom-0:has-text('Watch and Learn'):has-text('Mise Darling'), div:has(button:has(svg[class*='Play'])):has-text('Watch and Learn')",
+          "required_contents": "WATCH AND LEARN"
         }
       ]
+    }
+  },
+  {
+    "task_id": 14,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Navigate to Denys Brodovskyi's artist page and visit his website",
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": [
+        "url_match"
+      ],
+      "reference_answers": {
+        "exact_match": "https://freemusicarchive.org/music/denys-brodovskyi/",
+        "must_include": [],
+        "must_exclude": []
+      },
+      "program_html": []
     }
   }
 ]
