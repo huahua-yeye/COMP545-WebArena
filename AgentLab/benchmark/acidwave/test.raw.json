@@ -411,5 +411,32 @@
       },
       "program_html": []
     }
+  },
+  {
+    "task_id": 16,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "You have a list of songs for a presentation: 'Vibrant Horizon' by Denys Brodovskyi, 'Watch and Learn' by Mise Darling, and 'Konflikt' by Jazz at Mladost Club. Create a new playlist named 'PRESENTATION_MIX' and add all three songs to it in the exact order listed.",
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "PRESENTATION_MIX",
+          "VIBRANT HORIZON",
+          "WATCH AND LEARN",
+          "KONFLIKT"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
   }
 ]
