@@ -1,10 +1,10 @@
 """
-完整实验 - 运行所有Acidwave任务
-=======================================
+Full Experiment - Run All Acidwave Tasks
+=========================================
 
-参考WebArena的评估流程，运行全部16个任务并生成详细报告。
+Following WebArena's evaluation process, run all 16 tasks and generate detailed reports.
 
-用法:
+Usage:
     python experiments/run_full_experiments.py
     python experiments/run_full_experiments.py --difficulty easy
     python experiments/run_full_experiments.py --task-range 0 5
@@ -24,8 +24,8 @@ from benchmark.acidwave import AcidwaveBenchmark
 
 # Set API key if not already set
 if not os.getenv("OPENAI_API_KEY"):
-    print("❌ 错误: OPENAI_API_KEY 未设置")
-    print("请设置环境变量或创建 .env 文件")
+    print("❌ Error: OPENAI_API_KEY is not set")
+    print("Please set the environment variable or create a .env file")
     sys.exit(1)
 
 from agentlab.experiments.study import make_study
@@ -44,73 +44,73 @@ def run_full_experiments(
     quiet=False,
 ):
     """
-    运行完整的Acidwave实验
+    Run complete Acidwave experiments
     
     Args:
-        task_ids: 要运行的任务ID列表 (None = 全部)
-        difficulty: 按难度筛选 ("easy", "medium", "hard")
-        agent: 使用的Agent (默认: ACIDWAVE_AGENT)
-        headless: 是否无头模式运行
-        slow_mo: 浏览器操作延迟 (ms)
-        max_steps: 每个任务最大步数
-        n_jobs: 并行任务数
-        quiet: 静默模式，减少终端输出
+        task_ids: List of task IDs to run (None = all)
+        difficulty: Filter by difficulty ("easy", "medium", "hard")
+        agent: Agent to use (default: ACIDWAVE_AGENT)
+        headless: Whether to run in headless mode
+        slow_mo: Browser operation delay (ms)
+        max_steps: Maximum steps per task
+        n_jobs: Number of parallel tasks
+        quiet: Quiet mode, reduce terminal output
     """
     def log(msg="", level="info"):
-        """条件打印函数"""
+        """Conditional print function"""
         if quiet and level == "info":
             return
         print(msg)
     
     log("\n" + "="*80)
-    log("ACIDWAVE 完整实验 - WebArena风格评估")
+    log("ACIDWAVE Full Experiment - WebArena Style Evaluation")
     log("="*80)
     
     # Select agent
     if agent is None:
         agent = ACIDWAVE_AGENT
     
-    log(f"\n🤖 Agent配置:")
-    log(f"   名称: {agent.agent_name}")
-    log(f"   模型: {agent.chat_model_args.model_name}")
-    log(f"   温度: {agent.chat_model_args.temperature}")
+    log(f"\n🤖 Agent Configuration:")
+    log(f"   Name: {agent.agent_name}")
+    log(f"   Model: {agent.chat_model_args.model_name}")
+    log(f"   Temperature: {agent.chat_model_args.temperature}")
     
     # Load benchmark
-    log("\n[1/6] 加载任务...")
+    log("\n[1/6] Loading tasks...")
     
     # Determine task subset
     if task_ids is not None:
         # Explicit task IDs
         benchmark = AcidwaveBenchmark(task_subset=task_ids)
-        log(f"   使用指定任务: {task_ids}")
+        log(f"   Using specified tasks: {task_ids}")
     elif difficulty is not None:
         # Filter by difficulty
         temp_benchmark = AcidwaveBenchmark()
         filtered_tasks = temp_benchmark.get_tasks_by_difficulty(difficulty)
         task_ids = [t["task_id"] for t in filtered_tasks]
         benchmark = AcidwaveBenchmark(task_subset=task_ids)
-        log(f"   按难度筛选: {difficulty}")
-        log(f"   匹配任务: {len(task_ids)}个")
+        log(f"   Filtered by difficulty: {difficulty}")
+        log(f"   Matching tasks: {len(task_ids)} tasks")
     else:
         # All tasks
         benchmark = AcidwaveBenchmark()
-        log(f"   加载所有任务: {len(benchmark)}个")
+        log(f"   Loaded all tasks: {len(benchmark)} tasks")
     
     # Show task details
     if not quiet:
-        log(f"\n   任务详情:")
+        log(f"\n   Task Details:")
         for i, task in enumerate(benchmark):
             log(f"      [{task['task_id']}] ({task['difficulty']:6s}) {task['intent'][:50]}...")
     
     # Configure browser settings
-    log(f"\n🖥️  浏览器配置:")
-    log(f"   显示模式: {'无头' if headless else '可视化'}")
-    log(f"   操作延迟: {slow_mo}ms")
-    log(f"   最大步数: {max_steps}")
-    log(f"   并行任务: {n_jobs}")
+    log(f"\n🖥️  Browser Configuration:")
+    log(f"   Display Mode: {'Headless' if headless else 'Visual'}")
+    log(f"   Operation Delay: {slow_mo}ms")
+    log(f"   Max Steps: {max_steps}")
+    log(f"   Parallel Tasks: {n_jobs}")
     
     # Create study
-    log("\n[2/6] 创建实验...")
+    log("\n[2/6] Creating experiment...")
     
     try:
         # Create custom EnvArgs with settings
@@ -141,50 +141,50 @@ def run_full_experiments(
             agent_args=[agent],
             benchmark=benchmark,
             suffix=suffix,
-            comment=f"完整评估: {len(benchmark)}个任务",
+            comment=f"Full evaluation: {len(benchmark)} tasks",
         )
-        log(f"   实验名称: {study.name}")
-        log(f"   实验目录: {study.dir}")
+        log(f"   Experiment name: {study.name}")
+        log(f"   Experiment directory: {study.dir}")
         
     except Exception as e:
-        print(f"   ❌ 无法创建实验: {e}")  # Always show errors
+        print(f"   ❌ Cannot create experiment: {e}")  # Always show errors
         import traceback
         traceback.print_exc()
         sys.exit(1)
     
     # Check Acidwave is running
-    log("\n[3/6] 检查Acidwave环境...")
-    import requests
-    try:
-        response = requests.get("http://localhost:5173", timeout=3)
-        if response.status_code == 200:
-            log("   ✅ Acidwave前端运行正常")
-        else:
-            log(f"   ⚠️  前端返回状态 {response.status_code}")
-    except requests.exceptions.RequestException:
-        print("   ❌ 无法连接到Acidwave!")  # Always show errors
-        print("   请先启动: docker-compose up -d")
-        response = input("\n   是否继续? (y/n): ")
-        if response.lower() != 'y':
-            sys.exit(1)
+    # log("\n[3/6] Checking Acidwave environment...")
+    # import requests
+    # try:
+    #     response = requests.get("http://localhost:5173", timeout=3)
+    #     if response.status_code == 200:
+    #         log("   ✅ Acidwave frontend running normally")
+    #     else:
+    #         log(f"   ⚠️  Frontend returned status {response.status_code}")
+    # except requests.exceptions.RequestException:
+    #     print("   ❌ Cannot connect to Acidwave!")  # Always show errors
+    #     print("   Please start first: docker-compose up -d")
+    #     response = input("\n   Continue? (y/n): ")
+    #     if response.lower() != 'y':
+    #         sys.exit(1)
     
     # Run experiments
-    log("\n[4/6] 运行实验...")
-    log(f"   这可能需要 {len(benchmark) * 2}-{len(benchmark) * 5} 分钟...")
+    log("\n[4/6] Running experiments...")
+    log(f"   This may take {len(benchmark) * 2}-{len(benchmark) * 5} minutes...")
     
     if not headless and not quiet:
-        log("\n   💡 浏览器窗口会打开,你可以观看agent的操作")
+        log("\n   💡 Browser window will open, you can watch the agent's actions")
     
     try:
         study.run(n_jobs=n_jobs)
-        log("   ✅ 实验完成!")
+        log("   ✅ Experiment completed!")
     except Exception as e:
-        print(f"   ❌ 实验失败: {e}")  # Always show errors
-        print(f"\n   查看日志: {study.dir}")
+        print(f"   ❌ Experiment failed: {e}")  # Always show errors
+        print(f"\n   View logs: {study.dir}")
         sys.exit(1)
     
     # Analyze results
-    log("\n[5/6] 分析结果...")
+    log("\n[5/6] Analyzing results...")
     from agentlab.analyze import inspect_results
     
     summary_file = None  # Initialize to avoid UnboundLocalError
@@ -215,7 +215,7 @@ def run_full_experiments(
                 result_df["difficulty"] = "unknown"
         
         log("\n" + "="*80)
-        log("实验结果")
+        log("Experiment Results")
         log("="*80)
         
         # Overall metrics
@@ -228,14 +228,14 @@ def run_full_experiments(
         success_rate = (success_count / total * 100) if total > 0 else 0
         
         # Always show key results
-        print(f"\n📊 总体表现:")
-        print(f"   成功: {success_count:2d} / {total} ({success_rate:5.1f}%)")
-        print(f"   部分: {partial_count:2d} / {total}")
-        print(f"   失败: {fail_count:2d} / {total}")
+        print(f"\n📊 Overall Performance:")
+        print(f"   Success: {success_count:2d} / {total} ({success_rate:5.1f}%)")
+        print(f"   Partial: {partial_count:2d} / {total}")
+        print(f"   Failed: {fail_count:2d} / {total}")
         
         # By difficulty
         if not quiet and ("difficulty" in result_df.columns or len(benchmark._tasks) > 0):
-            print(f"\n📈 按难度分析:")
+            print(f"\n📈 Analysis by Difficulty:")
             
             # Add difficulty to results - check for task_name column
             if 'task_name' in result_df.columns:
@@ -262,7 +262,7 @@ def run_full_experiments(
         
         # Per-task details
         if not quiet:
-            print(f"\n📝 任务详情:")
+            print(f"\n📝 Task Details:")
             
             # Find the task name column
             task_col = None
@@ -293,75 +293,75 @@ def run_full_experiments(
                 # Get task difficulty
                 diff = row.get("difficulty", "?")
                 
-                print(f"   {status} 任务 {task_id} ({diff:6s}): 得分={reward:.2f}, 步数={steps}")
+                print(f"   {status} Task {task_id} ({diff:6s}): Score={reward:.2f}, Steps={steps}")
                 if error and reward <= 0.8:
-                    print(f"      错误: {error[:70]}")
+                    print(f"      Error: {error[:70]}")
         
         # Save summary
-        log("\n[6/6] 保存报告...")
+        log("\n[6/6] Saving report...")
         
         # Summary file
         summary_file = study.dir / "experiment_summary.txt"
         with open(summary_file, 'w', encoding='utf-8') as f:
             f.write("="*80 + "\n")
-            f.write("ACIDWAVE 实验总结\n")
+            f.write("ACIDWAVE Experiment Summary\n")
             f.write("="*80 + "\n\n")
             f.write(f"Agent: {agent.agent_name}\n")
             f.write(f"Model: {agent.chat_model_args.model_name}\n")
             f.write(f"Tasks: {total}\n\n")
-            f.write(f"成功率: {success_rate:.1f}% ({success_count}/{total})\n")
-            f.write(f"部分完成: {partial_count}/{total}\n")
-            f.write(f"失败: {fail_count}/{total}\n\n")
+            f.write(f"Success Rate: {success_rate:.1f}% ({success_count}/{total})\n")
+            f.write(f"Partial: {partial_count}/{total}\n")
+            f.write(f"Failed: {fail_count}/{total}\n\n")
             f.write("="*80 + "\n")
-            f.write("详细结果\n")
+            f.write("Detailed Results\n")
             f.write("="*80 + "\n\n")
             f.write(result_df.to_string())
         
-        log(f"   ✅ 总结已保存: {summary_file}")
+        log(f"   ✅ Summary saved: {summary_file}")
         
         # CSV export
         csv_file = study.dir / "results.csv"
         result_df.to_csv(csv_file, index=False)
-        log(f"   ✅ CSV已导出: {csv_file}")
+        log(f"   ✅ CSV exported: {csv_file}")
         
     except Exception as e:
-        print(f"   ⚠️  无法分析结果: {e}")  # Always show errors
+        print(f"   ⚠️  Cannot analyze results: {e}")  # Always show errors
         import traceback
         traceback.print_exc()
     
     # Final summary
     log("\n" + "="*80)
-    log("实验完成!")
+    log("Experiment Completed!")
     log("="*80)
-    print(f"\n📁 结果目录: {study.dir}")  # Always show final results
+    print(f"\n📁 Results Directory: {study.dir}")  # Always show final results
     
     if not quiet:
-        log("\n📊 下一步:")
+        log("\n📊 Next Steps:")
         if summary_file:
-            log("   1. 查看详细报告:")
+            log("   1. View detailed report:")
             log(f"      cat {summary_file}")
-        log("   2. 查看失败任务的截图:")
+        log("   2. View screenshots of failed tasks:")
         log(f"      cd {study.dir}")
         log("      ls */screenshot_*.png")
-        log("   3. 使用AgentXray可视化:")
+        log("   3. Use AgentXray for visualization:")
         log("      agentlab-xray")
-        log("\n💡 优化建议:")
+        log("\n💡 Optimization Suggestions:")
         try:
             # Try to get success_rate from earlier
             if 'success_rate' in locals():
                 if success_rate < 50:
-                    log("   - 成功率较低,考虑:")
-                    log("     • 改进agent提示词")
-                    log("     • 增加max_steps")
-                    log("     • 使用ACIDWAVE_REASONING_AGENT")
+                    log("   - Low success rate, consider:")
+                    log("     • Improve agent prompts")
+                    log("     • Increase max_steps")
+                    log("     • Use ACIDWAVE_REASONING_AGENT")
                 elif success_rate < 80:
-                    log("   - 成功率中等,考虑:")
-                    log("     • 调整temperature参数")
-                    log("     • 改进验证逻辑")
+                    log("   - Medium success rate, consider:")
+                    log("     • Adjust temperature parameter")
+                    log("     • Improve validation logic")
                 else:
-                    log("   - 成功率很好! 可以:")
-                    log("     • 尝试更难的任务")
-                    log("     • 优化步数效率")
+                    log("   - Great success rate! You can:")
+                    log("     • Try harder tasks")
+                    log("     • Optimize step efficiency")
         except:
             pass
 
@@ -370,26 +370,26 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(
-        description="运行完整的Acidwave实验 (WebArena风格)",
+        description="Run complete Acidwave experiments (WebArena style)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-示例:
-  # 运行所有任务
+Examples:
+  # Run all tasks
   python experiments/run_full_experiments.py
   
-  # 只运行简单任务
+  # Run only easy tasks
   python experiments/run_full_experiments.py --difficulty easy
   
-  # 运行指定任务范围
+  # Run specified task range
   python experiments/run_full_experiments.py --task-range 0 5
   
-  # 使用推理agent
+  # Use reasoning agent
   python experiments/run_full_experiments.py --agent reasoning
   
-  # 可视化模式 (显示浏览器)
+  # Visual mode (show browser)
   python experiments/run_full_experiments.py --no-headless --slow-mo 1000
   
-  # 并行运行 (需要足够的资源)
+  # Parallel execution (requires sufficient resources)
   python experiments/run_full_experiments.py --n-jobs 3
         """
     )
@@ -397,7 +397,7 @@ def main():
     parser.add_argument(
         '--difficulty',
         choices=['easy', 'medium', 'hard'],
-        help='按难度筛选任务'
+        help='Filter tasks by difficulty'
     )
     
     parser.add_argument(
@@ -405,54 +405,54 @@ def main():
         nargs=2,
         type=int,
         metavar=('START', 'END'),
-        help='运行任务ID范围 (例如: 0 5 表示任务0-4)'
+        help='Run task ID range (e.g., 0 5 means tasks 0-4)'
     )
     
     parser.add_argument(
         '--task-ids',
         nargs='+',
         type=int,
-        help='指定任务ID列表 (例如: 0 2 5 7)'
+        help='Specify task ID list (e.g., 0 2 5 7)'
     )
     
     parser.add_argument(
         '--agent',
         choices=['standard', 'reasoning', 'fast'],
         default='standard',
-        help='选择agent类型 (默认: standard)'
+        help='Select agent type (default: standard)'
     )
     
     parser.add_argument(
         '--no-headless',
         action='store_true',
-        help='显示浏览器窗口'
+        help='Show browser window'
     )
     
     parser.add_argument(
         '--slow-mo',
         type=int,
         default=100,
-        help='浏览器操作延迟 (ms, 默认: 100)'
+        help='Browser operation delay (ms, default: 100)'
     )
     
     parser.add_argument(
         '--max-steps',
         type=int,
         default=30,
-        help='每个任务最大步数 (默认: 30)'
+        help='Maximum steps per task (default: 30)'
     )
     
     parser.add_argument(
         '--n-jobs',
         type=int,
         default=1,
-        help='并行运行的任务数 (默认: 1, 顺序执行)'
+        help='Number of parallel tasks (default: 1, sequential execution)'
     )
     
     parser.add_argument(
         '--quiet',
         action='store_true',
-        help='静默模式，减少终端输出'
+        help='Quiet mode, reduce terminal output'
     )
     
     args = parser.parse_args()

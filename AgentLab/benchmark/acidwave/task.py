@@ -396,19 +396,33 @@ class AcidwaveTask(AbstractBrowserTask):
                     html_check_score = html_success_rate * 0.6
 
         # ==========================================
-        # EVALUATION TYPE 3: URL Match (SPA not using this much)
+        # EVALUATION TYPE 3: URL Match
         # ==========================================
         if "url_match" in eval_types:
             import re
+            # Support both url_pattern (regex) and exact_match (exact URL)
             url_pattern = reference.get("url_pattern", "")
+            exact_url = reference.get("exact_match", "")
             
             if url_pattern:
+                # Use regex pattern matching
                 if re.search(url_pattern, page_url):
                     checks_passed.append(f"URL matches pattern: {url_pattern}")
                     url_match_score = 1.0
                 else:
-                    checks_failed.append(f"URL doesn't match: {url_pattern} (got: {page_url})")
+                    checks_failed.append(f"URL doesn't match pattern: {url_pattern} (got: {page_url})")
                     url_match_score = 0.0
+            elif exact_url:
+                # Use exact URL matching
+                if page_url == exact_url:
+                    checks_passed.append(f"URL matches exactly: {exact_url}")
+                    url_match_score = 1.0
+                else:
+                    checks_failed.append(f"URL doesn't match: expected '{exact_url}', got '{page_url}'")
+                    url_match_score = 0.0
+            else:
+                checks_failed.append("No URL pattern or exact match specified in eval config")
+                url_match_score = 0.0
 
         # ==========================================
         # EVALUATION TYPE 4: Element State
