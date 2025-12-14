@@ -32,7 +32,7 @@ def _ensure_tasks_registered():
         
         if acidwave_tasks:
             # Tasks already registered
-            logger.debug(f"[task.py] Acidwave tasks already registered ({len(acidwave_tasks)} tasks)")
+            #logger.debug(f"[task.py] Acidwave tasks already registered ({len(acidwave_tasks)} tasks)")
             return
         
         # Load and register all tasks
@@ -56,7 +56,7 @@ def _ensure_tasks_registered():
             except Exception:
                 pass  # Task might already be registered
         
-        print(f"[task.py] Registered {len(all_tasks)} Acidwave tasks in PID {os.getpid()}")
+        #print(f"[task.py] Registered {len(all_tasks)} Acidwave tasks in PID {os.getpid()}")
         
     except Exception as e:
         logger.warning(f"[task.py] Failed to auto-register tasks: {e}")
@@ -429,7 +429,7 @@ class AcidwaveTask(AbstractBrowserTask):
             success = True
             done = True  # Task完成,可以终止
             message = "✅ Task completed successfully"
-        elif reward >= 0.5:
+        elif reward >= 0.7:
             # 降低阈值：只要一半以上完成就终止
             success = True
             done = True  # 认为任务基本完成

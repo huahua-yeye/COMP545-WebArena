@@ -243,15 +243,17 @@
     "intent_template_id": 8,
     "difficulty": "medium",
     "eval": {
-      "eval_types": ["string_match", "url_match"],
+      "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["DIGITAL SUNSET"],
-        "url_pattern": ".*album.*"
+        "must_include": ["DIGITAL SUNSET", "TRACKS", "PLAY ALL"]
       },
       "program_html": [
         {
-          "url": "http://localhost:5173",
           "locator": "text='DIGITAL SUNSET'",
+          "required_state": "visible"
+        },
+        {
+          "locator": "button:has-text('PLAY ALL')",
           "required_state": "visible"
         }
       ]
@@ -268,15 +270,17 @@
     "intent_template_id": 9,
     "difficulty": "medium",
     "eval": {
-      "eval_types": ["string_match", "url_match"],
+      "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["SYNTHWAVE COLLECTIVE"],
-        "url_pattern": ".*artist.*"
+        "must_include": ["SYNTHWAVE COLLECTIVE", "BIO", "TOP SONGS"]
       },
       "program_html": [
         {
-          "url": "http://localhost:5173",
           "locator": "text='SYNTHWAVE COLLECTIVE'",
+          "required_state": "visible"
+        },
+        {
+          "locator": "button:has-text('ALBUMS'), button:has-text('SONGS')",
           "required_state": "visible"
         }
       ]
@@ -394,15 +398,17 @@
     "intent_template_id": 14,
     "difficulty": "hard",
     "eval": {
-      "eval_types": ["string_match", "program_html", "url_match"],
+      "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["MIDNIGHT ECHOES"],
-        "url_pattern": ".*"
+        "must_include": ["MIDNIGHT ECHOES"]
       },
       "program_html": [
         {
-          "url": "http://localhost:5173",
           "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        },
+        {
+          "locator": "text='MIDNIGHT ECHOES'",
           "required_state": "visible"
         }
       ]

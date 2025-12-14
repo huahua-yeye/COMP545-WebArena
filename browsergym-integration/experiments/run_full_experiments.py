@@ -137,11 +137,17 @@ def run_full_experiments(
         if task_ids and len(task_ids) < 16:
             suffix += f"_tasks{len(task_ids)}"
         
+        # Set result directory to project folder
+        project_root = Path(__file__).parent.parent  # browsergym-integration folder
+        result_dir = project_root / "results"
+        result_dir.mkdir(exist_ok=True)  # Create if not exists
+        
         study = make_study(
             agent_args=[agent],
             benchmark=benchmark,
             suffix=suffix,
-            comment=f"完整评估: {len(benchmark)}个任务"
+            comment=f"完整评估: {len(benchmark)}个任务",
+            result_dir=result_dir,  # Save to project folder
         )
         log(f"   实验目录: {study.dir}")
         
@@ -184,6 +190,8 @@ def run_full_experiments(
     log("\n[5/6] 分析结果...")
     from agentlab.analyze import inspect_results
     
+    summary_file = None  # Initialize to avoid UnboundLocalError
+    
     try:
         result_df = inspect_results.load_result_df(study.dir)
         
@@ -210,12 +218,20 @@ def run_full_experiments(
         if not quiet and ("difficulty" in result_df.columns or len(benchmark._tasks) > 0):
             print(f"\n📈 按难度分析:")
             
-            # Add difficulty to results
-            task_difficulty = {
-                f"acidwave.task_{t['task_id']}": t['difficulty']
-                for t in benchmark._tasks
-            }
-            result_df['difficulty'] = result_df['task_name'].map(task_difficulty)
+            # Add difficulty to results - check for task_name column
+            if 'task_name' in result_df.columns:
+                task_difficulty = {
+                    f"acidwave.task_{t['task_id']}": t['difficulty']
+                    for t in benchmark._tasks
+                }
+                result_df['difficulty'] = result_df['task_name'].map(task_difficulty)
+            elif 'exp_args.env_args.task_name' in result_df.columns:
+                # Alternative column name
+                task_difficulty = {
+                    f"acidwave.task_{t['task_id']}": t['difficulty']
+                    for t in benchmark._tasks
+                }
+                result_df['difficulty'] = result_df['exp_args.env_args.task_name'].map(task_difficulty)
             
             for diff in ["easy", "medium", "hard"]:
                 diff_tasks = result_df[result_df['difficulty'] == diff]
@@ -228,8 +244,20 @@ def run_full_experiments(
         # Per-task details
         if not quiet:
             print(f"\n📝 任务详情:")
+            
+            # Find the task name column
+            task_col = None
+            for col in ['task_name', 'exp_args.env_args.task_name']:
+                if col in result_df.columns:
+                    task_col = col
+                    break
+            
             for _, row in result_df.iterrows():
-                task_name = row.get("task_name", "Unknown")
+                if task_col:
+                    task_name = row.get(task_col, "Unknown")
+                else:
+                    task_name = "Unknown"
+                    
                 task_id = task_name.split("_")[-1] if "_" in task_name else "?"
                 reward = row.get("cum_reward", 0)
                 steps = row.get("n_steps", 0)
@@ -290,27 +318,33 @@ def run_full_experiments(
     
     if not quiet:
         log("\n📊 下一步:")
-        log("   1. 查看详细报告:")
-        log(f"      cat {summary_file}")
+        if summary_file:
+            log("   1. 查看详细报告:")
+            log(f"      cat {summary_file}")
         log("   2. 查看失败任务的截图:")
         log(f"      cd {study.dir}")
         log("      ls */screenshot_*.png")
         log("   3. 使用AgentXray可视化:")
         log("      agentlab-xray")
         log("\n💡 优化建议:")
-        if success_rate < 50:
-            log("   - 成功率较低,考虑:")
-            log("     • 改进agent提示词")
-            log("     • 增加max_steps")
-            log("     • 使用ACIDWAVE_REASONING_AGENT")
-        elif success_rate < 80:
-            log("   - 成功率中等,考虑:")
-            log("     • 调整temperature参数")
-            log("     • 改进验证逻辑")
-        else:
-            log("   - 成功率很好! 可以:")
-            log("     • 尝试更难的任务")
-            log("     • 优化步数效率")
+        try:
+            # Try to get success_rate from earlier
+            if 'success_rate' in locals():
+                if success_rate < 50:
+                    log("   - 成功率较低,考虑:")
+                    log("     • 改进agent提示词")
+                    log("     • 增加max_steps")
+                    log("     • 使用ACIDWAVE_REASONING_AGENT")
+                elif success_rate < 80:
+                    log("   - 成功率中等,考虑:")
+                    log("     • 调整temperature参数")
+                    log("     • 改进验证逻辑")
+                else:
+                    log("   - 成功率很好! 可以:")
+                    log("     • 尝试更难的任务")
+                    log("     • 优化步数效率")
+        except:
+            pass
 
 
 def main():
