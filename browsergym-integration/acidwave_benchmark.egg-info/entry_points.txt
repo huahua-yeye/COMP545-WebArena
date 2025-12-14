@@ -1,2 +1,0 @@
-[browsergym.benchmarks]
-acidwave = benchmark.acidwave:AcidwaveBenchmark

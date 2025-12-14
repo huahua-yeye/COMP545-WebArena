@@ -1864,6 +1864,19 @@ export default function App() {
               console.error('Failed to add song to playlist:', error);
             }
           }}
+          onCreatePlaylist={async (playlistName) => {
+            try {
+              const newPlaylist = await apiCreatePlaylist(playlistName);
+              // Manually add the new playlist to the list
+              if (newPlaylist && apiPlaylists) {
+                setApiPlaylists([...apiPlaylists, newPlaylist]);
+              }
+              return newPlaylist;
+            } catch (error) {
+              console.error('Failed to create playlist:', error);
+              throw error;
+            }
+          }}
         />
       )}
 

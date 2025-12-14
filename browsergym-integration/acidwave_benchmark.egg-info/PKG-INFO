@@ -1,8 +1,0 @@
-Metadata-Version: 2.4
-Name: acidwave-benchmark
-Version: 0.1.0
-Summary: Acidwave music player benchmark for WebArena-Pro
-Requires-Dist: browsergym
-Requires-Dist: agentlab
-Dynamic: requires-dist
-Dynamic: summary

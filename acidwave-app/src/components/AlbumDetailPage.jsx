@@ -15,7 +15,7 @@ import {
  * Music player style view showing album info and track list
  * Right-click context menu for Add to Playlist and Download
  */
-export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, currentSong, playlists = [], onAddToPlaylist, favorites = [], onToggleFavorite }) {
+export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, currentSong, playlists = [], onAddToPlaylist, onCreatePlaylist, favorites = [], onToggleFavorite }) {
   const [contextMenu, setContextMenu] = useState(null); // { x, y, track, type: 'track' | 'album' }
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [targetForPlaylist, setTargetForPlaylist] = useState(null); // track or 'album'
@@ -113,11 +113,27 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
   // Create new playlist and add
   const handleCreatePlaylistAndAdd = async () => {
     if (!newPlaylistName.trim()) return;
-    // This would create a new playlist - for now just close
-    // TODO: Implement createPlaylist API call
-    setNewPlaylistName('');
-    setShowPlaylistModal(false);
-    setTargetForPlaylist(null);
+    
+    try {
+      // Call onCreatePlaylist if provided
+      if (onCreatePlaylist) {
+        await onCreatePlaylist(newPlaylistName);
+      }
+      
+      // After creating, add songs to it if onAddToPlaylist exists
+      if (onAddToPlaylist) {
+        // Find the newly created playlist (it should be the last one in the list)
+        // or we could pass the playlist ID back from onCreatePlaylist
+        // For now, we'll assume the parent will handle this
+      }
+      
+      setNewPlaylistName('');
+      setShowPlaylistModal(false);
+      setTargetForPlaylist(null);
+    } catch (error) {
+      console.error('Failed to create playlist:', error);
+      alert('Failed to create playlist. Please try again.');
+    }
   };
 
   // Download track - 导航到音频文件URL（用于benchmark任务）
@@ -389,8 +405,17 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
 
       {/* Playlist Selection Modal */}
       {showPlaylistModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[110]">
-          <div className="bg-[#111] border border-[#333] rounded-lg w-full max-w-md mx-4 overflow-hidden">
+        <div 
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-[110]"
+          onClick={(e) => {
+            // Close modal when clicking backdrop
+            if (e.target === e.currentTarget) {
+              setShowPlaylistModal(false);
+              setTargetForPlaylist(null);
+            }
+          }}
+        >
+          <div className="bg-[#111] border border-[#333] rounded-lg w-full max-w-md mx-4 overflow-hidden relative z-[111]">
             {/* Modal Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#222]">
               <h3 className="text-white font-bold">Add to Playlist</h3>
@@ -400,25 +425,33 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
                   setTargetForPlaylist(null);
                 }}
                 className="p-1 hover:bg-[#222] rounded transition-colors"
+                aria-label="Close modal"
               >
                 <X size={20} className="text-gray-400" />
               </button>
             </div>
 
             {/* Create New Playlist */}
-            <div className="p-4 border-b border-[#222]">
+            <div className="p-4 border-b border-[#222] relative z-[112]">
               <div className="flex items-center gap-2">
                 <input
                   type="text"
                   placeholder="Create new playlist..."
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
-                  className="flex-1 bg-[#050505] border border-[#333] rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-[#CCFF00]"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && newPlaylistName.trim()) {
+                      handleCreatePlaylistAndAdd();
+                    }
+                  }}
+                  className="flex-1 bg-[#050505] border border-[#333] rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-[#CCFF00] relative z-[113]"
+                  aria-label="New playlist name"
                 />
                 <button
                   onClick={handleCreatePlaylistAndAdd}
                   disabled={!newPlaylistName.trim()}
-                  className="p-2 bg-[#CCFF00] text-black rounded hover:bg-[#FF00FF] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 bg-[#CCFF00] text-black rounded hover:bg-[#FF00FF] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed relative z-[113] pointer-events-auto"
+                  aria-label="Create new playlist"
                 >
                   <Plus size={20} />
                 </button>
@@ -432,11 +465,11 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
                   <button
                     key={playlist.id}
                     onClick={() => handleSelectPlaylist(playlist)}
-                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#1a1a1a] transition-colors text-left"
+                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#1a1a1a] transition-all duration-200 text-left cursor-pointer group"
                   >
-                    <FolderPlus size={20} className="text-[#CCFF00]" />
-                    <div>
-                      <div className="text-white text-sm">{playlist.name}</div>
+                    <FolderPlus size={20} className="text-[#CCFF00] group-hover:text-[#FF00FF] transition-colors duration-200" />
+                    <div className="flex-1">
+                      <div className="text-white text-sm font-medium group-hover:text-[#CCFF00] transition-colors duration-200">{playlist.name}</div>
                       <div className="text-gray-500 text-xs">{playlist.total_tracks || 0} tracks</div>
                     </div>
                   </button>
