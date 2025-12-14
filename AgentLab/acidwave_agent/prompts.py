@@ -93,13 +93,35 @@ After login verification:
 - User avatar may be displayed
 
 ### Player Controls
-Located at the bottom of the page:
+
+**Player Bar Location and Display**:
+The player bar is located at the bottom of the page (fixed position) and only appears when a song is playing or paused.
+
+**Player Bar Information**:
+When a song is playing or paused, the player bar displays:
+- **Song title**: Displayed in white, bold text
+- **Artist name**: Displayed in acid green (#CCFF00), uppercase
+- **Album cover**: Small thumbnail image on the left
+- **Play/Pause button**: Shows Pause icon when playing, Play icon when paused
+- **Progress bar**: Shows current playback position
+- **Time stamps**: Current time and total duration
+
+**Control Buttons**:
 - **Play/Pause**: `button:has(svg[class*='Play'])` or `button:has(svg[class*='Pause'])`
-- **Next**: `button:has(svg[class*='SkipForward'])`
-- **Previous**: `button:has(svg[class*='SkipBack'])`
+  - When paused: Shows Play icon (▶)
+  - When playing: Shows Pause icon (⏸)
+  - Click to toggle between play and pause states
+- **Next**: `button:has(svg[class*='SkipForward'])` - Skip to next song
+- **Previous**: `button:has(svg[class*='SkipBack'])` - Skip to previous song
 - **Volume**: `input[type='range'][aria-label*='volume' i]`
 - **Shuffle**: `button:has(svg[class*='Shuffle'])`
 - **Repeat**: `button:has(svg[class*='Repeat'])`
+
+**How to Verify Playback State**:
+- Check if player bar is visible: `div.fixed.bottom-0` exists
+- Check if playing: `button:has(svg[class*='Pause'])` is visible
+- Check if paused: `button:has(svg[class*='Play'])` is visible
+- Check song details: Player bar contains song title and artist name
 
 ### Song Items
 
@@ -396,10 +418,41 @@ click("button:has-text('Remove from Playlist')")
 # The context menu will close after each removal, so you need to right-click again for the next song
 ```
 
+**Play first song and pause**:
+```python
+# 1. Navigate to SONGS view
+click("[aria-label='SONGS']")
+
+# 2. Click on the first song row to play it
+# The first song in the list is determined by the backend sort order (created_at descending)
+# Currently the first song is "Sneaky Snitch" by Kevin MacLeod
+click("div[role='button'][aria-label*='Play']:first")
+# OR if you know the song name
+click("[aria-label*='Play Sneaky Snitch by']")
+
+# 3. Wait for the song to start playing (player bar appears)
+# The player bar will show at the bottom with the song details
+
+# 4. Click the pause button to pause playback
+click("button:has(svg[class*='Pause'])")
+
+# 5. Verify the player bar still shows song details and is in paused state
+# Check for Play icon (means paused): button:has(svg[class*='Play'])
+# Player bar should display song title and artist (e.g., "Sneaky Snitch" and "Kevin MacLeod")
+```
+
 **Check playback state**:
 Look for pause button (means playing):
 - `button:has(svg[class*='Pause'])` visible = playing
 - `button:has(svg[class*='Play'])` visible = paused/stopped
+
+Check player bar details:
+```python
+# Player bar should be visible at bottom
+# Contains song title in white text
+# Contains artist name in acid green
+# Contains play/pause button
+```
 
 ### Error Handling
 

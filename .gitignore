@@ -41,7 +41,7 @@ Thumbs.db
 
 comment/
 webarena-setup/
-browsergym-integration/venv/
+browsergym-integration
 browsergym-integration/results/
 __pycache__/
 *.pyc
@@ -50,3 +50,4 @@ browsergym-integration/Guide/
 backend/scrape_fma/
 backend/docs/
 *.md
+webarena/
