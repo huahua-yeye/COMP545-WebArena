@@ -40,3 +40,10 @@ Thumbs.db
 .claude
 
 comment/
+webarena-setup/
+browsergym-integration/venv/
+browsergym-integration/results/
+__pycache__/
+*.pyc
+*.pyo
+browsergym-integration/Guide/

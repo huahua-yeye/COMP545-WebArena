@@ -29,3 +29,5 @@ CREATE INDEX IF NOT EXISTS idx_user_favorites_created_at ON user_favorites(creat
 -- Run this to verify the table was created
 -- SELECT 'user_favorites' as table_name, COUNT(*) as count FROM user_favorites;
 
+
+

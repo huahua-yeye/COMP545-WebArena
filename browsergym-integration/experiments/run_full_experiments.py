@@ -137,22 +137,19 @@ def run_full_experiments(
         if task_ids and len(task_ids) < 16:
             suffix += f"_tasks{len(task_ids)}"
         
-        # Set result directory to project folder
-        project_root = Path(__file__).parent.parent  # browsergym-integration folder
-        result_dir = project_root / "results"
-        result_dir.mkdir(exist_ok=True)  # Create if not exists
-        
         study = make_study(
             agent_args=[agent],
             benchmark=benchmark,
             suffix=suffix,
             comment=f"完整评估: {len(benchmark)}个任务",
-            result_dir=result_dir,  # Save to project folder
         )
+        log(f"   实验名称: {study.name}")
         log(f"   实验目录: {study.dir}")
         
     except Exception as e:
         print(f"   ❌ 无法创建实验: {e}")  # Always show errors
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
     
     # Check Acidwave is running

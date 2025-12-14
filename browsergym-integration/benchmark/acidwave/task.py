@@ -212,6 +212,11 @@ class AcidwaveTask(AbstractBrowserTask):
         reward = 0.0
         success = False
         message = "Task not completed"
+        
+        # Track individual evaluation scores
+        string_match_score = 0.0
+        html_check_score = 0.0
+        url_match_score = 0.0
 
         # ==========================================
         # EVALUATION TYPE 1: String Match
@@ -250,7 +255,7 @@ class AcidwaveTask(AbstractBrowserTask):
 
             # Calculate string match score
             if exact_found and all_includes and no_excludes:
-                reward = max(reward, 1.0)
+                string_match_score = 1.0
                 success = True
             else:
                 # Partial credit
@@ -261,7 +266,7 @@ class AcidwaveTask(AbstractBrowserTask):
                     partial_score += 0.4
                 if no_excludes:
                     partial_score += 0.2
-                reward = max(reward, partial_score)
+                string_match_score = partial_score
 
         # ==========================================
         # EVALUATION TYPE 2: Program HTML
@@ -380,10 +385,15 @@ class AcidwaveTask(AbstractBrowserTask):
             if html_checks:
                 html_success_rate = sum(html_checks) / len(html_checks)
                 if html_success_rate == 1.0:
-                    reward = max(reward, 1.0)
+                    # 所有HTML检查都通过
+                    html_check_score = 1.0
                     success = True
+                elif html_success_rate >= 0.8:
+                    # 大部分通过，给予较高分数但不算完全成功
+                    html_check_score = html_success_rate * 0.85
                 else:
-                    reward = max(reward, html_success_rate * 0.9)  # Slight penalty for incomplete
+                    # 通过率低，给予较低分数
+                    html_check_score = html_success_rate * 0.6
 
         # ==========================================
         # EVALUATION TYPE 3: URL Match
@@ -395,9 +405,10 @@ class AcidwaveTask(AbstractBrowserTask):
             if url_pattern:
                 if re.search(url_pattern, page_url):
                     checks_passed.append(f"URL matches pattern: {url_pattern}")
-                    reward = max(reward, 0.5)  # URL match is partial indicator
+                    url_match_score = 1.0
                 else:
                     checks_failed.append(f"URL doesn't match: {url_pattern} (got: {page_url})")
+                    url_match_score = 0.0
 
         # ==========================================
         # EVALUATION TYPE 4: Element State
@@ -408,9 +419,32 @@ class AcidwaveTask(AbstractBrowserTask):
             pass
 
         # ==========================================
+        # CALCULATE FINAL REWARD
+        # ==========================================
+        # 如果任务使用多种评估类型，需要综合考虑所有类型的得分
+        # 策略：取所有有效评估类型的最小值（AND逻辑），确保所有条件都满足
+        
+        active_scores = []
+        if "string_match" in eval_types:
+            active_scores.append(string_match_score)
+        if "program_html" in eval_types and program_html:
+            active_scores.append(html_check_score)
+        if "url_match" in eval_types:
+            active_scores.append(url_match_score)
+        
+        if active_scores:
+            # 使用最小值策略：所有评估都必须通过
+            reward = min(active_scores)
+            # 如果所有评估类型都接近完美，才算成功
+            success = all(score >= 0.95 for score in active_scores)
+        else:
+            # 没有有效评估，使用启发式
+            reward = 0.0
+        
+        # ==========================================
         # DEFAULT: Heuristic Check
         # ==========================================
-        if not eval_types or reward == 0.0:
+        if not eval_types or (reward == 0.0 and not active_scores):
             logger.warning(f"No evaluation type or checks failed for task {self.task_id}")
             # Check if goal keywords are present
             goal_keywords = self._goal.lower().split()
@@ -418,35 +452,37 @@ class AcidwaveTask(AbstractBrowserTask):
             reward = min(1.0, found_keywords / max(len(goal_keywords), 1))
             success = reward > 0.7
             message = f"Heuristic evaluation: {found_keywords}/{len(goal_keywords)} keywords found"
-
+        
         # ==========================================
         # Build Final Message
         # ==========================================
-        # IMPORTANT: 如果任何检查通过，或者 reward > 0，可能任务已部分/完全完成
-        # 为了避免无限循环，采用更宽松的终止策略
+        # 评估策略：需要所有检查都通过才算成功
         
-        if reward >= 0.95:
-            success = True
-            done = True  # Task完成,可以终止
-            message = "✅ Task completed successfully"
-        elif reward >= 0.7:
-            # 降低阈值：只要一半以上完成就终止
-            success = True
-            done = True  # 认为任务基本完成
-            message = f"✅ Task completed (score: {reward:.2f})"
-        elif reward > 0 and len(checks_passed) > 0:
-            # 如果有任何检查通过，也认为部分成功，可以终止
+        if reward >= 0.98:
+            # 几乎完美完成
             success = True
             done = True
-            message = f"✅ Task partially completed (score: {reward:.2f}, {len(checks_passed)} checks passed)"
+            message = "✅ Task completed successfully"
+        elif reward >= 0.9:
+            # 所有关键检查通过，允许微小误差
+            success = True
+            done = True
+            message = f"✅ Task completed (score: {reward:.2f})"
+        elif reward >= 0.7:
+            # 大部分完成但不够完美，继续尝试
+            success = False
+            done = False
+            message = f"⚠️  Task mostly completed (score: {reward:.2f}), but not all checks passed. Continue..."
         elif reward > 0:
-            # 有 reward 但没有明确的检查通过，继续尝试但设置较低的容忍度
+            # 部分完成，继续尝试
+            success = False
             done = False
-            message = f"⚠️  Task in progress (score: {reward:.2f}), continue..."
+            message = f"⚠️  Task in progress (score: {reward:.2f}), {len(checks_passed)}/{len(checks_passed) + len(checks_failed)} checks passed. Continue..."
         else:
-            # 完全失败，让agent继续尝试（除非超过max_steps）
+            # 完全失败，继续尝试（除非超过max_steps）
+            success = False
             done = False
-            message = f"❌ Task not completed yet (score: {reward:.2f}), keep trying..."
+            message = f"❌ Task not completed (score: {reward:.2f}). Keep trying..."
 
         # Add check details to message
         if checks_passed or checks_failed:

@@ -15,8 +15,7 @@ import {
  * Music player style view showing album info and track list
  * Right-click context menu for Add to Playlist and Download
  */
-export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, currentSong, playlists = [], onAddToPlaylist }) {
-  const [isLiked, setIsLiked] = useState(false);
+export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, currentSong, playlists = [], onAddToPlaylist, favorites = [], onToggleFavorite }) {
   const [contextMenu, setContextMenu] = useState(null); // { x, y, track, type: 'track' | 'album' }
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [targetForPlaylist, setTargetForPlaylist] = useState(null); // track or 'album'
@@ -207,9 +206,6 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
             <div className="flex-1 flex flex-col justify-end">
               <h1 className="text-4xl font-bold text-white mb-2">
                 {album.title}
-                {isLiked && (
-                  <Heart size={32} className="inline-block ml-3 text-[#FF00FF] fill-current" />
-                )}
               </h1>
 
               <div className="text-[#CCFF00] text-lg mb-3">
@@ -264,15 +260,18 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
             PLAY
           </button>
 
-          <button
-            onClick={() => setIsLiked(!isLiked)}
-            className="p-2 border border-[#333] rounded hover:border-[#FF00FF] transition-colors"
-          >
-            <Heart
-              size={20}
-              className={isLiked ? 'text-[#FF00FF] fill-current' : 'text-gray-400'}
-            />
-          </button>
+          {/* Like button for first track as album representative */}
+          {album.tracks && album.tracks.length > 0 && (
+            <button
+              onClick={(e) => onToggleFavorite?.(e, album.tracks[0].id)}
+              className="p-2 border border-[#333] rounded hover:border-[#FF00FF] transition-colors"
+            >
+              <Heart
+                size={20}
+                className={favorites.includes(album.tracks[0].id) ? 'text-[#FF00FF] fill-current' : 'text-gray-400'}
+              />
+            </button>
+          )}
 
           <span className="ml-auto text-gray-500 text-xs font-mono">
             Right-click album or track for options
@@ -333,10 +332,18 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
+                      onToggleFavorite?.(e, track.id);
                     }}
                     className={`transition-opacity ${isPlaying ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
                   >
-                    <Heart size={16} className="text-gray-400 hover:text-[#FF00FF]" />
+                    <Heart 
+                      size={16} 
+                      className={`transition-all hover:scale-125 ${
+                        favorites.includes(track.id) 
+                          ? 'text-[#FF00FF] fill-[#FF00FF]' 
+                          : 'text-gray-400 hover:text-[#FF00FF]'
+                      }`}
+                    />
                   </button>
                 </div>
               );

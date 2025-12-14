@@ -212,16 +212,13 @@ const MOCK_LYRICS = [
 ];
 
 const CATEGORIES = [
-  { id: 1, name: "GLITCH", bg: "bg-[#CCFF00] text-black" },
-  { id: 2, name: "VAPOR", bg: "bg-gradient-to-r from-pink-500 to-purple-500 text-white" },
-  { id: 3, name: "CYBER", bg: "bg-black border border-[#CCFF00] text-[#CCFF00]" },
-  { id: 4, name: "TECHNO", bg: "bg-gray-800 text-white" },
-  { id: 5, name: "ACID", bg: "bg-white text-black" },
-  { id: 6, name: "AMBIENT", bg: "bg-gradient-to-b from-gray-900 to-black text-white border border-gray-700" },
+  { id: 1, name: "ROCK", bg: "bg-gray-800 text-white" },
+  { id: 2, name: "FOLK", bg: "bg-gradient-to-b from-gray-900 to-black text-white border border-gray-700" },
+  { id: 3, name: "JAZZ", bg: "bg-[#CCFF00] text-black" },
+  { id: 4, name: "ELECTRONIC", bg: "bg-gradient-to-r from-pink-500 to-purple-500 text-white" },
 ];
 
 const INITIAL_PLAYLISTS = [
-  "LIQUID_METAL_MIX", "NEURO_FUNK", "Y2K_REVIVAL", "DATA_MOSHR"
 ];
 
 // --- COMPONENTS ---
@@ -369,18 +366,6 @@ const SongCard = ({ song, onClick, onAlbumClick, isCurrent }) => (
              <Zap size={32} className="text-[#CCFF00] animate-pulse" fill="#CCFF00" />
            </div>
         )}
-        {/* Play button overlay */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick(song);
-          }}
-          className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <div className="w-12 h-12 rounded-full bg-[#CCFF00] flex items-center justify-center hover:scale-110 transition-transform">
-            <Play size={20} fill="black" className="text-black ml-0.5" />
-          </div>
-        </button>
       </div>
       <div className="mt-auto">
         <h3 className={`font-mono font-bold text-sm truncate ${isCurrent ? 'text-[#CCFF00]' : 'text-gray-200'} group-hover:text-white`}>{song.title}</h3>
@@ -967,13 +952,13 @@ export default function App() {
           </div>
 
           <div className="p-6 flex flex-col gap-4">
-            <div onClick={() => setCurrentView('albums')} className={`flex items-center gap-4 cursor-pointer hover:text-[#CCFF00] transition-colors ${currentView === 'albums' ? 'text-[#CCFF00]' : ''}`}>
+            <div role="button" tabIndex={0} aria-label="ALBUMS" onClick={() => setCurrentView('albums')} onKeyDown={(e) => e.key === 'Enter' && setCurrentView('albums')} className={`flex items-center gap-4 cursor-pointer hover:text-[#CCFF00] transition-colors ${currentView === 'albums' ? 'text-[#CCFF00]' : ''}`}>
                <Album size={20} /> <span className="font-bold tracking-widest text-sm">ALBUMS</span>
             </div>
-            <div onClick={() => setCurrentView('songs')} className={`flex items-center gap-4 cursor-pointer hover:text-[#CCFF00] transition-colors ${currentView === 'songs' ? 'text-[#CCFF00]' : ''}`}>
+            <div role="button" tabIndex={0} aria-label="SONGS" onClick={() => setCurrentView('songs')} onKeyDown={(e) => e.key === 'Enter' && setCurrentView('songs')} className={`flex items-center gap-4 cursor-pointer hover:text-[#CCFF00] transition-colors ${currentView === 'songs' ? 'text-[#CCFF00]' : ''}`}>
                <Music size={20} /> <span className="font-bold tracking-widest text-sm">SONGS</span>
             </div>
-            <div onClick={() => setCurrentView('artists')} className={`flex items-center gap-4 cursor-pointer hover:text-[#CCFF00] transition-colors ${currentView === 'artists' ? 'text-[#CCFF00]' : ''}`}>
+            <div role="button" tabIndex={0} aria-label="ARTISTS" onClick={() => setCurrentView('artists')} onKeyDown={(e) => e.key === 'Enter' && setCurrentView('artists')} className={`flex items-center gap-4 cursor-pointer hover:text-[#CCFF00] transition-colors ${currentView === 'artists' ? 'text-[#CCFF00]' : ''}`}>
                <Users size={20} /> <span className="font-bold tracking-widest text-sm">ARTISTS</span>
             </div>
           </div>
@@ -1727,6 +1712,8 @@ export default function App() {
           onPlayAlbum={handlePlayAlbum}
           currentSong={currentSong}
           playlists={apiPlaylists || []}
+          favorites={favorites}
+          onToggleFavorite={toggleFavorite}
           onAddToPlaylist={async (playlistId, songId) => {
             try {
               await addSongToPlaylist(playlistId, songId);

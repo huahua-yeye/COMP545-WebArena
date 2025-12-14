@@ -132,21 +132,21 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "Find and play the song titled 'HYPERREALITY'",
+    "intent": "Find and play the song titled 'SUNNY'",
     "intent_template": "Find and play the song titled '{song_name}'",
     "intent_template_id": 4,
     "difficulty": "medium",
     "eval": {
       "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["HYPERREALITY"],
+        "must_include": ["SUNNY"],
         "must_exclude": []
       },
       "program_html": [
         {
           "url": "http://localhost:5173",
           "locator": "[class*='font-bold'][class*='text-white']",
-          "required_contents": "HYPERREALITY"
+          "required_contents": "SUNNY"
         },
         {
           "url": "http://localhost:5173",
@@ -162,22 +162,22 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "Use the search/filter to find TECHNO songs",
+    "intent": "Use the search/filter to find ACOUSTIC songs",
     "intent_template": "Use the search/filter to find {genre} songs",
     "intent_template_id": 5,
     "difficulty": "medium",
     "eval": {
       "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["TECHNO"],
-        "must_exclude": ["HOUSE", "AMBIENT"]
+        "must_include": ["ACOUSTIC"],
+        "must_exclude": ["ELECTRONIC", "CINEMATIC"]
       },
       "program_html": [
         {
           "url": "http://localhost:5173",
           "locator": "input[placeholder*='FILTER']",
           "attribute": "value",
-          "required_contents": "TECHNO"
+          "required_contents": "ACOUSTIC"
         }
       ]
     }
@@ -188,14 +188,14 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "Add the song 'NEON DREAMS' to your favorites",
+    "intent": "Add the song 'SUMMER' to your favorites",
     "intent_template": "Add the song '{song_name}' to your favorites",
     "intent_template_id": 6,
     "difficulty": "medium",
     "eval": {
       "eval_types": ["program_html"],
       "reference_answers": {
-        "must_include": ["NEON DREAMS"],
+        "must_include": ["SUMMER"],
         "must_exclude": []
       },
       "program_html": [
@@ -238,18 +238,18 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "View the details of the album 'DIGITAL SUNSET' by clicking on it",
+    "intent": "View the details of the album 'ACOUSTIC ESSENTIALS' by clicking on it",
     "intent_template": "View the details of the album '{album_name}'",
     "intent_template_id": 8,
     "difficulty": "medium",
     "eval": {
       "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["DIGITAL SUNSET", "TRACKS", "PLAY ALL"]
+        "must_include": ["ACOUSTIC ESSENTIALS", "TRACKS", "PLAY ALL"]
       },
       "program_html": [
         {
-          "locator": "text='DIGITAL SUNSET'",
+          "locator": "text='ACOUSTIC ESSENTIALS'",
           "required_state": "visible"
         },
         {
@@ -265,18 +265,18 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "Browse to the ARTISTS view and click on 'SYNTHWAVE COLLECTIVE' to see their profile",
+    "intent": "Browse to the ARTISTS view and click on 'BENSOUND' to see their profile",
     "intent_template": "Browse to the ARTISTS view and click on '{artist_name}'",
     "intent_template_id": 9,
     "difficulty": "medium",
     "eval": {
       "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["SYNTHWAVE COLLECTIVE", "BIO", "TOP SONGS"]
+        "must_include": ["BENSOUND", "BIO", "TOP SONGS"]
       },
       "program_html": [
         {
-          "locator": "text='SYNTHWAVE COLLECTIVE'",
+          "locator": "text='BENSOUND'",
           "required_state": "visible"
         },
         {
@@ -337,14 +337,14 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "Navigate to SONGS, filter by HOUSE genre, and play the first HOUSE song",
+    "intent": "Navigate to SONGS, filter by ELECTRONIC genre, and play the first ELECTRONIC song",
     "intent_template": "Navigate to {view}, filter by {genre}, and play the first song",
     "intent_template_id": 12,
     "difficulty": "hard",
     "eval": {
       "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["HOUSE"],
+        "must_include": ["ELECTRONIC"],
         "must_exclude": []
       },
       "program_html": [
@@ -352,7 +352,7 @@
           "url": "http://localhost:5173",
           "locator": "input[placeholder*='FILTER']",
           "attribute": "value",
-          "required_contents": "HOUSE"
+          "required_contents": "ELECTRONIC"
         },
         {
           "url": "http://localhost:5173",
@@ -368,14 +368,14 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "View your playlists and play the entire 'Chill Vibes' playlist",
+    "intent": "View your playlists and play the entire '轻松工作背景音乐' playlist",
     "intent_template": "View playlists and play '{playlist_name}'",
     "intent_template_id": 13,
     "difficulty": "medium",
     "eval": {
       "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["Chill Vibes"],
+        "must_include": ["轻松工作背景音乐"],
         "must_exclude": []
       },
       "program_html": [
@@ -393,14 +393,14 @@
     "require_reset": true,
     "start_url": "http://localhost:5173",
     "sites": ["acidwave"],
-    "intent": "Complex workflow: Navigate to ALBUMS, find 'MIDNIGHT ECHOES', view its details, and play the first track",
+    "intent": "Complex workflow: Navigate to ALBUMS, find 'ELECTRONIC DREAMS', view its details, and play the first track",
     "intent_template": "Navigate to {view}, find '{album_name}', view details, and play first track",
     "intent_template_id": 14,
     "difficulty": "hard",
     "eval": {
       "eval_types": ["string_match", "program_html"],
       "reference_answers": {
-        "must_include": ["MIDNIGHT ECHOES"]
+        "must_include": ["ELECTRONIC DREAMS"]
       },
       "program_html": [
         {
@@ -408,7 +408,7 @@
           "required_state": "visible"
         },
         {
-          "locator": "text='MIDNIGHT ECHOES'",
+          "locator": "text='ELECTRONIC DREAMS'",
           "required_state": "visible"
         }
       ]
