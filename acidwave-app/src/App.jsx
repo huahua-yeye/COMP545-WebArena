@@ -483,6 +483,21 @@ export default function App() {
 
   // Check for logged in user on mount
   useEffect(() => {
+    // Initialize default test user if it doesn't exist
+    const users = JSON.parse(localStorage.getItem('acidwave_users') || '[]');
+    const testUserExists = users.find(u => u.username === 'aciduser');
+    if (!testUserExists) {
+      const testUser = {
+        username: 'aciduser',
+        email: 'aciduser@acidwave.com',
+        password: 'aciduser',
+        avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=aciduser',
+        createdAt: new Date().toISOString()
+      };
+      users.push(testUser);
+      localStorage.setItem('acidwave_users', JSON.stringify(users));
+    }
+
     const savedUser = localStorage.getItem('acidwave_current_user');
     if (savedUser) {
       setCurrentUser(JSON.parse(savedUser));
@@ -996,7 +1011,13 @@ export default function App() {
 
              {isPlaylistOpen && (
                <div className="flex-1 overflow-y-auto space-y-3 pb-4 custom-scrollbar">
-                  <div onClick={() => setCurrentView('create-playlist')} className={`flex items-center gap-3 cursor-pointer group ${currentView === 'create-playlist' ? 'text-[#CCFF00]' : 'hover:text-[#CCFF00]'}`}>
+                  <div
+                    onClick={() => setCurrentView('create-playlist')}
+                    className={`flex items-center gap-3 cursor-pointer group ${currentView === 'create-playlist' ? 'text-[#CCFF00]' : 'hover:text-[#CCFF00]'}`}
+                    role="button"
+                    aria-label="Create new playlist"
+                    data-action="init-new-list"
+                  >
                      <div className={`w-4 h-4 border border-dashed border-gray-500 flex items-center justify-center ${currentView === 'create-playlist' ? 'border-[#CCFF00]' : 'group-hover:border-[#CCFF00]'}`}>+</div>
                      <span className="text-xs font-bold">INIT_NEW_LIST</span>
                   </div>

@@ -161,5 +161,130 @@
       },
       "program_html": []
     }
+  },
+  {
+    "task_id": 6,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Navigate to the FAVORITES.DAT playlist",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "FAVORITE_DATA"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
+  },
+  {
+    "task_id": 7,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Filter and display all songs in the POP category",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "program_html"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [],
+        "must_exclude": []
+      },
+      "program_html": [
+        {
+          "locator": "button:has-text(\"POP\")[class*='ring-2'], button:has-text(\"POP\")[class*='shadow']",
+          "required_contents": "POP"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 8,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Add the song 'Vibrant Horizon' to favorites and verify it appears in the favorites list",
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "FAVORITE_DATA",
+          "VIBRANT HORIZON"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
+  },
+  {
+    "task_id": 9,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Create a new playlist named 'PLAYLIST2'",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "PLAYLIST2"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
+  },
+  {
+    "task_id": 10,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Login with username 'aciduser' and password 'aciduser'",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "aciduser",
+          "AUTHENTICATED"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
   }
 ]

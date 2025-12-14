@@ -18,19 +18,22 @@ You can interact with web pages using Browser Interaction Description (BID) acti
 1. **click(selector)** - Click an element
    Example: click("[aria-label='SONGS']")
 
-2. **fill(selector, text)** - Fill a text input
+2. **right_click(selector)** - Right-click an element to open context menu
+   Example: right_click("[data-song-title='Vibrant Horizon']")
+
+3. **fill(selector, text)** - Fill a text input
    Example: fill("input[placeholder*='FILTER']", "ACOUSTIC")
 
-3. **press(key)** - Press a keyboard key
+4. **press(key)** - Press a keyboard key
    Example: press("Enter")
 
-4. **hover(selector)** - Hover over an element
+5. **hover(selector)** - Hover over an element
    Example: hover("button.play-button")
 
-5. **scroll(direction)** - Scroll the page
+6. **scroll(direction)** - Scroll the page
    Example: scroll("down")
 
-6. **send_msg_to_user(message)** - Send a final answer when task is complete
+7. **send_msg_to_user(message)** - Send a final answer when task is complete
    Example: send_msg_to_user("Task completed successfully")
 
 ### Selector Syntax
@@ -61,6 +64,33 @@ Use standard CSS selectors:
 - **PLAYLISTS view**: User playlists
   - Selector: `[aria-label='PLAYLISTS']`
   - Features: Playlist list, create new
+
+### User Authentication
+
+**IMPORTANT: How to Login**
+Users can login to access personalized features.
+
+To login:
+1. Look for the user profile section in the sidebar (usually at the bottom)
+2. If not logged in, you'll see "GUEST_MODE" with "CLICK_TO_LOGIN" text
+3. Click on the guest mode area to open the login page
+4. The login page will appear as a modal/overlay
+5. Fill in the username and password fields
+6. Click the "INITIATE_ACCESS" button to login
+7. After successful login, the sidebar will show the username and "AUTHENTICATED" status
+
+Login page selectors:
+- **Login button/area**: Look for text containing "GUEST_MODE" and "CLICK_TO_LOGIN"
+  - Or button with text about login
+- **Username input**: `input[name='username']` or `input[placeholder*='USERNAME']`
+- **Password input**: `input[name='password']` or `input[placeholder*='PASSWORD']`
+- **Submit button**: `button:has-text('INITIATE_ACCESS')` or `button[type='submit']`
+- **Tab switcher**: Can switch between LOGIN and REGISTER modes
+
+After login verification:
+- Username should appear in the sidebar
+- "AUTHENTICATED" text should be visible
+- User avatar may be displayed
 
 ### Player Controls
 Located at the bottom of the page:
@@ -94,7 +124,16 @@ Each song row contains:
 - **Album name**: Additional metadata
 - **Heart icon**: `button:has(svg[class*='Heart'])` - Add to favorites (DO NOT click this to play)
   - Filled heart: `button:has(svg[class*='Heart'])[class*='fill']` - Already favorited
-- **More options**: Three-dot menu for adding to playlist
+
+**Right-Click Context Menu**:
+Songs, albums, and tracks support right-click context menus with additional options:
+- Right-click on a song row to open a context menu
+- Menu options include:
+  - Add to Playlist
+  - Download
+  - Add to Favorites
+- Use standard right-click action to trigger the menu
+- Select an option by clicking on the menu item
 
 ### Filter/Search
 - **Filter input**: `input[placeholder*='FILTER']`
@@ -117,10 +156,32 @@ When viewing an artist:
 - **SONGS tab**: All songs by artist
 
 ### Playlists
-- **Create playlist**: Click `+` or "NEW PLAYLIST" button
-- **Playlist name input**: Modal with text input
-- **Add songs**: Click + icon on song cards
+
+**IMPORTANT: How to Create a New Playlist**
+In the PLAYLISTS view, you can create new playlists.
+
+To create a new playlist:
+1. Navigate to the PLAYLISTS section if not already there
+2. Click the "INIT_NEW_LIST" option in the sidebar (it has a "+" symbol next to it)
+3. This opens a playlist creation page with a form
+4. Fill in the playlist name in the "SEQUENCE_ID" input field (placeholder: "ENTER_NAME...")
+5. Click "COMPILE_DATA" button to create the playlist
+6. The new playlist will appear in the playlists list
+
+Playlist creation selectors:
+- **INIT_NEW_LIST button**: Clickable option with "+" symbol and "INIT_NEW_LIST" text
+  - Best selectors:
+    - `[aria-label='Create new playlist']` (most reliable)
+    - `[data-action='init-new-list']`
+    - `div:has-text('INIT_NEW_LIST')` (matches the outer clickable div)
+- **Playlist name input**: `input[placeholder='ENTER_NAME...']` or `input[placeholder*='ENTER_NAME']`
+- **CREATE button**: `button:has-text('COMPILE_DATA')`
+- **Cancel button**: `button:has-text('ABORT')`
+
+**Other Playlist Operations**:
+- **Add songs**: Click + icon on song cards or use right-click context menu
 - **Play playlist**: Click playlist then PLAY ALL
+- **View playlist**: Click on playlist name to see contents
 
 ## Data Types
 
@@ -185,17 +246,57 @@ click("[data-song-title='Vibrant Horizon']")
 
 **Add to favorites**:
 ```python
+# Option 1: Click the heart icon directly
 click("button:has(svg[class*='Heart'])")
+
+# Option 2: Use right-click context menu
+# Right-click on song row
+right_click("[aria-label*='Play Song Name by Artist']")
+# Then click "Add to Favorites" in the menu
+click("button:has-text('Add to Favorites')")
+```
+
+**Add song to playlist using context menu**:
+```python
+# Right-click on the song row
+right_click("[data-song-title='Song Name']")
+# Click "Add to Playlist" option
+click("button:has-text('Add to Playlist')")
+# Select a playlist from the list
+click("button:has-text('Playlist Name')")
 ```
 
 **Create playlist**:
 ```python
-# 1. Click new playlist
-click("button:has-text('NEW PLAYLIST')")
-# 2. Enter name
-fill("input[placeholder*='playlist name']", "My Playlist")
-# 3. Confirm
-click("button:has-text('CREATE')")
+# 1. Navigate to PLAYLISTS view if not already there
+click("[aria-label='PLAYLISTS']")
+# 2. Click the create new playlist button (use aria-label for reliability)
+click("[aria-label='Create new playlist']")
+# 3. Wait for the creation form to appear, then enter playlist name
+fill("input[placeholder*='ENTER_NAME']", "PLAYLIST2")
+# 4. Click COMPILE_DATA button to create the playlist
+click("button:has-text('COMPILE_DATA')")
+# 5. The new playlist will appear in the playlists list
+```
+
+**Login to account**:
+```python
+# 1. Look for the guest mode area in the sidebar (shows "GUEST_MODE" and "CLICK_TO_LOGIN")
+# Click on it to open the login page
+click("button:has-text('CLICK_TO_LOGIN')")
+# OR look for the guest mode container
+click("div:has-text('GUEST_MODE')")
+
+# 2. The login modal will appear. Fill in username
+fill("input[name='username']", "aciduser")
+
+# 3. Fill in password
+fill("input[name='password']", "aciduser")
+
+# 4. Click the login button
+click("button:has-text('INITIATE_ACCESS')")
+
+# 5. After successful login, verify by checking for username and "AUTHENTICATED" in the page
 ```
 
 **Check playback state**:
@@ -323,21 +424,90 @@ fill("input[placeholder*='FILTER']", "ACOUSTIC")
     },
     {
         "role": "user",
-        "content": """Goal: Create a new playlist named 'My Favorites' and add at least 2 songs
+        "content": """Goal: Create a new playlist named 'PLAYLIST2'
 
 Current Page (Accessibility Tree):
-[1] RootWebArea 'Playlists - Acidwave'
-  [45] main
-    [67] button 'NEW PLAYLIST'
-    [89] generic 'Existing playlists...'
+[1] RootWebArea 'Acidwave - Music Player'
+  [12] link 'SONGS' aria-label='SONGS'
+  [28] link 'ALBUMS' aria-label='ALBUMS'
+  [45] link 'PLAYLISTS' aria-label='PLAYLISTS'
+  [63] main
+    [89] heading 'Home'
 """
     },
     {
         "role": "assistant",
-        "content": """I need to create a new playlist. I can see a NEW PLAYLIST button at element [67]. I'll click it to open the playlist creation dialog.
+        "content": """I need to create a new playlist named 'PLAYLIST2'. First, I need to navigate to the PLAYLISTS view. I can see the PLAYLISTS link at element [45].
 
 ```python
-click("button:has-text('NEW PLAYLIST')")
+click("[aria-label='PLAYLISTS']")
+```"""
+    },
+    {
+        "role": "user",
+        "content": """Goal: Create a new playlist named 'PLAYLIST2'
+
+Current Page (Accessibility Tree):
+[1] RootWebArea 'Playlists - Acidwave'
+  [45] main
+    [67] button 'Create new playlist' aria-label='Create new playlist'
+      [78] div '+'
+      [89] span 'INIT_NEW_LIST'
+    [102] div 'FAVORITES.DAT'
+    [115] div 'My Playlist'
+"""
+    },
+    {
+        "role": "assistant",
+        "content": """Now I'm in the PLAYLISTS view. I can see the create playlist button at element [67] with aria-label='Create new playlist'. I'll click it to open the playlist creation form.
+
+```python
+click("[aria-label='Create new playlist']")
+```"""
+    },
+    {
+        "role": "user",
+        "content": """Goal: Create a new playlist named 'PLAYLIST2'
+
+Current Page (Accessibility Tree):
+[1] RootWebArea 'Playlists - Acidwave'
+  [45] main
+    [67] heading 'CONSTRUCT_PLAYLIST'
+    [89] div 'SEQUENCE_ID'
+      [104] input placeholder='ENTER_NAME...'
+    [120] button 'COMPILE_DATA'
+    [135] button 'ABORT'
+"""
+    },
+    {
+        "role": "assistant",
+        "content": """The playlist creation form has opened. I can see the SEQUENCE_ID input field at element [104] with placeholder 'ENTER_NAME...'. I'll enter the playlist name 'PLAYLIST2'.
+
+```python
+fill("input[placeholder='ENTER_NAME...']", "PLAYLIST2")
+```"""
+    },
+    {
+        "role": "user",
+        "content": """Goal: Add the song "Vibrant Horizon" to a playlist using the context menu
+
+Current Page HTML:
+[1] RootWebArea 'Songs - Acidwave'
+  [45] main
+    [89] div 'Song table'
+      [104] div role='button' aria-label='Play Vibrant Horizon by Denys Brodovskyi' data-song-title='Vibrant Horizon'
+        [120] div 'Vibrant Horizon'
+        [135] div 'Denys Brodovskyi'
+      [200] div 'Playlists section'
+        [220] button 'My Playlist'
+"""
+    },
+    {
+        "role": "assistant",
+        "content": """I need to add "Vibrant Horizon" to a playlist using the context menu. I can see the song row at element [104]. I'll right-click on it to open the context menu with options.
+
+```python
+right_click("[aria-label='Play Vibrant Horizon by Denys Brodovskyi']")
 ```"""
     },
 ]
@@ -379,6 +549,7 @@ click("[aria-label='SONGS']")
 ACTION_SPACE_DESCRIPTION = """
 Available actions:
 - click(selector): Click an element matching the CSS selector
+- right_click(selector): Right-click an element to open context menu
 - fill(selector, text): Fill text into an input field
 - press(key): Press a keyboard key (Enter, Escape, etc.)
 - hover(selector): Hover over an element
