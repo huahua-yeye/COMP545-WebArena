@@ -53,6 +53,8 @@ import LoadingSpinner, { ErrorDisplay } from './components/LoadingSpinner';
 import { SongAttributionButton } from './components/SongAttributionButton';
 import { AlbumDetailPage } from './components/AlbumDetailPage';
 import { ArtistDetailPage } from './components/ArtistDetailPage';
+import { Footer } from './components/Footer';
+import { LicensesPage } from './components/LicensesPage';
 
 // --- ACID COLOR PALETTE ---
 const ACID_GREEN = "#CCFF00";
@@ -216,6 +218,7 @@ const CATEGORIES = [
   { id: 2, name: "FOLK", bg: "bg-gradient-to-b from-gray-900 to-black text-white border border-gray-700" },
   { id: 3, name: "JAZZ", bg: "bg-[#CCFF00] text-black" },
   { id: 4, name: "ELECTRONIC", bg: "bg-gradient-to-r from-pink-500 to-purple-500 text-white" },
+  { id: 5, name: "POP", bg: "bg-gradient-to-r from-blue-500 to-cyan-500 text-white" },
 ];
 
 const INITIAL_PLAYLISTS = [
@@ -432,6 +435,7 @@ export default function App() {
   const [selectedArtistId, setSelectedArtistId] = useState(null);
   const [selectedArtistInfo, setSelectedArtistInfo] = useState(null);
   const [showArtistDetail, setShowArtistDetail] = useState(false);
+  const [showLicensesPage, setShowLicensesPage] = useState(false);
   const [isPlaylistOpen, setIsPlaylistOpen] = useState(true);
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -842,12 +846,28 @@ export default function App() {
       case 'RECENTLY_ADDED': filtered = [...MOCK_SONGS].reverse(); break;
       case 'ALL': default: filtered = MOCK_SONGS; break;
     }
+
+    // Group songs by album to get unique albums
+    const albumsMap = new Map();
+    filtered.forEach(song => {
+      const albumKey = `${song.album}-${song.artist}`;
+      if (!albumsMap.has(albumKey)) {
+        albumsMap.set(albumKey, {
+          ...song,
+          title: song.album, // Use album name as title
+          albumName: song.album,
+          songTitle: song.title // Keep original song title
+        });
+      }
+    });
+
+    const uniqueAlbums = Array.from(albumsMap.values());
     const start = (albumsPage - 1) * ALBUMS_PER_PAGE;
     const end = start + ALBUMS_PER_PAGE;
     return {
-      items: filtered.slice(start, end),
-      total: filtered.length,
-      totalPages: Math.ceil(filtered.length / ALBUMS_PER_PAGE)
+      items: uniqueAlbums.slice(start, end),
+      total: uniqueAlbums.length,
+      totalPages: Math.ceil(uniqueAlbums.length / ALBUMS_PER_PAGE)
     };
   };
 
@@ -1042,7 +1062,7 @@ export default function App() {
         </div>
 
         {/* --- MAIN CONTENT --- */}
-        <div className="flex-1 overflow-y-auto bg-[#050505] relative custom-scrollbar">
+        <div className="flex-1 overflow-y-auto bg-[#050505] relative custom-scrollbar pb-32 lg:pb-36">
           
           {/* Top Bar */}
           <div className="sticky top-0 z-20 px-4 sm:px-8 py-5 flex justify-between items-center bg-[#050505]/90 backdrop-blur-md border-b border-[#333]">
@@ -1675,6 +1695,15 @@ export default function App() {
                 </div>
              </div>
           </div>
+
+          {/* Attribution Notice (optional) */}
+          {currentSong?.requires_attribution && currentSong?.attribution && (
+            <div className="px-4 py-2 bg-black/50 border-t border-[#222] text-center">
+              <div className="text-[9px] text-gray-500 font-mono">
+                {currentSong.attribution}
+              </div>
+            </div>
+          )}
        </div>
        )}
 
@@ -1723,6 +1752,16 @@ export default function App() {
           }}
         />
       )}
+
+      {/* Licenses Page Overlay */}
+      {showLicensesPage && (
+        <div className="fixed inset-0 z-[9999] bg-[#050505] overflow-y-auto">
+          <LicensesPage onClose={() => setShowLicensesPage(false)} />
+        </div>
+      )}
+
+      {/* Footer with Attribution */}
+      <Footer onLicensesClick={() => setShowLicensesPage(true)} />
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }

@@ -47,3 +47,6 @@ __pycache__/
 *.pyc
 *.pyo
 browsergym-integration/Guide/
+backend/scrape_fma/
+backend/docs/
+*.md

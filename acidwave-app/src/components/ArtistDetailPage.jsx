@@ -369,6 +369,8 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
           {/* Albums Grid */}
           {activeTab === 'albums' && (() => {
             const albums = artist.albums || [];
+            // Debug: 打印专辑数据
+            console.log('Artist albums data:', albums);
             // 只在首次加载时显示骨架屏，刷新时不显示（避免闪烁）
             const showSkeleton = albums.length === 0 && loading;
 
@@ -410,6 +412,10 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
                         src={album.cover_url || 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop'}
                         alt={album.title}
                         className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          console.log('Image failed to load:', album.cover_url);
+                          e.target.src = 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop';
+                        }}
                       />
                       {/* Play overlay on hover */}
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">

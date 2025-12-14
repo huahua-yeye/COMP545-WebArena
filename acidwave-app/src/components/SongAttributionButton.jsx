@@ -91,7 +91,13 @@ export function SongAttributionButton({ song }) {
                   {song.attribution && (
                     <div className="mt-2">
                       <div className="text-xs text-gray-500 mb-1">ATTRIBUTION</div>
-                      <div className="text-gray-300 text-sm">{song.attribution}</div>
+                      <div className="text-gray-300 text-sm">
+                        {song.attribution}
+                        {song.license && ` (${song.license})`}
+                      </div>
+                      <div className="text-gray-500 text-xs mt-1">
+                        Source: Free Music Archive
+                      </div>
                     </div>
                   )}
 
@@ -144,8 +150,25 @@ export function SongAttributionButton({ song }) {
               {/* License Explanation */}
               {song.requires_attribution && (
                 <div className="mt-4 p-3 bg-[#CCFF00]/10 border border-[#CCFF00]/30 rounded text-xs text-gray-400">
-                  <strong className="text-[#CCFF00]">Attribution Notice:</strong> This track is licensed under{' '}
-                  {song.license} and requires attribution. The attribution is displayed in the footer of this website.
+                  <strong className="text-[#CCFF00]">Attribution Notice:</strong> Music provided by{' '}
+                  <a
+                    href="https://freemusicarchive.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#FF00FF] hover:text-[#CCFF00] transition-colors underline"
+                  >
+                    Free Music Archive
+                  </a>
+                  {' '}under{' '}
+                  <a
+                    href="https://creativecommons.org/licenses/by/4.0/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#FF00FF] hover:text-[#CCFF00] transition-colors underline"
+                  >
+                    {song.license || 'CC BY 4.0'}
+                  </a>
+                  {' '}license.
                 </div>
               )}
             </div>
