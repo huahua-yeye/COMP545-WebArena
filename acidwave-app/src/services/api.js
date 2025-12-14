@@ -1,11 +1,14 @@
 // API service layer for backend integration
 
 // API base URL - switches by environment
-// const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
-// 添加环境变量支持
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// In development, use '/api' to go through Vite proxy
+// In production, use environment variable or default
+const isDevelopment = import.meta.env.DEV;
+const API_BASE_URL = isDevelopment
+  ? '/api'  // Use Vite proxy in development
+  : (import.meta.env.VITE_API_URL || 'http://localhost:3000/api');
 
-console.log('🔗 API URL:', API_BASE_URL); // 调试用
+console.log('🔗 API URL:', API_BASE_URL, '(dev mode:', isDevelopment, ')'); // 调试用
 
 // 导出配置
 export const API_CONFIG = {
