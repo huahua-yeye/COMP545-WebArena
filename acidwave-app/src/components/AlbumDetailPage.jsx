@@ -120,7 +120,7 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
     setTargetForPlaylist(null);
   };
 
-  // Download track - 使用直接链接方式，避免 CORS 问题
+  // Download track - 导航到音频文件URL（用于benchmark任务）
   const handleDownload = (track) => {
     setContextMenu(null);
     
@@ -129,26 +129,12 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
       return;
     }
 
-    try {
-      // 方法1: 尝试使用 <a> 标签直接下载
-      const a = document.createElement('a');
-      a.href = track.url;
-      a.target = '_blank';
-      a.download = `${track.artist?.name || track.artist || album.artist?.name || 'Unknown'} - ${track.title}.mp3`;
-      
-      // 对于跨域资源，download 属性可能不生效，但至少会在新标签页打开
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      
-    } catch (error) {
-      console.error('Download failed:', error);
-      // 如果直接下载失败，在新窗口打开
-      window.open(track.url, '_blank');
-    }
+    // 直接导航到音频文件URL，让agent能检测到URL变化
+    // 这会在当前窗口打开MP3文件，浏览器通常会播放或下载
+    window.location.href = track.url;
   };
 
-  // Download all tracks
+  // Download all tracks - 下载第一首歌曲
   const handleDownloadAll = () => {
     setContextMenu(null);
     
@@ -159,18 +145,16 @@ export function AlbumDetailPage({ album, onClose, onPlaySong, onPlayAlbum, curre
       return;
     }
     
-    // 提示用户将要下载多个文件
-    if (tracksWithUrl.length > 1) {
-      const confirmed = confirm(`Will open ${tracksWithUrl.length} download links. Continue?`);
-      if (!confirmed) return;
+    // 对于benchmark任务，直接导航到第一首歌曲的URL
+    // 如果用户真的想下载所有歌曲，可以显示确认对话框
+    if (tracksWithUrl.length === 1) {
+      window.location.href = tracksWithUrl[0].url;
+    } else {
+      const confirmed = confirm(`Download all ${tracksWithUrl.length} tracks? (Will navigate to first track URL)`);
+      if (confirmed) {
+        window.location.href = tracksWithUrl[0].url;
+      }
     }
-    
-    // 依次打开下载链接（间隔500ms避免被浏览器阻止）
-    tracksWithUrl.forEach((track, index) => {
-      setTimeout(() => {
-        handleDownload(track);
-      }, index * 500);
-    });
   };
 
   return (
