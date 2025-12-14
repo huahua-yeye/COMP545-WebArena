@@ -137,6 +137,12 @@ Songs, playlists, and tracks support right-click context menus with additional o
 **For Playlist Tracks** (when viewing a playlist detail page):
 - Right-click on a track row to open the context menu
 - The track rows have `data-track-id` and `data-track-title` attributes for identification
+- **The track title is especially designed for right-click**:
+  - It has `cursor-context-menu` style and underlines on hover
+  - It has `data-context-menu="track-title"` attribute
+  - You can right-click directly on the song title text
+  - Selectors: `[data-context-menu='track-title']` or `div:has-text('Song Title Name')`
+- You can right-click anywhere on the track row (including title, artist, album, or duration)
 - Menu options include:
   - **Download**: `[data-action='download-track']` or `button:has-text('Download')`
   - **Remove from Playlist**: `[data-action='remove-from-playlist']` or `button:has-text('Remove from Playlist')`
@@ -367,13 +373,16 @@ click("[aria-label='PLAYLISTS']")
 click("div:has-text('PLAYLIST1')")
 
 # 3. For each song in the playlist, right-click on the track row to open context menu
-# Option 1: Right-click using track title
+# Option 1: Right-click directly on the track title (RECOMMENDED - most visible)
+right_click("[data-context-menu='track-title']")
+
+# Option 2: Right-click using track title attribute
 right_click("[data-track-title='Vibrant Horizon']")
 
-# Option 2: Right-click using aria-label
+# Option 3: Right-click using aria-label
 right_click("[aria-label*='Right-click to remove']")
 
-# Option 3: Right-click on any track row (will select first visible track)
+# Option 4: Right-click on any track row (will select first visible track)
 right_click("div[data-track-id]")
 
 # 4. After context menu appears, click "Remove from Playlist" button

@@ -1579,7 +1579,14 @@ export default function App() {
                                  <div className={`w-2 h-2 sm:w-3 sm:h-3 border ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'border-[#444] group-hover:border-[#CCFF00]'}`}></div>
                                </div>
                                <div className={currentSong?.id === track.id ? 'text-[#CCFF00]' : 'group-hover:text-white'}>{(playlistPage - 1) * PLAYLIST_ITEMS_PER_PAGE + i + 1}</div>
-                               <div className={`font-bold truncate ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-white'}`}>{track.title}</div>
+                               <div
+                                 className={`font-bold truncate ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-white'} hover:underline cursor-context-menu`}
+                                 data-context-menu="track-title"
+                                 aria-label={`Right-click ${track.title} for options`}
+                                 title="Right-click for options"
+                               >
+                                 {track.title}
+                               </div>
                                <div className="hidden sm:block truncate hover:text-white">{track.album}</div>
                                <div className="hidden md:block truncate hover:text-white">{track.artist}</div>
                                <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
