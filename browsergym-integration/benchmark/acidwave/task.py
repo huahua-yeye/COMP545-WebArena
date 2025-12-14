@@ -396,7 +396,7 @@ class AcidwaveTask(AbstractBrowserTask):
                     html_check_score = html_success_rate * 0.6
 
         # ==========================================
-        # EVALUATION TYPE 3: URL Match
+        # EVALUATION TYPE 3: URL Match (SPA not using this much)
         # ==========================================
         if "url_match" in eval_types:
             import re

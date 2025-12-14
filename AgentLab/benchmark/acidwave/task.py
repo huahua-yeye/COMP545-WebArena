@@ -312,7 +312,7 @@ class AcidwaveTask(AbstractBrowserTask):
                         
                         # Check if attribute contains required content
                         if required_contents:
-                            if attr_value and required_contents in attr_value:
+                            if attr_value and required_contents.lower() in attr_value.lower():
                                 checks_passed.append(
                                     f"Attribute '{attribute}' contains '{required_contents}'"
                                 )
@@ -349,7 +349,7 @@ class AcidwaveTask(AbstractBrowserTask):
                     # Check 3: Element text content
                     if required_contents and not attribute:
                         text_content = element.inner_text()
-                        if required_contents in text_content:
+                        if required_contents.lower() in text_content.lower():
                             checks_passed.append(f"Element contains: '{required_contents}'")
                             html_checks.append(True)
                         else:

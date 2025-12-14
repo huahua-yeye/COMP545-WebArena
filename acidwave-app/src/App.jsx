@@ -515,12 +515,12 @@ export default function App() {
     loadFavorites();
   }, [currentUser]);
 
-  // Set default song
-  useEffect(() => {
-    if (!currentSong && MOCK_SONGS.length > 0) {
-      setCurrentSong(MOCK_SONGS[0]);
-    }
-  }, [MOCK_SONGS, currentSong]);
+  // Set default song - REMOVED: Player should be hidden until user plays a song
+  // useEffect(() => {
+  //   if (!currentSong && MOCK_SONGS.length > 0) {
+  //     setCurrentSong(MOCK_SONGS[0]);
+  //   }
+  // }, [MOCK_SONGS, currentSong]);
 
   // Fetch artists from backend and fall back to mock data
   useEffect(() => {
@@ -1153,6 +1153,11 @@ export default function App() {
                             <div
                                key={track.id}
                                onClick={() => playSong(track)}
+                               data-testid={`song-row-${track.id}`}
+                               data-song-title={track.title}
+                               data-song-artist={track.artist}
+                               role="button"
+                               aria-label={`Play ${track.title} by ${track.artist}`}
                                className={`grid grid-cols-[32px_minmax(120px,3fr)_minmax(100px,2fr)_minmax(100px,2fr)_50px_50px_32px] sm:grid-cols-[40px_3fr_2fr_2fr_60px_60px_40px] gap-2 sm:gap-4 p-2 sm:p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-[10px] sm:text-xs font-mono ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-gray-400'}`}
                             >
                                <div className="flex justify-center">
@@ -1163,7 +1168,12 @@ export default function App() {
                                <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
                                <div className="hidden lg:block opacity-50">{track.year}</div>
                                <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
-                               <div className="flex justify-center" onClick={(e) => toggleFavorite(e, track.id)}>
+                               <div
+                                 className="flex justify-center"
+                                 onClick={(e) => toggleFavorite(e, track.id)}
+                                 role="button"
+                                 aria-label={favorites.includes(track.id) ? `Remove ${track.title} from favorites` : `Add ${track.title} to favorites`}
+                               >
                                  <Heart
                                    size={12}
                                    className={`sm:w-[14px] sm:h-[14px] transition-all hover:scale-125 ${favorites.includes(track.id) ? 'text-[#FF00FF] fill-[#FF00FF]' : 'text-gray-700 hover:text-[#FF00FF]'}`}
@@ -1211,6 +1221,11 @@ export default function App() {
                             <div
                                key={track.id}
                                onClick={() => playSong(track)}
+                               data-testid={`favorite-song-row-${track.id}`}
+                               data-song-title={track.title}
+                               data-song-artist={track.artist}
+                               role="button"
+                               aria-label={`Play ${track.title} by ${track.artist}`}
                                className={`grid grid-cols-[32px_minmax(120px,3fr)_minmax(100px,2fr)_minmax(100px,2fr)_50px_32px] sm:grid-cols-[40px_3fr_2fr_2fr_60px_40px] gap-2 sm:gap-4 p-2 sm:p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-[10px] sm:text-xs font-mono ${currentSong?.id === track.id ? 'text-[#CCFF00]' : 'text-gray-400'}`}
                             >
                                <div className="flex justify-center">
@@ -1220,7 +1235,12 @@ export default function App() {
                                <div className="hidden md:block truncate group-hover:text-white">{track.album}</div>
                                <div className="hidden sm:block truncate group-hover:text-white">{track.artist}</div>
                                <div className="text-[9px] sm:text-xs">{formatTime(track.duration)}</div>
-                               <div className="flex justify-center" onClick={(e) => toggleFavorite(e, track.id)}>
+                               <div
+                                 className="flex justify-center"
+                                 onClick={(e) => toggleFavorite(e, track.id)}
+                                 role="button"
+                                 aria-label={`Remove ${track.title} from favorites`}
+                               >
                                  <Heart size={12} className="sm:w-[14px] sm:h-[14px] text-[#FF00FF] fill-[#FF00FF] transition-all hover:scale-125" />
                                </div>
                             </div>

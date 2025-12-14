@@ -1,0 +1,160 @@
+[
+  {
+    "task_id": 0,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Play the song \"Vibrant Horizon\" by Denys Brodovskyi.",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "program_html"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [],
+        "must_exclude": []
+      },
+      "program_html": [
+        {
+          "locator": "div.fixed.bottom-0:has-text(\"Vibrant Horizon\"):has-text(\"Denys Brodovskyi\")",
+          "required_contents": "VIBRANT HORIZON"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 1,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Play the song \"Watch and Learn\" by Mise Darling",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "program_html"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [],
+        "must_exclude": []
+      },
+      "program_html": [
+        {
+          "locator": "div.fixed.bottom-0:has-text(\"Watch and Learn\"):has-text(\"Mise Darling\")",
+          "required_contents": "WATCH AND LEARN"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 2,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Open the album \"Luminary Echoes\" by Denys Brodovskyi",
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "Luminary Echoes",
+          "Denys Brodovskyi"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
+  },
+  {
+    "task_id": 3,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Open the album \"Plastic Love\" by Mise Darling",
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": [
+        "string_match",
+        "program_html"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "Plastic Love",
+          "Mise Darling"
+        ],
+        "must_exclude": []
+      },
+      "program_html": [
+        {
+          "locator": "h1:has-text(\"Plastic Love\"), h2:has-text(\"Plastic Love\"), [aria-label*='album' i]:has-text(\"Plastic Love\"), [data-test*='album-title']:has-text(\"Plastic Love\")",
+          "required_contents": "PlASTIC LOVE"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 4,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Open the artist page for Denys Brodovskyi",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "Denys Brodovskyi"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
+  },
+  {
+    "task_id": 5,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Open the artist page for Mise Darling",
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "Mise Darling"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
+  }
+]

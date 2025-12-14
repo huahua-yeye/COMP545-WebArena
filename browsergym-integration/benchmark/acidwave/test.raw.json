@@ -413,5 +413,385 @@
         }
       ]
     }
+  },
+  {
+    "task_id": 16,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Browse to ALBUMS view, find an album with at least 3 tracks, and verify the track count is displayed",
+    "intent_template": "Browse to {view} view and verify album with minimum {count} tracks",
+    "intent_template_id": 15,
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["ALBUMS", "TRACKS"]
+      },
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "[aria-label='ALBUMS']",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 17,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Find songs by artist 'BENSOUND' using the search/filter feature",
+    "intent_template": "Find songs by artist '{artist_name}' using search",
+    "intent_template_id": 16,
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["BENSOUND"]
+      },
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "input[placeholder*='FILTER']",
+          "attribute": "value",
+          "required_contents": "BENSOUND"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 18,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Play a song from the 'ACOUSTIC ESSENTIALS' album and verify the album title is shown in the player",
+    "intent_template": "Play song from '{album_name}' album and verify album display",
+    "intent_template_id": 17,
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["ACOUSTIC ESSENTIALS"]
+      },
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 19,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Check if a specific song shows attribution information (license, requires_attribution)",
+    "intent_template": "Verify song attribution and license information is displayed",
+    "intent_template_id": 18,
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": ["string_match"],
+      "reference_answers": {
+        "must_include": ["CC", "ATTRIBUTION"]
+      }
+    }
+  },
+  {
+    "task_id": 20,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Add multiple songs (at least 3) to favorites and verify they appear in favorites view",
+    "intent_template": "Add {count} songs to favorites and verify in favorites view",
+    "intent_template_id": 19,
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": ["program_html"],
+      "reference_answers": {},
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Heart'])[class*='fill']",
+          "required_state": "visible",
+          "check": "count_at_least_3"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 21,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Use search to find CINEMATIC genre songs, then play the song with the highest play count",
+    "intent_template": "Search {genre} genre and play most popular song",
+    "intent_template_id": 20,
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["CINEMATIC"]
+      },
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "input[placeholder*='FILTER']",
+          "attribute": "value",
+          "required_contents": "CINEMATIC"
+        },
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 22,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Browse to an artist profile page and play one of their top songs",
+    "intent_template": "Navigate to artist profile and play a top song",
+    "intent_template_id": 21,
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["TOP SONGS", "BIO"]
+      },
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 23,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Create a new playlist with a specific name, add 3 songs from different genres, then play the playlist",
+    "intent_template": "Create playlist '{name}', add {count} songs from different genres, then play",
+    "intent_template_id": 22,
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["Multi-Genre Mix"]
+      },
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "text='Multi-Genre Mix'",
+          "required_state": "visible"
+        },
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 24,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Find the newest released album and view its track listing",
+    "intent_template": "Find newest album and view track list",
+    "intent_template_id": 23,
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["TRACKS", "RELEASE"]
+      },
+      "program_html": [
+        {
+          "locator": "button:has-text('PLAY ALL')",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 25,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Test shuffle functionality: Play a playlist and activate shuffle mode",
+    "intent_template": "Play playlist and enable shuffle mode",
+    "intent_template_id": 24,
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": ["program_html"],
+      "reference_answers": {},
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Shuffle'])[aria-pressed='true']",
+          "required_state": "visible"
+        },
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 26,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Test repeat functionality: Play a song and enable repeat mode",
+    "intent_template": "Play song and enable repeat mode",
+    "intent_template_id": 25,
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": ["program_html"],
+      "reference_answers": {},
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Repeat'])[aria-pressed='true']",
+          "required_state": "visible"
+        },
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 27,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Verify song duration is displayed correctly when playing",
+    "intent_template": "Verify song duration display during playback",
+    "intent_template_id": 26,
+    "difficulty": "easy",
+    "eval": {
+      "eval_types": ["program_html"],
+      "reference_answers": {},
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "[class*='time'], [class*='duration']",
+          "required_state": "visible",
+          "check": "has_time_format"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 28,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Complex: Filter by ELECTRONIC genre, add the first 2 songs to a new playlist named 'Electronic Favorites', then play it",
+    "intent_template": "Filter {genre}, create playlist '{name}' with {count} songs, then play",
+    "intent_template_id": 27,
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["Electronic Favorites", "ELECTRONIC"]
+      },
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "text='Electronic Favorites'",
+          "required_state": "visible"
+        },
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 29,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Navigate to an album, click 'PLAY ALL' to queue all tracks, then verify queue contains multiple songs",
+    "intent_template": "Play all tracks from album and verify queue",
+    "intent_template_id": 28,
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": ["string_match", "program_html"],
+      "reference_answers": {
+        "must_include": ["QUEUE", "NEXT UP"]
+      },
+      "program_html": [
+        {
+          "locator": "button:has-text('PLAY ALL')",
+          "required_state": "visible"
+        },
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        }
+      ]
+    }
+  },
+  {
+    "task_id": 30,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "http://localhost:5173",
+    "sites": ["acidwave"],
+    "intent": "Test complete playback cycle: Play a song, skip to next, go back to previous, pause, then resume",
+    "intent_template": "Test complete playback controls cycle",
+    "intent_template_id": 29,
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": ["element_changed", "program_html"],
+      "reference_answers": {},
+      "program_html": [
+        {
+          "url": "http://localhost:5173",
+          "locator": "button:has(svg[class*='Pause'])",
+          "required_state": "visible"
+        },
+        {
+          "url": "http://localhost:5173",
+          "locator": "[class*='font-bold'][class*='text-white']",
+          "check": "text_changed"
+        }
+      ]
+    }
   }
 ]
