@@ -602,8 +602,22 @@ export default function App() {
       setContextMenu(null);
       setPlaylistTrackMenu(null);
     };
+
+    // Prevent default browser context menu globally
+    const handleGlobalContextMenu = (e) => {
+      // Allow context menu on input fields and text areas
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+      }
+      e.preventDefault();
+    };
+
     window.addEventListener('click', handleClick);
-    return () => window.removeEventListener('click', handleClick);
+    window.addEventListener('contextmenu', handleGlobalContextMenu);
+    return () => {
+      window.removeEventListener('click', handleClick);
+      window.removeEventListener('contextmenu', handleGlobalContextMenu);
+    };
   }, []);
 
   const handleTimeUpdate = () => {
@@ -955,9 +969,11 @@ export default function App() {
           <div className="px-3 py-2 border-b border-[#333] text-[10px] text-gray-500 font-bold uppercase tracking-widest">
             {contextMenu.playlist}
           </div>
-          <button 
+          <button
             onClick={handleDeletePlaylist}
             className="flex items-center gap-2 w-full p-3 hover:bg-[#CCFF00] hover:text-black text-[#FF00FF] text-xs font-bold font-mono transition-colors text-left"
+            data-action="delete-playlist"
+            aria-label="Delete playlist"
           >
             <Trash2 size={14} /> DELETE_SEQUENCE
           </button>
@@ -1550,11 +1566,14 @@ export default function App() {
                       <div className="divide-y divide-[#222]">
                          {playlistData.items.length > 0 ? (
                            playlistData.items.map((track, i) => (
-                             <div 
-                               key={track.id} 
-                               onClick={() => playSong(track)} 
+                             <div
+                               key={track.id}
+                               onClick={() => playSong(track)}
                                onContextMenu={(e) => handlePlaylistTrackContextMenu(e, track)}
                                className={`grid grid-cols-[32px_32px_minmax(120px,2fr)_minmax(100px,1.5fr)_minmax(100px,1.5fr)_60px] sm:grid-cols-[40px_40px_2fr_1.5fr_1.5fr_80px] gap-2 sm:gap-4 p-2 sm:p-3 hover:bg-[#151515] group transition-colors cursor-pointer items-center text-[10px] sm:text-xs font-mono ${currentSong?.id === track.id ? 'bg-[#CCFF00]/10 text-[#CCFF00]' : 'text-gray-400'}`}
+                               data-track-id={track.id}
+                               data-track-title={track.title}
+                               aria-label={`Right-click to remove ${track.title} from playlist`}
                              >
                                <div className="flex justify-center">
                                  <div className={`w-2 h-2 sm:w-3 sm:h-3 border ${currentSong?.id === track.id ? 'bg-[#CCFF00] border-[#CCFF00]' : 'border-[#444] group-hover:border-[#CCFF00]'}`}></div>
@@ -1593,14 +1612,18 @@ export default function App() {
                       <button
                         onClick={() => handleDownloadTrack(playlistTrackMenu.track)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-[#CCFF00] hover:text-black transition-colors"
+                        data-action="download-track"
+                        aria-label="Download track"
                       >
                         <Download size={16} />
                         <span>Download</span>
                       </button>
-                      
+
                       <button
                         onClick={() => handleRemoveFromPlaylist(playlistTrackMenu.track)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-red-500 hover:text-white transition-colors"
+                        data-action="remove-from-playlist"
+                        aria-label="Remove from playlist"
                       >
                         <Trash2 size={16} />
                         <span>Remove from Playlist</span>

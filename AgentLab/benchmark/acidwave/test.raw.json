@@ -286,5 +286,55 @@
       },
       "program_html": []
     }
+  },
+  {
+    "task_id": 11,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Remove all songs from the FAVORITES.DAT playlist",
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "FAVORITE_DATA",
+          "NO_FAVORITES_DETECTED"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
+  },
+  {
+    "task_id": 12,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Navigate to PLAYLIST1 and remove all songs from it",
+    "difficulty": "medium",
+    "eval": {
+      "eval_types": [
+        "string_match"
+      ],
+      "reference_answers": {
+        "exact_match": "",
+        "must_include": [
+          "PLAYLIST1",
+          "EMPTY_PLAYLIST"
+        ],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
   }
 ]

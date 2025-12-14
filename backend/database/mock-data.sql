@@ -346,6 +346,7 @@ ON CONFLICT DO NOTHING;
 -- ============================================
 
 INSERT INTO playlists (name, description, is_public) VALUES
+  ('PLAYLIST1', 'Test playlist for agent benchmark tasks', true),
   ('轻松工作背景音乐', '适合工作和学习的轻松音乐', true),
   ('电影级配乐精选', '史诗级和电影风格音乐合集', true),
   ('夏日阳光', '充满活力的夏日音乐', true),
@@ -356,6 +357,34 @@ ON CONFLICT DO NOTHING;
 -- ============================================
 -- ADD SONGS TO PLAYLISTS
 -- ============================================
+
+-- Playlist: PLAYLIST1 (Test playlist)
+INSERT INTO playlist_songs (playlist_id, song_id, position)
+SELECT
+  (SELECT id FROM playlists WHERE name = 'PLAYLIST1'),
+  (SELECT id FROM songs WHERE title = 'Vibrant Horizon'),
+  0
+WHERE EXISTS (SELECT 1 FROM playlists WHERE name = 'PLAYLIST1')
+  AND EXISTS (SELECT 1 FROM songs WHERE title = 'Vibrant Horizon')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO playlist_songs (playlist_id, song_id, position)
+SELECT
+  (SELECT id FROM playlists WHERE name = 'PLAYLIST1'),
+  (SELECT id FROM songs WHERE title = 'Watch and Learn'),
+  1
+WHERE EXISTS (SELECT 1 FROM playlists WHERE name = 'PLAYLIST1')
+  AND EXISTS (SELECT 1 FROM songs WHERE title = 'Watch and Learn')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO playlist_songs (playlist_id, song_id, position)
+SELECT
+  (SELECT id FROM playlists WHERE name = 'PLAYLIST1'),
+  (SELECT id FROM songs WHERE title = 'Creative Minds'),
+  2
+WHERE EXISTS (SELECT 1 FROM playlists WHERE name = 'PLAYLIST1')
+  AND EXISTS (SELECT 1 FROM songs WHERE title = 'Creative Minds')
+ON CONFLICT DO NOTHING;
 
 -- Playlist: 轻松工作背景音乐
 INSERT INTO playlist_songs (playlist_id, song_id, position)

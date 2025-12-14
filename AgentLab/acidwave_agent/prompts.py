@@ -122,18 +122,36 @@ Each song row contains:
 - **Song title**: Displayed prominently in the row
 - **Artist name**: Next to the title
 - **Album name**: Additional metadata
-- **Heart icon**: `button:has(svg[class*='Heart'])` - Add to favorites (DO NOT click this to play)
-  - Filled heart: `button:has(svg[class*='Heart'])[class*='fill']` - Already favorited
+- **Heart icon**: `button:has(svg[class*='Heart'])` - Toggle favorites (DO NOT click this to play)
+  - Empty heart (unfilled): Song is not in favorites
+    - aria-label: "Add [Song Name] to favorites"
+  - Filled heart (pink/magenta color): Song is already in favorites
+    - aria-label: "Remove [Song Name] from favorites"
+  - Clicking the heart toggles the favorite status
 
 **Right-Click Context Menu**:
-Songs, albums, and tracks support right-click context menus with additional options:
-- Right-click on a song row to open a context menu
+IMPORTANT: The browser's default context menu has been disabled to allow the application's custom context menu to work properly.
+
+Songs, playlists, and tracks support right-click context menus with additional options:
+
+**For Playlist Tracks** (when viewing a playlist detail page):
+- Right-click on a track row to open the context menu
+- The track rows have `data-track-id` and `data-track-title` attributes for identification
 - Menu options include:
-  - Add to Playlist
-  - Download
-  - Add to Favorites
-- Use standard right-click action to trigger the menu
-- Select an option by clicking on the menu item
+  - **Download**: `[data-action='download-track']` or `button:has-text('Download')`
+  - **Remove from Playlist**: `[data-action='remove-from-playlist']` or `button:has-text('Remove from Playlist')`
+- After right-clicking, the context menu will appear at the cursor position
+- Click the desired menu option to execute the action
+
+**For Playlists** (in the sidebar playlist list):
+- Right-click on a playlist name to open its context menu
+- Menu options include:
+  - **Delete Playlist**: `[data-action='delete-playlist']` or `button:has-text('DELETE_SEQUENCE')`
+
+**Important Notes**:
+- The context menu is positioned at the cursor location when you right-click
+- Clicking anywhere outside the menu will close it
+- The custom context menu should now work correctly with Playwright's `right_click()` action
 
 ### Filter/Search
 - **Filter input**: `input[placeholder*='FILTER']`
@@ -177,6 +195,25 @@ Playlist creation selectors:
 - **Playlist name input**: `input[placeholder='ENTER_NAME...']` or `input[placeholder*='ENTER_NAME']`
 - **CREATE button**: `button:has-text('COMPILE_DATA')`
 - **Cancel button**: `button:has-text('ABORT')`
+
+**FAVORITES.DAT Playlist**:
+The FAVORITES.DAT is a special built-in playlist that contains all songs marked as favorites:
+- Click on "FAVORITES.DAT" in the playlists section to view all favorite songs
+- Songs appear here when you click the heart icon on any song
+- To remove a song from favorites, click the heart icon again (it will toggle from filled to empty)
+- When empty, the playlist shows "NO_FAVORITES_DETECTED" message
+- Selector: `div:has-text('FAVORITES.DAT')` or look for the pink/magenta playlist with heart icon
+
+**Remove Songs from Playlist**:
+To remove songs from a user-created playlist:
+1. Navigate to the playlist by clicking on its name in the PLAYLISTS section
+2. Find the song you want to remove in the playlist's track list
+3. Right-click on the song row to open the context menu
+4. Click "Remove from Playlist" option in the menu
+5. The song will be removed from the playlist
+6. When all songs are removed, the playlist shows "EMPTY_PLAYLIST" message
+
+Note: This only works for user playlists, not FAVORITES.DAT (which uses the heart icon instead)
 
 **Other Playlist Operations**:
 - **Add songs**: Click + icon on song cards or use right-click context menu
@@ -256,6 +293,28 @@ right_click("[aria-label*='Play Song Name by Artist']")
 click("button:has-text('Add to Favorites')")
 ```
 
+**Remove from favorites**:
+```python
+# The heart icon acts as a toggle - clicking it again removes the song from favorites
+# Look for the aria-label that says "Remove ... from favorites"
+click("button[aria-label*='Remove'][aria-label*='from favorites']")
+# OR if you know the song title
+click("button[aria-label*='Remove Vibrant Horizon from favorites']")
+# The heart icon will change from filled to empty when removed
+```
+
+**Remove all songs from favorites**:
+```python
+# 1. Navigate to FAVORITES.DAT playlist
+click("div:has-text('FAVORITES.DAT')")
+
+# 2. For each song in the favorites list, click the heart icon to remove it
+# The heart icons have aria-labels like "Remove [Song Name] from favorites"
+# You need to click each one individually until all songs are removed
+
+# 3. When all songs are removed, the page should show "NO_FAVORITES_DETECTED"
+```
+
 **Add song to playlist using context menu**:
 ```python
 # Right-click on the song row
@@ -297,6 +356,35 @@ fill("input[name='password']", "aciduser")
 click("button:has-text('INITIATE_ACCESS')")
 
 # 5. After successful login, verify by checking for username and "AUTHENTICATED" in the page
+```
+
+**Remove all songs from a playlist**:
+```python
+# 1. Navigate to the PLAYLISTS view
+click("[aria-label='PLAYLISTS']")
+
+# 2. Click on the playlist name (e.g., "PLAYLIST1")
+click("div:has-text('PLAYLIST1')")
+
+# 3. For each song in the playlist, right-click on the track row to open context menu
+# Option 1: Right-click using track title
+right_click("[data-track-title='Vibrant Horizon']")
+
+# Option 2: Right-click using aria-label
+right_click("[aria-label*='Right-click to remove']")
+
+# Option 3: Right-click on any track row (will select first visible track)
+right_click("div[data-track-id]")
+
+# 4. After context menu appears, click "Remove from Playlist" button
+# Option 1: Use data attribute (most reliable)
+click("[data-action='remove-from-playlist']")
+
+# Option 2: Use button text
+click("button:has-text('Remove from Playlist')")
+
+# 5. Repeat steps 3-4 for all songs until the playlist shows "EMPTY_PLAYLIST"
+# The context menu will close after each removal, so you need to right-click again for the next song
 ```
 
 **Check playback state**:
