@@ -65,17 +65,19 @@
     "difficulty": "medium",
     "eval": {
       "eval_types": [
-        "string_match"
+        "program_html"
       ],
       "reference_answers": {
         "exact_match": "",
-        "must_include": [
-          "Luminary Echoes",
-          "Denys Brodovskyi"
-        ],
+        "must_include": [],
         "must_exclude": []
       },
-      "program_html": []
+      "program_html": [
+        {
+          "locator": "h1:has-text(\"Luminary Echoes\"), h2:has-text(\"Luminary Echoes\"), [class*='album']:has-text(\"Luminary Echoes\")",
+          "required_contents": "LUMINARY ECHOES"
+        }
+      ]
     }
   },
   {
@@ -126,7 +128,9 @@
       "reference_answers": {
         "exact_match": "",
         "must_include": [
-          "Denys Brodovskyi"
+          "Denys Brodovskyi",
+          "ARTIST_PROFILE"
+
         ],
         "must_exclude": []
       },
@@ -150,7 +154,8 @@
       "reference_answers": {
         "exact_match": "",
         "must_include": [
-          "Mise Darling"
+          "Mise Darling",
+          "ARTIST_PROFILE"
         ],
         "must_exclude": []
       },
