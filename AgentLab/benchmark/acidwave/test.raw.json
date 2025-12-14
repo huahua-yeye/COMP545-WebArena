@@ -390,5 +390,27 @@
       },
       "program_html": []
     }
+  },
+  {
+    "task_id": 15,
+    "require_login": false,
+    "require_reset": true,
+    "start_url": "https://comp545-webarena-production-9062.up.railway.app",
+    "sites": [
+      "acidwave"
+    ],
+    "intent": "Navigate to the KONFLIKT album and download the first song KONFLIKT",
+    "difficulty": "hard",
+    "eval": {
+      "eval_types": [
+        "url_match"
+      ],
+      "reference_answers": {
+        "exact_match": "https://mbdhzhgtcfxmmpcyahkr.supabase.co/storage/v1/object/public/music-files/artists/Jazz%20at%20Mladost%20Club/Jazz%20at%20Mladost%20Club%20-%20Konflikt.mp3",
+        "must_include": [],
+        "must_exclude": []
+      },
+      "program_html": []
+    }
   }
 ]

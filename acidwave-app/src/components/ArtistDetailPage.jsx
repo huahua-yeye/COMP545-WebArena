@@ -274,7 +274,6 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
                 {artist.website && (
                   <a
                     href={artist.website}
-                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 px-3 py-1 bg-[#111] border border-[#333] rounded hover:border-[#CCFF00] hover:text-[#CCFF00] text-gray-400 text-sm transition-colors"
                   >
