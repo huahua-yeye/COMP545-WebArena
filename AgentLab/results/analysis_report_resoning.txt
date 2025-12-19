@@ -1,0 +1,52 @@
+
+================================================================================
+DETAILED EXPERIMENT RESULTS REPORT
+================================================================================
+
+[*] Overall Performance
+--------------------------------------------------------------------------------
+Total Tasks:       17
+Successful:        16 ( 94.1%)
+Partial Success:    0
+Failed:             0
+Average Score:     2.062
+Average Steps:     3.8
+
+[*] Breakdown by Difficulty
+--------------------------------------------------------------------------------
+Difficulty   Total    Success  Rate         Avg Score    Avg Steps   
+--------------------------------------------------------------------------------
+easy         8        8        100.0      % 2.300        3.8         
+medium       7        7        100.0      % 1.943        3.3         
+hard         2        1        50.0       % 1.000        7.0         
+
+[*] Step Efficiency (Successful Tasks Only)
+--------------------------------------------------------------------------------
+Difficulty   Average    Min        Max        Std Dev   
+--------------------------------------------------------------------------------
+easy         3.8        1          15         4.65      
+medium       3.3        1          7          2.06      
+hard         7.0        7          7          nan       
+
+[!] Recommendations
+--------------------------------------------------------------------------------
+[OK] Excellent success rate (>80%)!
+   Consider:
+   1. Optimize step efficiency (reduce redundant operations)
+   2. Add more challenging tasks
+   3. Test with other models (GPT-4o-mini)
+   4. Conduct ablation studies
+
+[>] Next Steps
+--------------------------------------------------------------------------------
+1. View detailed logs:
+   cd C:\Users\25781\agentlab_results\2025-12-14_21-13-26_acidwavereasoningagent-gpt4o-on-acidwave-full-experiment
+   ls */experiment.log
+
+2. View screenshots of failed tasks:
+   cd C:\Users\25781\agentlab_results\2025-12-14_21-13-26_acidwavereasoningagent-gpt4o-on-acidwave-full-experiment
+
+3. Visualize with AgentXray:
+   agentlab-xray
+
+================================================================================

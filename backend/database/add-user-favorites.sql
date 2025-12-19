@@ -34,3 +34,4 @@ CREATE INDEX IF NOT EXISTS idx_user_favorites_created_at ON user_favorites(creat
 
 
 
+

@@ -1,0 +1,61 @@
+
+================================================================================
+DETAILED EXPERIMENT RESULTS REPORT
+================================================================================
+
+[*] Overall Performance
+--------------------------------------------------------------------------------
+Total Tasks:       17
+Successful:        16 ( 94.1%)
+Partial Success:    0
+Failed:             1
+Average Score:     2.153
+Average Steps:     4.4
+
+[*] Breakdown by Difficulty
+--------------------------------------------------------------------------------
+Difficulty   Total    Success  Rate         Avg Score    Avg Steps   
+--------------------------------------------------------------------------------
+easy         8        8        100.0      % 2.525        4.0         
+medium       7        7        100.0      % 2.200        3.3         
+hard         2        1        50.0       % 0.500        9.5         
+
+[*] Step Efficiency (Successful Tasks Only)
+--------------------------------------------------------------------------------
+Difficulty   Average    Min        Max        Std Dev   
+--------------------------------------------------------------------------------
+easy         4.0        1          15         4.57      
+medium       3.3        1          11         3.59      
+hard         4.0        4          4          nan       
+
+[X] Failed Tasks Details (1 tasks)
+--------------------------------------------------------------------------------
+
+1. Task 16 (hard)
+   Goal: Navigate to the album 'Luminary Echoes' by Denys Brodovskyi, then crea
+   Score: 0.000
+   Steps: 15
+
+[!] Recommendations
+--------------------------------------------------------------------------------
+[OK] Excellent success rate (>80%)!
+   Consider:
+   1. Optimize step efficiency (reduce redundant operations)
+   2. Add more challenging tasks
+   3. Test with other models (GPT-4o-mini)
+   4. Conduct ablation studies
+
+[>] Next Steps
+--------------------------------------------------------------------------------
+1. View detailed logs:
+   cd C:\Users\25781\agentlab_results\2025-12-14_19-35-53_acidwaveagent-gpt4o-on-acidwave-full-experiment
+   ls */experiment.log
+
+2. View screenshots of failed tasks:
+   cd C:\Users\25781\agentlab_results\2025-12-14_19-35-53_acidwaveagent-gpt4o-on-acidwave-full-experiment
+   ls *acidwave.task_16*/screenshot_*.png
+
+3. Visualize with AgentXray:
+   agentlab-xray
+
+================================================================================

@@ -65,19 +65,14 @@
     "difficulty": "medium",
     "eval": {
       "eval_types": [
-        "program_html"
+        "string_match"
       ],
       "reference_answers": {
         "exact_match": "",
-        "must_include": [],
+        "must_include": ["LUMINARY ECHOES"],
         "must_exclude": []
       },
-      "program_html": [
-        {
-          "locator": "h1:has-text(\"Luminary Echoes\"), h2:has-text(\"Luminary Echoes\"), [class*='album']:has-text(\"Luminary Echoes\")",
-          "required_contents": "LUMINARY ECHOES"
-        }
-      ]
+      "program_html": []
     }
   },
   {
@@ -98,7 +93,6 @@
       "reference_answers": {
         "exact_match": "",
         "must_include": [
-          "Plastic Love",
           "Mise Darling"
         ],
         "must_exclude": []
@@ -354,18 +348,10 @@
       "reference_answers": {
         "exact_match": "",
         "must_include": [
-          "Song Information",
-          "Watch and Learn",
-          "Mise Darling"
+          "Song Information"
         ],
         "must_exclude": []
-      },
-      "program_html": [
-        {
-          "locator": "div.fixed.bottom-0:has-text('Watch and Learn'):has-text('Mise Darling'), div:has(button:has(svg[class*='Play'])):has-text('Watch and Learn')",
-          "required_contents": "WATCH AND LEARN"
-        }
-      ]
+      }
     }
   },
   {

@@ -1,0 +1,2 @@
+agent.agent_name,env.benchmark,avg_reward,std_err,avg_steps,n_completed,n_err,cum_cost
+AcidwaveAgent-GPT4oMini,acidwave,2.529,0.79,7.0,17/17,1,0.0429

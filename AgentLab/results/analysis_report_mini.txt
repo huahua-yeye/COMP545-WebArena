@@ -1,0 +1,76 @@
+
+================================================================================
+DETAILED EXPERIMENT RESULTS REPORT
+================================================================================
+
+[*] Overall Performance
+--------------------------------------------------------------------------------
+Total Tasks:       17
+Successful:        13 ( 76.5%)
+Partial Success:    0
+Failed:             4
+Average Score:     2.529
+Average Steps:     7.5
+
+[*] Breakdown by Difficulty
+--------------------------------------------------------------------------------
+Difficulty   Total    Success  Rate         Avg Score    Avg Steps   
+--------------------------------------------------------------------------------
+easy         8        8        100.0      % 3.225        5.2         
+medium       7        5        71.4       % 2.457        8.0         
+hard         2        0        0.0        % 0.000        15.0        
+
+[*] Step Efficiency (Successful Tasks Only)
+--------------------------------------------------------------------------------
+Difficulty   Average    Min        Max        Std Dev   
+--------------------------------------------------------------------------------
+easy         5.2        1          15         6.09      
+medium       5.2        1          15         5.85      
+
+[X] Failed Tasks Details (4 tasks)
+--------------------------------------------------------------------------------
+
+1. Task 14 (medium)
+   Goal: Navigate to Denys Brodovskyi's artist page and visit his website
+   Score: 0.000
+   Steps: 15
+
+2. Task 15 (hard)
+   Goal: Navigate to the KONFLIKT album and download the first song KONFLIKT
+   Score: 0.000
+   Steps: 15
+
+3. Task 16 (hard)
+   Goal: Navigate to the album 'Luminary Echoes' by Denys Brodovskyi, then crea
+   Score: 0.000
+   Steps: 15
+
+4. Task 3 (medium)
+   Goal: Open the album "Plastic Love" by Mise Darling
+   Score: 0.000
+   Steps: 15
+
+[!] Recommendations
+--------------------------------------------------------------------------------
+[*] Moderate success rate (50-80%), suggestions:
+   1. Optimize prompts for failed tasks
+   2. Adjust temperature parameter
+   3. Improve task validation logic
+   4. Analyze failure patterns (concentrated in one difficulty?)
+
+[>] Next Steps
+--------------------------------------------------------------------------------
+1. View detailed logs:
+   cd C:\Users\25781\agentlab_results\2025-12-14_20-27-17_acidwaveagent-gpt4omini-on-acidwave-full-experiment
+   ls */experiment.log
+
+2. View screenshots of failed tasks:
+   cd C:\Users\25781\agentlab_results\2025-12-14_20-27-17_acidwaveagent-gpt4omini-on-acidwave-full-experiment
+   ls *acidwave.task_14*/screenshot_*.png
+   ls *acidwave.task_15*/screenshot_*.png
+   ls *acidwave.task_16*/screenshot_*.png
+
+3. Visualize with AgentXray:
+   agentlab-xray
+
+================================================================================

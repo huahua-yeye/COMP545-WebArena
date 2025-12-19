@@ -1,14 +1,14 @@
 """
-结果分析工具 - WebArena风格报告
-=================================
+Result Analysis Tool - WebArena Style Report
+=============================================
 
-分析实验结果并生成详细的性能报告，包括：
-- 按难度分组的成功率
-- 失败任务分析
-- 步数统计
-- 可视化图表
+Analyze experiment results and generate detailed performance reports, including:
+- Success rates grouped by difficulty
+- Failed task analysis
+- Step statistics
+- Visualization charts
 
-用法:
+Usage:
     python experiments/analyze_results.py <result_dir>
     python experiments/analyze_results.py results/2025-12-13_18-00-00_*
 """
@@ -26,10 +26,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 def load_experiment_results(result_dir: Path) -> Optional[pd.DataFrame]:
     """
-    加载实验结果
+    Load experiment results
     
     Args:
-        result_dir: 结果目录路径
+        result_dir: Path to results directory
         
     Returns:
         DataFrame with results or None if not found
@@ -39,16 +39,16 @@ def load_experiment_results(result_dir: Path) -> Optional[pd.DataFrame]:
         df = inspect_results.load_result_df(result_dir)
         return df
     except Exception as e:
-        print(f"❌ 无法加载结果: {e}")
+        print(f"[X] Failed to load results: {e}")
         return None
 
 
 def load_task_metadata(task_ids: List[int]) -> Dict:
     """
-    加载任务元数据
+    Load task metadata
     
     Args:
-        task_ids: 任务ID列表
+        task_ids: List of task IDs
         
     Returns:
         Dict mapping task_id to task config
@@ -65,7 +65,7 @@ def load_task_metadata(task_ids: List[int]) -> Dict:
 
 
 def extract_task_id(task_name: str) -> int:
-    """从task_name提取task_id"""
+    """Extract task_id from task_name"""
     try:
         # Format: acidwave.task_<ID>
         return int(task_name.split("_")[-1])
@@ -74,9 +74,17 @@ def extract_task_id(task_name: str) -> int:
 
 
 def analyze_by_difficulty(df: pd.DataFrame, task_map: Dict) -> pd.DataFrame:
-    """按难度分组分析"""
+    """Analyze results grouped by difficulty"""
+    
+    # Extract task names from index
+    if isinstance(df.index, pd.MultiIndex):
+        task_names = df.index.get_level_values(0)
+    else:
+        task_names = df.index
     
     # Add task metadata
+    df = df.copy()
+    df['task_name'] = task_names
     df['task_id'] = df['task_name'].apply(extract_task_id)
     df['difficulty'] = df['task_id'].apply(
         lambda tid: task_map.get(tid, {}).get('difficulty', 'unknown')
@@ -110,9 +118,17 @@ def analyze_by_difficulty(df: pd.DataFrame, task_map: Dict) -> pd.DataFrame:
 
 
 def analyze_failures(df: pd.DataFrame, task_map: Dict) -> List[Dict]:
-    """分析失败任务"""
+    """Analyze failed tasks"""
+    
+    # Extract task names from index
+    if isinstance(df.index, pd.MultiIndex):
+        task_names = df.index.get_level_values(0)
+    else:
+        task_names = df.index
     
     # Add metadata
+    df = df.copy()
+    df['task_name'] = task_names
     df['task_id'] = df['task_name'].apply(extract_task_id)
     df['difficulty'] = df['task_id'].apply(
         lambda tid: task_map.get(tid, {}).get('difficulty', 'unknown')
@@ -140,8 +156,16 @@ def analyze_failures(df: pd.DataFrame, task_map: Dict) -> List[Dict]:
 
 
 def analyze_step_efficiency(df: pd.DataFrame, task_map: Dict) -> pd.DataFrame:
-    """分析步数效率"""
+    """Analyze step efficiency"""
     
+    # Extract task names from index
+    if isinstance(df.index, pd.MultiIndex):
+        task_names = df.index.get_level_values(0)
+    else:
+        task_names = df.index
+    
+    df = df.copy()
+    df['task_name'] = task_names
     df['task_id'] = df['task_name'].apply(extract_task_id)
     df['difficulty'] = df['task_id'].apply(
         lambda tid: task_map.get(tid, {}).get('difficulty', 'unknown')
@@ -175,36 +199,43 @@ def analyze_step_efficiency(df: pd.DataFrame, task_map: Dict) -> pd.DataFrame:
 
 def generate_report(result_dir: Path, output_file: Optional[Path] = None):
     """
-    生成完整分析报告
+    Generate complete analysis report
     
     Args:
-        result_dir: 结果目录
-        output_file: 输出文件路径 (None = 打印到控制台)
+        result_dir: Results directory
+        output_file: Output file path (None = print to console)
     """
     
     print("\n" + "="*80)
-    print("ACIDWAVE 实验结果分析")
+    print("ACIDWAVE EXPERIMENT RESULTS ANALYSIS")
     print("="*80)
-    print(f"\n📁 结果目录: {result_dir}")
+    print(f"\n[*] Results Directory: {result_dir}")
     
     # Load results
-    print("\n[1/5] 加载实验数据...")
+    print("\n[1/5] Loading experiment data...")
     df = load_experiment_results(result_dir)
     
     if df is None:
-        print("❌ 无法加载结果")
+        print("[X] Failed to load results")
         return
     
-    print(f"   ✅ 加载了 {len(df)} 个任务的结果")
+    print(f"   [OK] Loaded results for {len(df)} tasks")
     
     # Load task metadata
-    print("\n[2/5] 加载任务元数据...")
-    task_ids = df['task_name'].apply(extract_task_id).tolist()
+    print("\n[2/5] Loading task metadata...")
+    
+    # Extract task names from index (AgentLab uses tuple index: (task_name, agent_name, benchmark_name))
+    if isinstance(df.index, pd.MultiIndex):
+        task_names = df.index.get_level_values(0).tolist()
+    else:
+        task_names = df.index.tolist()
+    
+    task_ids = [extract_task_id(str(name)) for name in task_names]
     task_map = load_task_metadata(task_ids)
-    print(f"   ✅ 加载了 {len(task_map)} 个任务的元数据")
+    print(f"   [OK] Loaded metadata for {len(task_map)} tasks")
     
     # Overall statistics
-    print("\n[3/5] 计算整体统计...")
+    print("\n[3/5] Computing overall statistics...")
     total = len(df)
     success_count = (df['cum_reward'] > 0.8).sum()
     partial_count = ((df['cum_reward'] > 0.3) & (df['cum_reward'] <= 0.8)).sum()
@@ -215,11 +246,11 @@ def generate_report(result_dir: Path, output_file: Optional[Path] = None):
     avg_steps = df['n_steps'].mean()
     
     # Difficulty analysis
-    print("\n[4/5] 按难度分析...")
+    print("\n[4/5] Analyzing by difficulty...")
     difficulty_df = analyze_by_difficulty(df, task_map)
     
     # Failure analysis
-    print("\n[5/5] 分析失败任务...")
+    print("\n[5/5] Analyzing failed tasks...")
     failures = analyze_failures(df, task_map)
     
     # Step efficiency
@@ -236,100 +267,100 @@ def generate_report(result_dir: Path, output_file: Optional[Path] = None):
         print(text)
     
     add_line("\n" + "="*80)
-    add_line("实验结果详细报告")
+    add_line("DETAILED EXPERIMENT RESULTS REPORT")
     add_line("="*80)
-    add_line(f"\n📊 总体表现")
+    add_line(f"\n[*] Overall Performance")
     add_line("-" * 80)
-    add_line(f"总任务数:      {total}")
-    add_line(f"成功任务:      {success_count:2d} ({success_rate:5.1f}%)")
-    add_line(f"部分完成:      {partial_count:2d}")
-    add_line(f"失败任务:      {fail_count:2d}")
-    add_line(f"平均得分:      {avg_reward:.3f}")
-    add_line(f"平均步数:      {avg_steps:.1f}")
+    add_line(f"Total Tasks:       {total}")
+    add_line(f"Successful:        {success_count:2d} ({success_rate:5.1f}%)")
+    add_line(f"Partial Success:   {partial_count:2d}")
+    add_line(f"Failed:            {fail_count:2d}")
+    add_line(f"Average Score:     {avg_reward:.3f}")
+    add_line(f"Average Steps:     {avg_steps:.1f}")
     
     # Difficulty breakdown
-    add_line(f"\n📈 按难度分组")
+    add_line(f"\n[*] Breakdown by Difficulty")
     add_line("-" * 80)
-    add_line(f"{'难度':<10} {'总数':<6} {'成功':<6} {'成功率':<10} {'平均分':<10} {'平均步数':<10}")
+    add_line(f"{'Difficulty':<12} {'Total':<8} {'Success':<8} {'Rate':<12} {'Avg Score':<12} {'Avg Steps':<12}")
     add_line("-" * 80)
     
     for _, row in difficulty_df.iterrows():
         add_line(
-            f"{row['difficulty']:<10} "
-            f"{row['total']:<6.0f} "
-            f"{row['success']:<6.0f} "
-            f"{row['success_rate']:<10.1f}% "
-            f"{row['avg_reward']:<10.3f} "
-            f"{row['avg_steps']:<10.1f}"
+            f"{row['difficulty']:<12} "
+            f"{row['total']:<8.0f} "
+            f"{row['success']:<8.0f} "
+            f"{row['success_rate']:<11.1f}% "
+            f"{row['avg_reward']:<12.3f} "
+            f"{row['avg_steps']:<12.1f}"
         )
     
     # Step efficiency for successful tasks
     if len(step_efficiency_df) > 0:
-        add_line(f"\n⚡ 步数效率 (仅成功任务)")
+        add_line(f"\n[*] Step Efficiency (Successful Tasks Only)")
         add_line("-" * 80)
-        add_line(f"{'难度':<10} {'平均':<8} {'最少':<8} {'最多':<8} {'标准差':<8}")
+        add_line(f"{'Difficulty':<12} {'Average':<10} {'Min':<10} {'Max':<10} {'Std Dev':<10}")
         add_line("-" * 80)
         
         for _, row in step_efficiency_df.iterrows():
             add_line(
-                f"{row['difficulty']:<10} "
-                f"{row['avg_steps']:<8.1f} "
-                f"{row['min_steps']:<8.0f} "
-                f"{row['max_steps']:<8.0f} "
-                f"{row['std_steps']:<8.2f}"
+                f"{row['difficulty']:<12} "
+                f"{row['avg_steps']:<10.1f} "
+                f"{row['min_steps']:<10.0f} "
+                f"{row['max_steps']:<10.0f} "
+                f"{row['std_steps']:<10.2f}"
             )
     
     # Failed tasks
     if failures:
-        add_line(f"\n❌ 失败任务详情 ({len(failures)}个)")
+        add_line(f"\n[X] Failed Tasks Details ({len(failures)} tasks)")
         add_line("-" * 80)
         
         for i, failure in enumerate(failures, 1):
-            add_line(f"\n{i}. 任务 {failure['task_id']} ({failure['difficulty']})")
-            add_line(f"   目标: {failure['intent'][:70]}")
-            add_line(f"   得分: {failure['reward']:.3f}")
-            add_line(f"   步数: {failure['steps']}")
+            add_line(f"\n{i}. Task {failure['task_id']} ({failure['difficulty']})")
+            add_line(f"   Goal: {failure['intent'][:70]}")
+            add_line(f"   Score: {failure['reward']:.3f}")
+            add_line(f"   Steps: {failure['steps']}")
             if failure['error'] and failure['error'] != 'No error message':
-                add_line(f"   错误: {failure['error'][:100]}")
+                add_line(f"   Error: {failure['error'][:100]}")
     
     # Recommendations
-    add_line(f"\n💡 改进建议")
+    add_line(f"\n[!] Recommendations")
     add_line("-" * 80)
     
     if success_rate < 50:
-        add_line("⚠️  成功率较低 (<50%), 建议:")
-        add_line("   1. 检查agent提示词是否清晰")
-        add_line("   2. 增加max_steps (当前可能不够)")
-        add_line("   3. 使用ACIDWAVE_REASONING_AGENT")
-        add_line("   4. 检查Acidwave应用是否正常运行")
-        add_line("   5. 查看失败任务的截图和日志")
+        add_line("[!] Low success rate (<50%), suggestions:")
+        add_line("   1. Check if agent prompts are clear and specific")
+        add_line("   2. Increase max_steps (may not be sufficient)")
+        add_line("   3. Use ACIDWAVE_REASONING_AGENT")
+        add_line("   4. Verify Acidwave application is running properly")
+        add_line("   5. Review screenshots and logs of failed tasks")
     elif success_rate < 80:
-        add_line("🔶 成功率中等 (50-80%), 建议:")
-        add_line("   1. 针对失败任务优化提示词")
-        add_line("   2. 调整temperature参数")
-        add_line("   3. 改进任务验证逻辑")
-        add_line("   4. 分析失败模式 (是否集中在某个难度?)")
+        add_line("[*] Moderate success rate (50-80%), suggestions:")
+        add_line("   1. Optimize prompts for failed tasks")
+        add_line("   2. Adjust temperature parameter")
+        add_line("   3. Improve task validation logic")
+        add_line("   4. Analyze failure patterns (concentrated in one difficulty?)")
     else:
-        add_line("✅ 成功率优秀 (>80%)!")
-        add_line("   可以尝试:")
-        add_line("   1. 优化步数效率 (减少冗余操作)")
-        add_line("   2. 增加更具挑战性的任务")
-        add_line("   3. 测试其他模型 (GPT-4o-mini)")
-        add_line("   4. 进行消融实验 (ablation study)")
+        add_line("[OK] Excellent success rate (>80%)!")
+        add_line("   Consider:")
+        add_line("   1. Optimize step efficiency (reduce redundant operations)")
+        add_line("   2. Add more challenging tasks")
+        add_line("   3. Test with other models (GPT-4o-mini)")
+        add_line("   4. Conduct ablation studies")
     
     # Next steps
-    add_line(f"\n🚀 下一步行动")
+    add_line(f"\n[>] Next Steps")
     add_line("-" * 80)
-    add_line(f"1. 查看详细日志:")
+    add_line(f"1. View detailed logs:")
     add_line(f"   cd {result_dir}")
     add_line(f"   ls */experiment.log")
-    add_line(f"\n2. 查看失败任务截图:")
+    add_line(f"\n2. View screenshots of failed tasks:")
     add_line(f"   cd {result_dir}")
     for failure in failures[:3]:  # Show first 3
         task_name = failure['task_name']
         add_line(f"   ls *{task_name}*/screenshot_*.png")
     
-    add_line(f"\n3. 使用AgentXray可视化:")
+    add_line(f"\n3. Visualize with AgentXray:")
     add_line(f"   agentlab-xray")
     
     add_line("\n" + "="*80)
@@ -339,28 +370,28 @@ def generate_report(result_dir: Path, output_file: Optional[Path] = None):
         output_file = Path(output_file)
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write('\n'.join(report_lines))
-        print(f"\n✅ 报告已保存到: {output_file}")
+        print(f"\n[OK] Report saved to: {output_file}")
     else:
         # Save to default location
         default_output = result_dir / "analysis_report.txt"
         with open(default_output, 'w', encoding='utf-8') as f:
             f.write('\n'.join(report_lines))
-        print(f"\n✅ 报告已保存到: {default_output}")
+        print(f"\n[OK] Report saved to: {default_output}")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="分析Acidwave实验结果 (WebArena风格)",
+        description="Analyze Acidwave experiment results (WebArena style)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-示例:
-  # 分析最新结果
+Examples:
+  # Analyze latest results
   python experiments/analyze_results.py results/2025-12-13_18-00-00_full_experiment
   
-  # 指定输出文件
+  # Specify output file
   python experiments/analyze_results.py results/<dir> -o my_report.txt
   
-  # 分析多个实验 (需要手动运行多次)
+  # Analyze multiple experiments (need to run manually multiple times)
   python experiments/analyze_results.py results/experiment1
   python experiments/analyze_results.py results/experiment2
         """
@@ -369,13 +400,13 @@ def main():
     parser.add_argument(
         'result_dir',
         type=str,
-        help='实验结果目录路径'
+        help='Path to experiment results directory'
     )
     
     parser.add_argument(
         '-o', '--output',
         type=str,
-        help='输出报告文件路径 (默认: <result_dir>/analysis_report.txt)'
+        help='Output report file path (default: <result_dir>/analysis_report.txt)'
     )
     
     args = parser.parse_args()
@@ -383,7 +414,7 @@ def main():
     result_dir = Path(args.result_dir)
     
     if not result_dir.exists():
-        print(f"❌ 目录不存在: {result_dir}")
+        print(f"[X] Directory does not exist: {result_dir}")
         sys.exit(1)
     
     generate_report(result_dir, args.output)
@@ -391,6 +422,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 
