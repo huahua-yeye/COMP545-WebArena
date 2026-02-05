@@ -66,104 +66,104 @@ const DEFAULT_ARTIST_IMAGE = "https://images.unsplash.com/photo-1493225457124-a3
 const MOCK_SONGS_FALLBACK = [
   {
     id: 1,
-    title: "HYPERREALITY",
-    artist: "GRIMES",
-    album: "ART ANGELS",
+    title: "STAIRWAY TO HEAVEN",
+    artist: "LED ZEPPELIN",
+    album: "LED ZEPPELIN IV",
     cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop",
-    duration: 243,
+    duration: 482,
     quality: "FLAC",
-    genre: "GLITCH",
-    year: 2015,
+    genre: "ROCK",
+    year: 1971,
     plays: "1.2M",
     rating: 5,
     url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    accent: "border-[#CCFF00]"
+    accent: "border-gray-400"
   },
   {
     id: 2,
-    title: "DIGITAL LOVE",
-    artist: "DAFT PUNK",
-    album: "DISCOVERY",
+    title: "BOHEMIAN RHAPSODY",
+    artist: "QUEEN",
+    album: "A NIGHT AT THE OPERA",
     cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop",
-    duration: 337,
+    duration: 354,
     quality: "MP3 320",
-    genre: "TECHNO",
-    year: 2001,
-    plays: "845K",
+    genre: "ROCK",
+    year: 1975,
+    plays: "2.5M",
     rating: 5,
     url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    accent: "border-[#FF00FF]"
+    accent: "border-gray-400"
   },
   {
     id: 3,
-    title: "NEON GUTS",
-    artist: "LIL UZI VERT",
-    album: "LUV IS RAGE 2",
+    title: "BLOWIN IN THE WIND",
+    artist: "BOB DYLAN",
+    album: "THE FREEWHEELIN",
     cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300&h=300&fit=crop",
-    duration: 216,
+    duration: 168,
     quality: "MP3 192",
-    genre: "VAPOR",
-    year: 2017,
-    plays: "2.1M",
-    rating: 4,
+    genre: "FOLK",
+    year: 1963,
+    plays: "890K",
+    rating: 5,
     url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-    accent: "border-cyan-400"
+    accent: "border-gray-700"
   },
   {
     id: 4,
-    title: "CHROMATICA",
-    artist: "LADY GAGA",
-    album: "CHROMATICA",
+    title: "BIG YELLOW TAXI",
+    artist: "JONI MITCHELL",
+    album: "LADIES OF THE CANYON",
     cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop",
-    duration: 200,
+    duration: 143,
     quality: "FLAC 24bit",
-    genre: "CYBER",
-    year: 2020,
+    genre: "FOLK",
+    year: 1970,
     plays: "560K",
     rating: 4,
     url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-    accent: "border-white"
+    accent: "border-gray-700"
   },
   {
     id: 5,
-    title: "FUTURE NOSTALGIA",
-    artist: "DUA LIPA",
-    album: "FUTURE NOSTALGIA",
+    title: "TAKE FIVE",
+    artist: "DAVE BRUBECK",
+    album: "TIME OUT",
     cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop",
-    duration: 203,
+    duration: 324,
     quality: "MP3 320",
-    genre: "GLITCH",
-    year: 2020,
-    plays: "3.4M",
+    genre: "JAZZ",
+    year: 1959,
+    plays: "1.8M",
     rating: 5,
     url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
     accent: "border-[#CCFF00]"
   },
-  { id: 6, title: "STORIES FROM EMONA I", artist: "MAYA FILIPIČ", album: "BETWEEN TWO WORLDS", duration: 209, quality: "MP3 185", genre: "AMBIENT", year: 2010, plays: "12K", rating: 3, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
-  { id: 7, title: "DANIEL", artist: "NATASHA BELLER", album: "FAIRYTALE", duration: 244, quality: "MP3 192", genre: "ACID", year: 2018, plays: "45K", rating: 4, cover: "https://images.unsplash.com/photo-1514525253440-b39345208668?w=300&h=300&fit=crop", url: "" },
-  { id: 8, title: "GHOST IN THE SHELL", artist: "KENJI KAWAI", album: "OST", duration: 310, quality: "FLAC", genre: "CYBER", year: 1995, plays: "900K", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
-  { id: 9, title: "ACID RAIN", artist: "LORN", album: "THE MAZE TO NOWHERE", duration: 180, quality: "WAV", genre: "GLITCH", year: 2015, plays: "150K", rating: 5, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
-  { id: 10, title: "XENOMORPH", artist: "GESTAFFELSTEIN", album: "ALEPH", duration: 250, quality: "FLAC", genre: "TECHNO", year: 2013, plays: "300K", rating: 4, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
-  { id: 11, title: "CYBERPUNK DREAMS", artist: "SYNTHWAVE COLLECTIVE", album: "NEON NIGHTS", duration: 267, quality: "MP3 320", genre: "TECHNO", year: 2019, plays: "678K", rating: 4, cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop", url: "" },
-  { id: 12, title: "ELECTRIC SHEEP", artist: "BLADE RUNNER", album: "ANDROID DREAMS", duration: 189, quality: "FLAC", genre: "AMBIENT", year: 2017, plays: "234K", rating: 5, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
-  { id: 13, title: "MATRIX RELOADED", artist: "DIGITAL BEINGS", album: "VIRTUAL REALITY", duration: 298, quality: "MP3 192", genre: "GLITCH", year: 2021, plays: "1.5M", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
-  { id: 14, title: "NEON TOKYO", artist: "CYBER PUNK", album: "NIGHT CITY", duration: 223, quality: "WAV", genre: "VAPOR", year: 2018, plays: "890K", rating: 4, cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300&h=300&fit=crop", url: "" },
-  { id: 15, title: "QUANTUM LEAP", artist: "TIME TRAVELER", album: "PARADOX", duration: 312, quality: "FLAC 24bit", genre: "TECHNO", year: 2020, plays: "445K", rating: 5, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
-  { id: 16, title: "HOLOGRAPHIC LOVE", artist: "VIRTUAL ROMANCE", album: "DIGITAL HEARTS", duration: 256, quality: "MP3 320", genre: "CYBER", year: 2019, plays: "723K", rating: 4, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
-  { id: 17, title: "SYNTH WAVE SUNSET", artist: "RETRO FUTURE", album: "80S REVIVAL", duration: 234, quality: "MP3 192", genre: "ACID", year: 2016, plays: "567K", rating: 4, cover: "https://images.unsplash.com/photo-1514525253440-b39345208668?w=300&h=300&fit=crop", url: "" },
-  { id: 18, title: "BINARY SUNSET", artist: "STAR WARS", album: "FORCE AWAKENS", duration: 278, quality: "FLAC", genre: "AMBIENT", year: 2015, plays: "1.8M", rating: 5, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
-  { id: 19, title: "PIXEL PERFECT", artist: "8BIT WARRIORS", album: "CHIPTUNE MADNESS", duration: 198, quality: "WAV", genre: "GLITCH", year: 2014, plays: "234K", rating: 3, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
-  { id: 20, title: "LASER GRID", artist: "TRON LEGACY", album: "GRID WARS", duration: 289, quality: "MP3 320", genre: "TECHNO", year: 2010, plays: "956K", rating: 5, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
-  { id: 21, title: "CHROME HEARTS", artist: "METALLIC DREAMS", album: "STEEL EMOTIONS", duration: 245, quality: "FLAC", genre: "VAPOR", year: 2022, plays: "412K", rating: 4, cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300&h=300&fit=crop", url: "" },
-  { id: 22, title: "DATA STREAM", artist: "NETWORK GHOST", album: "PROTOCOL 7", duration: 267, quality: "MP3 192", genre: "CYBER", year: 2021, plays: "678K", rating: 4, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
-  { id: 23, title: "NEON PULSE", artist: "CITY LIGHTS", album: "URBAN GLOW", duration: 221, quality: "FLAC 24bit", genre: "ACID", year: 2019, plays: "534K", rating: 5, cover: "https://images.unsplash.com/photo-1514525253440-b39345208668?w=300&h=300&fit=crop", url: "" },
-  { id: 24, title: "VIRTUAL VORTEX", artist: "DIMENSION X", album: "PARALLEL UNIVERSE", duration: 301, quality: "WAV", genre: "GLITCH", year: 2020, plays: "789K", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
-  { id: 25, title: "COSMIC RAY", artist: "SPACE ODYSSEY", album: "STELLAR WINDS", duration: 278, quality: "MP3 320", genre: "AMBIENT", year: 2018, plays: "1.2M", rating: 4, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
-  { id: 26, title: "TERMINAL VELOCITY", artist: "SPEED DEMONS", album: "MAXIMUM OVERDRIVE", duration: 234, quality: "FLAC", genre: "TECHNO", year: 2017, plays: "645K", rating: 4, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
-  { id: 27, title: "DIGITAL RAIN", artist: "MATRIX CODE", album: "GREEN CASCADE", duration: 256, quality: "MP3 192", genre: "GLITCH", year: 2016, plays: "892K", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
-  { id: 28, title: "MIDNIGHT RUNNER", artist: "BLADE RUNNER 2049", album: "NEO NOIR", duration: 289, quality: "FLAC 24bit", genre: "VAPOR", year: 2022, plays: "1.1M", rating: 5, cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300&h=300&fit=crop", url: "" },
-  { id: 29, title: "FRACTAL DREAMS", artist: "MATHEMATICAL MINDS", album: "INFINITE PATTERNS", duration: 312, quality: "WAV", genre: "AMBIENT", year: 2021, plays: "456K", rating: 4, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
-  { id: 30, title: "NEON SAMURAI", artist: "TOKYO NIGHTS", album: "CYBER WARRIOR", duration: 243, quality: "MP3 320", genre: "CYBER", year: 2020, plays: "723K", rating: 5, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
+  { id: 6, title: "SO WHAT", artist: "MILES DAVIS", album: "KIND OF BLUE", duration: 562, quality: "FLAC", genre: "JAZZ", year: 1959, plays: "2.1M", rating: 5, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
+  { id: 7, title: "BLUE MONDAY", artist: "NEW ORDER", album: "POWER CORRUPTION", duration: 448, quality: "MP3 320", genre: "ELECTRONIC", year: 1983, plays: "1.5M", rating: 5, cover: "https://images.unsplash.com/photo-1514525253440-b39345208668?w=300&h=300&fit=crop", url: "" },
+  { id: 8, title: "AROUND THE WORLD", artist: "DAFT PUNK", album: "HOMEWORK", duration: 427, quality: "FLAC", genre: "ELECTRONIC", year: 1997, plays: "1.9M", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
+  { id: 9, title: "BILLIE JEAN", artist: "MICHAEL JACKSON", album: "THRILLER", duration: 294, quality: "MP3 320", genre: "POP", year: 1982, plays: "3.4M", rating: 5, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
+  { id: 10, title: "LIKE A PRAYER", artist: "MADONNA", album: "LIKE A PRAYER", duration: 340, quality: "FLAC", genre: "POP", year: 1989, plays: "2.8M", rating: 5, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
+  { id: 11, title: "SMELLS LIKE TEEN SPIRIT", artist: "NIRVANA", album: "NEVERMIND", duration: 301, quality: "MP3 320", genre: "ROCK", year: 1991, plays: "2.6M", rating: 5, cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop", url: "" },
+  { id: 12, title: "WONDERWALL", artist: "OASIS", album: "WHATS THE STORY", duration: 258, quality: "FLAC", genre: "ROCK", year: 1995, plays: "2.3M", rating: 4, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
+  { id: 13, title: "THE SOUND OF SILENCE", artist: "SIMON & GARFUNKEL", album: "SOUNDS OF SILENCE", duration: 199, quality: "MP3 192", genre: "FOLK", year: 1964, plays: "1.7M", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
+  { id: 14, title: "WHAT A WONDERFUL WORLD", artist: "LOUIS ARMSTRONG", album: "SINGLE", duration: 139, quality: "MP3 192", genre: "JAZZ", year: 1967, plays: "2.0M", rating: 5, cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300&h=300&fit=crop", url: "" },
+  { id: 15, title: "SWEET CHILD O MINE", artist: "GUNS N ROSES", album: "APPETITE DESTRUCTION", duration: 356, quality: "FLAC 24bit", genre: "ROCK", year: 1987, plays: "2.9M", rating: 5, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
+  { id: 16, title: "BLUE IN GREEN", artist: "BILL EVANS", album: "KIND OF BLUE", duration: 336, quality: "FLAC", genre: "JAZZ", year: 1959, plays: "890K", rating: 5, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
+  { id: 17, title: "MR TAMBOURINE MAN", artist: "THE BYRDS", album: "MR TAMBOURINE MAN", duration: 154, quality: "MP3 192", genre: "FOLK", year: 1965, plays: "760K", rating: 4, cover: "https://images.unsplash.com/photo-1514525253440-b39345208668?w=300&h=300&fit=crop", url: "" },
+  { id: 18, title: "KRAFTWERK", artist: "AUTOBAHN", album: "AUTOBAHN", duration: 1342, quality: "FLAC", genre: "ELECTRONIC", year: 1974, plays: "1.2M", rating: 5, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
+  { id: 19, title: "DANCING QUEEN", artist: "ABBA", album: "ARRIVAL", duration: 231, quality: "MP3 320", genre: "POP", year: 1976, plays: "3.1M", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
+  { id: 20, title: "EVERY BREATH YOU TAKE", artist: "THE POLICE", album: "SYNCHRONICITY", duration: 253, quality: "MP3 320", genre: "ROCK", year: 1983, plays: "2.4M", rating: 5, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
+  { id: 21, title: "SCARBOROUGH FAIR", artist: "SIMON & GARFUNKEL", album: "PARSLEY SAGE", duration: 201, quality: "FLAC", genre: "FOLK", year: 1966, plays: "980K", rating: 4, cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300&h=300&fit=crop", url: "" },
+  { id: 22, title: "FLY ME TO THE MOON", artist: "FRANK SINATRA", album: "IT MIGHT AS WELL", duration: 149, quality: "MP3 192", genre: "JAZZ", year: 1964, plays: "1.6M", rating: 5, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
+  { id: 23, title: "ROCK AROUND THE CLOCK", artist: "BILL HALEY", album: "SINGLE", duration: 131, quality: "MP3 192", genre: "ROCK", year: 1954, plays: "1.1M", rating: 4, cover: "https://images.unsplash.com/photo-1514525253440-b39345208668?w=300&h=300&fit=crop", url: "" },
+  { id: 24, title: "OXYGENE PART 4", artist: "JEAN MICHEL JARRE", album: "OXYGENE", duration: 239, quality: "FLAC", genre: "ELECTRONIC", year: 1976, plays: "1.3M", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
+  { id: 25, title: "I WANT TO BREAK FREE", artist: "QUEEN", album: "THE WORKS", duration: 199, quality: "MP3 320", genre: "POP", year: 1984, plays: "2.7M", rating: 5, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
+  { id: 26, title: "BLACK HOLE SUN", artist: "SOUNDGARDEN", album: "SUPERUNKNOWN", duration: 318, quality: "FLAC", genre: "ROCK", year: 1994, plays: "1.9M", rating: 5, cover: "https://images.unsplash.com/photo-1621360841012-3f868c6883cd?w=300&h=300&fit=crop", url: "" },
+  { id: 27, title: "BOTH SIDES NOW", artist: "JONI MITCHELL", album: "CLOUDS", duration: 260, quality: "MP3 192", genre: "FOLK", year: 1969, plays: "710K", rating: 5, cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop", url: "" },
+  { id: 28, title: "AUTUMN LEAVES", artist: "BILL EVANS TRIO", album: "PORTRAIT IN JAZZ", duration: 513, quality: "FLAC", genre: "JAZZ", year: 1959, plays: "1.4M", rating: 5, cover: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300&h=300&fit=crop", url: "" },
+  { id: 29, title: "TRANS EUROPE EXPRESS", artist: "KRAFTWERK", album: "TRANS EUROPE", duration: 403, quality: "FLAC", genre: "ELECTRONIC", year: 1977, plays: "1.1M", rating: 4, cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop", url: "" },
+  { id: 30, title: "LIKE A VIRGIN", artist: "MADONNA", album: "LIKE A VIRGIN", duration: 219, quality: "MP3 320", genre: "POP", year: 1984, plays: "2.5M", rating: 5, cover: "https://images.unsplash.com/photo-1619983081563-430f63602796?w=300&h=300&fit=crop", url: "" },
 ];
 
 const MOCK_ARTISTS = [
@@ -413,8 +413,22 @@ export default function App() {
 
   // Use API data when available, otherwise fall back to mock data
   const MOCK_SONGS = React.useMemo(() => {
-    return apiSongs && apiSongs.length > 0 ? apiSongs : MOCK_SONGS_FALLBACK;
+    // If we have an error, still check if we got some data before
+    if (apiSongs && apiSongs.length > 0) {
+      return apiSongs;
+    }
+    // If loading or has error and no data, use fallback
+    return MOCK_SONGS_FALLBACK;
   }, [apiSongs]);
+  
+  // Auto-retry mechanism: if songs failed to load, show error but allow retry
+  React.useEffect(() => {
+    if (songsError && (!apiSongs || apiSongs.length === 0)) {
+      console.warn('Songs API failed, using fallback data. Error:', songsError);
+    } else if (apiSongs && apiSongs.length > 0) {
+      console.log('✅ Loaded', apiSongs.length, 'songs from API');
+    }
+  }, [songsError, apiSongs]);
 
   // Define MOCK_PLAYLIST_TRACKS after MOCK_SONGS is available
   const MOCK_PLAYLIST_TRACKS = MOCK_SONGS;
@@ -969,11 +983,12 @@ export default function App() {
 
   const getFilteredSongs = () => {
     let filtered = MOCK_SONGS;
+    
     if (songsGenreFilter !== 'ALL') {
       // 使用包含匹配：只要 genre 中包含 filter 的关键词就匹配
+      const filterGenre = songsGenreFilter.toUpperCase();
       filtered = filtered.filter(s => {
         const songGenre = (s.genre || '').toUpperCase();
-        const filterGenre = songsGenreFilter.toUpperCase();
         return songGenre.includes(filterGenre);
       });
     }
@@ -1202,8 +1217,28 @@ export default function App() {
              {/* --- SONGS VIEW (TABLE LAYOUT WITH FILTERS) --- */}
              {!songsLoading && !songsError && currentView === 'songs' && (() => {
                const songsData = getFilteredSongs();
+               const usingFallbackData = !apiSongs || apiSongs.length === 0;
                return (
                <div className="animate-in fade-in duration-300">
+
+                  {/* Warning banner when using fallback data */}
+                  {usingFallbackData && (
+                    <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-600/50 rounded-lg flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-yellow-500 text-2xl">⚠</span>
+                        <div>
+                          <p className="text-yellow-500 font-bold text-sm">API_CONNECTION_FAILED</p>
+                          <p className="text-yellow-600 text-xs mt-1">Using fallback data. Real songs (Jazz, Folk, Pop) not available.</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => reloadSongs()}
+                        className="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-black font-bold text-xs rounded transition-colors"
+                      >
+                        RETRY_CONNECTION
+                      </button>
+                    </div>
+                  )}
 
                   {/* Header & Filters */}
                   <div className="mb-8">
@@ -1378,8 +1413,27 @@ export default function App() {
 
              {!songsLoading && !songsError && currentView === 'albums' && (() => {
                const albumsData = getFilteredAlbums();
+               const usingFallbackData = !apiSongs || apiSongs.length === 0;
                return (
                <div className="animate-in fade-in duration-300">
+                  {/* Warning banner when using fallback data */}
+                  {usingFallbackData && (
+                    <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-600/50 rounded-lg flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-yellow-500 text-2xl">⚠</span>
+                        <div>
+                          <p className="text-yellow-500 font-bold text-sm">API_CONNECTION_FAILED</p>
+                          <p className="text-yellow-600 text-xs mt-1">Using fallback data. Real albums not available.</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => reloadSongs()}
+                        className="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-black font-bold text-xs rounded transition-colors"
+                      >
+                        RETRY_CONNECTION
+                      </button>
+                    </div>
+                  )}
                   <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between border-b border-[#333] pb-4 mb-8 gap-4">
                       <h2 className="text-4xl font-black text-white italic tracking-tighter">ALBUM_ARCHIVE</h2>
                       <div className="flex gap-2 bg-[#0a0a0a] p-1 border border-[#333] rounded-sm">

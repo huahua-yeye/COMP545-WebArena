@@ -47,7 +47,7 @@ async function fetchAPI(endpoint, options = {}) {
  * Get all songs
  */
 export async function getAllSongs() {
-  const response = await fetchAPI('/songs');
+  const response = await fetchAPI('/songs?limit=500');
   return response.data || [];
 }
 
