@@ -489,7 +489,7 @@ export default function App() {
   const [playlistPage, setPlaylistPage] = useState(1);
 
   const ALBUMS_PER_PAGE = 10;
-  const SONGS_PER_PAGE = 20;
+  const SONGS_PER_PAGE = 15;
   const ARTISTS_PER_PAGE = 10;
   const PLAYLIST_ITEMS_PER_PAGE = 20;
 
@@ -1079,7 +1079,7 @@ export default function App() {
         
         {/* --- LEFT SIDEBAR --- */}
         <div className={`
-          w-64 bg-black flex flex-col shrink-0 border-r border-[#333]
+          w-64 bg-black flex flex-col shrink-0 border-r border-[#333] relative
           fixed lg:relative inset-y-0 left-0 z-50
           transform transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -1142,7 +1142,7 @@ export default function App() {
              )}
           </div>
           
-          <div className="p-4 border-t border-[#333] bg-[#0a0a0a]">
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#333] bg-[#0a0a0a] z-[101] mb-[80px] lg:mb-[112px]">
              {currentUser ? (
                <div className="space-y-2">
                  <div className="flex items-center gap-3 border border-[#333] p-2 hover:border-[#CCFF00] transition-colors group">
@@ -1186,7 +1186,7 @@ export default function App() {
         </div>
 
         {/* --- MAIN CONTENT --- */}
-        <div className="flex-1 overflow-y-auto bg-[#050505] relative custom-scrollbar pb-32 lg:pb-36">
+        <div className="flex-1 overflow-y-auto bg-[#050505] relative custom-scrollbar pb-20 lg:pb-28">
           
           {/* Top Bar */}
           <div className="sticky top-0 z-20 px-4 sm:px-8 py-5 flex justify-between items-center bg-[#050505]/90 backdrop-blur-md border-b border-[#333]">
@@ -2038,9 +2038,6 @@ export default function App() {
           <LicensesPage onClose={() => setShowLicensesPage(false)} />
         </div>
       )}
-
-      {/* Footer with Attribution */}
-      <Footer onLicensesClick={() => setShowLicensesPage(true)} />
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
