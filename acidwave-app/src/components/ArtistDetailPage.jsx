@@ -10,10 +10,9 @@ import {
   ExternalLink,
   Music,
   Disc3,
-  Users,
-  Star
+  Users
 } from 'lucide-react';
-import { getArtistById } from '../services/api.js';
+import { getArtistById, getAlbumTracks, transformSongData } from '../services/api.js';
 
 /**
  * ArtistDetailPage - artist detail overlay
@@ -26,11 +25,14 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
   const [isLiked, setIsLiked] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState('albums'); // 'albums' or 'songs'
+  const [albumCoverOverrides, setAlbumCoverOverrides] = useState({});
   const requestRef = useRef(0);
+  const coverFetchRef = useRef(new Set());
 
   // Normalize artist data from different sources
   const normalizeArtist = (data, fallback = null) => {
     if (!data) return fallback;
+    const normalizedTopSongs = (data.top_songs || []).map((song) => transformSongData(song));
     return {
       id: data.id,
       name: data.name,
@@ -47,7 +49,7 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
       songCount: data.songCount || data.song_count || data.top_songs?.length || 0,
       albumCount: data.albumCount || data.albums?.length || 0,
       albums: data.albums || [],
-      top_songs: data.top_songs || []
+      top_songs: normalizedTopSongs
     };
   };
 
@@ -157,6 +159,26 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const loadAlbumCover = async (album) => {
+    if (!album?.id || coverFetchRef.current.has(album.id)) return;
+    coverFetchRef.current.add(album.id);
+
+    try {
+      const tracks = await getAlbumTracks(album.id);
+      const first = tracks?.[0];
+      if (!first) return;
+      const cover =
+        first.cover_url ||
+        first.album?.cover_url ||
+        transformSongData(first).cover;
+      if (cover) {
+        setAlbumCoverOverrides(prev => ({ ...prev, [album.id]: cover }));
+      }
+    } catch (err) {
+      console.error('Failed to load album cover:', err);
+    }
   };
 
   if (loading) {
@@ -403,17 +425,30 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
                 {albums.map((album) => (
                   <div
                     key={album.id}
-                    onClick={() => onAlbumClick?.(album)}
+                    onClick={() => onAlbumClick?.({
+                      ...album,
+                      artist: artist?.name || artist?.artist
+                    })}
                     className="group cursor-pointer"
                   >
                     <div className="relative mb-3 overflow-hidden rounded-lg border border-[#333] group-hover:border-[#CCFF00] transition-all">
                       <img
-                        src={album.cover_url || 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop'}
+                        src={
+                          albumCoverOverrides[album.id] ||
+                          album.cover_url ||
+                          artist?.image ||
+                          artist?.avatar_url ||
+                          'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop'
+                        }
                         alt={album.title}
                         className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
                           console.log('Image failed to load:', album.cover_url);
-                          e.target.src = 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop';
+                          loadAlbumCover(album);
+                          e.target.src =
+                            artist?.image ||
+                            artist?.avatar_url ||
+                            'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=300&h=300&fit=crop';
                         }}
                       />
                       {/* Play overlay on hover */}
@@ -443,7 +478,7 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
                   <div
                     key={song.id}
                     onClick={() => onPlaySong?.(song)}
-                    className="grid grid-cols-[40px_1fr_200px_100px_80px] gap-4 px-4 py-3 hover:bg-[#111] rounded group cursor-pointer transition-colors items-center"
+                    className="grid grid-cols-[40px_1fr_200px_100px] gap-4 px-4 py-3 hover:bg-[#111] rounded group cursor-pointer transition-colors items-center"
                   >
                     {/* Number */}
                     <div className="text-gray-400 text-sm font-mono">
@@ -472,16 +507,6 @@ export function ArtistDetailPage({ artistId, initialArtist, onClose, onPlaySong,
                       {formatTime(song.duration || 0)}
                     </div>
 
-                    {/* Rating */}
-                    <div className="flex items-center gap-0.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          size={12}
-                          className={star <= (song.rating || 4) ? 'text-[#CCFF00] fill-current' : 'text-gray-600'}
-                        />
-                      ))}
-                    </div>
                   </div>
                 ))
               ) : (

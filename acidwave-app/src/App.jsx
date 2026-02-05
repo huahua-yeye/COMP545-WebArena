@@ -48,7 +48,7 @@ import {
 } from 'lucide-react';
 import AuthPage from './AuthPage';
 import { useSongs, usePlaylists } from './hooks/useAPI';
-import { createPlaylist as apiCreatePlaylist, deletePlaylist as apiDeletePlaylist, transformPlaylistData, getAllArtists, addSongToPlaylist, removeSongFromPlaylist, getUserFavorites, addToFavorites, removeFromFavorites, getPlaylistById, transformSongData } from './services/api';
+import { createPlaylist as apiCreatePlaylist, deletePlaylist as apiDeletePlaylist, transformPlaylistData, getAllArtists, addSongToPlaylist, removeSongFromPlaylist, getUserFavorites, addToFavorites, removeFromFavorites, getPlaylistById, transformSongData, getAlbumTracks } from './services/api';
 import LoadingSpinner, { ErrorDisplay } from './components/LoadingSpinner';
 import { SongAttributionButton } from './components/SongAttributionButton';
 import { AlbumDetailPage } from './components/AlbumDetailPage';
@@ -443,6 +443,7 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [activeLyricIndex, setActiveLyricIndex] = useState(0);
+  const [audioError, setAudioError] = useState(null);
 
   // Playlist State
   const [playlists, setPlaylists] = useState(apiPlaylists && apiPlaylists.length > 0 ? apiPlaylists.map(p => p.name) : INITIAL_PLAYLISTS);
@@ -645,7 +646,11 @@ export default function App() {
     audioRef.current.currentTime = time;
     setProgress(time);
   };
-  const playSong = (song) => { setCurrentSong(song); setIsPlaying(true); };
+  const playSong = (song) => { 
+    setCurrentSong(song); 
+    setIsPlaying(true); 
+    setAudioError(null); // 清除之前的错误
+  };
   const togglePlay = () => setIsPlaying(!isPlaying);
   const skipNext = () => {
     if (!currentSong) return;
@@ -820,28 +825,72 @@ export default function App() {
   };
 
   // Handle opening album detail page
-  const handleOpenAlbumDetail = (song) => {
+  const handleOpenAlbumDetail = async (item) => {
+    if (!item) return;
+
+    const isSong = !!item.album;
+    if (!isSong) {
+      const baseAlbum = {
+        id: item.id,
+        title: item.title,
+        artist: item.artist,
+        cover_url: item.cover_url,
+        release_date: item.release_date,
+        genre: item.genre,
+        total_tracks: item.total_tracks || 0,
+        duration: item.duration || 0,
+        tracks: [],
+        license: item.license,
+        attribution: item.attribution,
+        source_url: item.source_url,
+        requires_attribution: item.requires_attribution
+      };
+
+      setSelectedAlbum(baseAlbum);
+      setShowAlbumDetail(true);
+
+      if (!item.id) return;
+      try {
+        const apiTracks = await getAlbumTracks(item.id);
+        const tracks = apiTracks.map((track, index) => ({
+          ...transformSongData(track),
+          track_number: track.track_number || index + 1
+        }));
+        const duration = tracks.reduce((sum, t) => sum + (t.duration || 0), 0);
+
+        setSelectedAlbum(prev => prev ? {
+          ...prev,
+          tracks,
+          total_tracks: tracks.length,
+          duration
+        } : prev);
+      } catch (error) {
+        console.error('Failed to load album tracks:', error);
+      }
+      return;
+    }
+
     // Group songs by album to create album object
-    const albumSongs = MOCK_SONGS.filter(s => s.album === song.album && s.artist === song.artist);
+    const albumSongs = MOCK_SONGS.filter(s => s.album === item.album && s.artist === item.artist);
 
     const albumObj = {
-      id: song.albumData?.id || `album-${song.album}`,
-      title: song.album,
-      artist: song.artistData || song.artist,
-      cover_url: song.cover,
-      release_date: song.year ? `${song.year}-01-01` : null,
-      genre: song.genre,
+      id: item.albumData?.id || `album-${item.album}`,
+      title: item.album,
+      artist: item.artistData || item.artist,
+      cover_url: item.cover,
+      release_date: item.year ? `${item.year}-01-01` : null,
+      genre: item.genre,
       total_tracks: albumSongs.length,
       duration: albumSongs.reduce((sum, s) => sum + (s.duration || 0), 0),
       tracks: albumSongs.map((s, index) => ({
         ...s,
         track_number: s.track_number || index + 1
       })),
-      license: song.license,
-      attribution: song.attribution,
-      source_url: song.source_url,
-      requires_attribution: song.requires_attribution,
-      rating: song.rating || 4
+      license: item.license,
+      attribution: item.attribution,
+      source_url: item.source_url,
+      requires_attribution: item.requires_attribution,
+      rating: item.rating || 4
     };
 
     setSelectedAlbum(albumObj);
@@ -921,7 +970,12 @@ export default function App() {
   const getFilteredSongs = () => {
     let filtered = MOCK_SONGS;
     if (songsGenreFilter !== 'ALL') {
-      filtered = filtered.filter(s => s.genre === songsGenreFilter);
+      // 使用包含匹配：只要 genre 中包含 filter 的关键词就匹配
+      filtered = filtered.filter(s => {
+        const songGenre = (s.genre || '').toUpperCase();
+        const filterGenre = songsGenreFilter.toUpperCase();
+        return songGenre.includes(filterGenre);
+      });
     }
     if (songsSearchQuery) {
       const q = songsSearchQuery.toLowerCase();
@@ -1710,6 +1764,29 @@ export default function App() {
         </div>
       </div>
 
+       {/* Audio Error Toast */}
+       {audioError && (
+         <div className="fixed top-24 right-8 z-[9999] bg-red-500/90 border border-red-600 px-6 py-4 max-w-md shadow-2xl animate-in slide-in-from-top-4 duration-300">
+           <div className="flex items-start gap-3">
+             <X size={16} className="text-white mt-0.5 flex-shrink-0" />
+             <div>
+               <div className="text-white font-bold text-sm mb-1 tracking-wider">PLAYBACK_ERROR</div>
+               <div className="text-red-100 text-xs font-mono">{audioError}</div>
+               <div className="text-red-200 text-[10px] mt-2 font-mono">
+                 NOTE: Audio URL may not be a direct media file. Check data source or contact administrator.
+               </div>
+             </div>
+             <button 
+               onClick={() => setAudioError(null)}
+               className="ml-auto text-white hover:text-red-200 transition-colors flex-shrink-0"
+               aria-label="Close error"
+             >
+               <X size={16} />
+             </button>
+           </div>
+         </div>
+       )}
+
        {/* --- BOTTOM PLAYER (CHROME BAR) --- */}
        {currentSong && (
        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-b from-[#111] to-black border-t border-[#333] z-[100]">
@@ -1822,7 +1899,28 @@ export default function App() {
        )}
 
       {currentSong && (
-        <audio ref={audioRef} src={currentSong.url} onTimeUpdate={handleTimeUpdate} onEnded={skipNext} />
+        <audio 
+          ref={audioRef} 
+          src={currentSong.playback_url || currentSong.url} 
+          onTimeUpdate={handleTimeUpdate} 
+          onEnded={skipNext}
+          onError={(e) => {
+            console.error('Audio playback error:', e);
+            console.error('Failed URL:', currentSong.playback_url || currentSong.url);
+            console.error('Song data:', currentSong);
+            setAudioError(`PLAYBACK_FAILED: Unable to load audio file. URL may not be a direct audio link.`);
+            setIsPlaying(false);
+            // Try fallback URL
+            if (audioRef.current && currentSong.download_url && audioRef.current.src !== currentSong.download_url) {
+              console.log('Trying download_url:', currentSong.download_url);
+              audioRef.current.src = currentSong.download_url;
+              audioRef.current.load();
+            }
+          }}
+          onLoadStart={() => console.log('Loading audio:', currentSong.playback_url || currentSong.url)}
+          onCanPlay={() => console.log('Audio ready to play')}
+          crossOrigin="anonymous"
+        />
       )}
 
       {/* Auth Page Modal */}

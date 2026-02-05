@@ -11,6 +11,7 @@ import songsRouter from './routes/songs.js';
 import playlistsRouter from './routes/playlists.js';
 import favoritesRouter from './routes/favorites.js';
 import healthRouter from './routes/health.js';
+import streamRouter from './routes/stream.js';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use('/api/albums', albumsRouter);
 app.use('/api/songs', songsRouter);
 app.use('/api/playlists', playlistsRouter);
 app.use('/api/favorites', favoritesRouter);
+app.use('/api/stream', streamRouter);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -42,7 +44,8 @@ app.get('/', (req, res) => {
       albums: '/api/albums',
       songs: '/api/songs',
       playlists: '/api/playlists',
-      favorites: '/api/favorites'
+      favorites: '/api/favorites',
+      stream: '/api/stream?url='
     }
   });
 });

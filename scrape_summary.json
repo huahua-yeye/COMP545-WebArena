@@ -1,0 +1,943 @@
+{
+  "summary": {
+    "total_tracks": 200,
+    "total_artists": 41,
+    "total_albums": 64,
+    "scrape_time": "2026-02-05 02:33:01"
+  },
+  "artists": [
+    {
+      "name": "Breuss Arrizabalaga Quintet",
+      "genres": [
+        "Jazz",
+        "Free-Jazz"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Pierce Murphy",
+      "genres": [
+        "Jazz",
+        "Jazz: Vocal"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "William Ross Chernoff's Nomads",
+      "genres": [
+        "Jazz"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Beat Mekanik",
+      "genres": [
+        "Jazz"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Aki Streeter & Strange Sauces",
+      "genres": [
+        "Jazz"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Kevin MacLeod",
+      "genres": [
+        "Jazz"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Jesse Spillane",
+      "genres": [
+        "Jazz"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Vic Dillahay",
+      "genres": [
+        "Jazz",
+        "Free-Jazz",
+        "Ambient"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "1st Contact",
+      "genres": [
+        "Jazz",
+        "Jazz: Vocal",
+        "Ambient"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Lemon Knife",
+      "genres": [
+        "Rock",
+        "Psych-Rock",
+        "Space-Rock"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Jon Shuemaker",
+      "genres": [
+        "Rock",
+        "Loud-Rock",
+        "Indie-Rock"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "VADE",
+      "genres": [
+        "Rock",
+        "Psych-Rock",
+        "Indie-Rock"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "human gazpacho",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Amarent",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Jangwa",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Brylie Christopher",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Tea K Pea",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Timo Versemann",
+      "genres": [
+        "Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Anisotropic Psyche",
+      "genres": [
+        "Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Marihiko Hara",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic"
+      ],
+      "has_bio": false,
+      "has_avatar": false,
+      "has_social": true
+    },
+    {
+      "name": "Itsensäsyöjät",
+      "genres": [
+        "Electronic",
+        "Minimal Electronic"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Ieva",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic"
+      ],
+      "has_bio": false,
+      "has_avatar": false,
+      "has_social": true
+    },
+    {
+      "name": "Justin Tuijl",
+      "genres": [
+        "Electronic",
+        "Ambient Electronic"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "HoliznaCC0",
+      "genres": [
+        "Pop",
+        "Power-Pop",
+        "Synth Pop"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Zane Little",
+      "genres": [
+        "Pop",
+        "Experimental Pop",
+        "Synth Pop"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Adeline Yeo (HP)",
+      "genres": [
+        "Pop",
+        "Experimental Pop",
+        "C-pop"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Andrey Petrov",
+      "genres": [
+        "Pop",
+        "Experimental Pop",
+        "Power-Pop"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "SUPERARE",
+      "genres": [
+        "Pop",
+        "Synth Pop"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Tadz",
+      "genres": [
+        "Pop",
+        "Power-Pop"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Origami Repetika",
+      "genres": [
+        "Pop",
+        "Synth Pop"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Kate Kody",
+      "genres": [
+        "Pop",
+        "Synth Pop"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "A. Cooper",
+      "genres": [
+        "Pop"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Greg Atkinson",
+      "genres": [
+        "Folk",
+        "British Folk"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Austin Moffa",
+      "genres": [
+        "Folk",
+        "Psych-Folk"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Howie Mitchell & Charlotte Williams",
+      "genres": [
+        "Folk"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Katy Kirby",
+      "genres": [
+        "Folk"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Josh Woodward",
+      "genres": [
+        "Folk"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Ben von Wildenhaus",
+      "genres": [
+        "Folk"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Kelly Latimore",
+      "genres": [
+        "Folk"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "Howie Mitchell",
+      "genres": [
+        "Folk"
+      ],
+      "has_bio": false,
+      "has_avatar": true,
+      "has_social": true
+    },
+    {
+      "name": "The Midnight Sons",
+      "genres": [
+        "Folk"
+      ],
+      "has_bio": true,
+      "has_avatar": true,
+      "has_social": true
+    }
+  ],
+  "albums": [
+    {
+      "title": "Nfamoudou-Boudougou",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "tracks": 10,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Fellow Traveler",
+      "artist": "Pierce Murphy",
+      "tracks": 5,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Aim to Stay",
+      "artist": "William Ross Chernoff's Nomads",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Beat Mekanik",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Aki Streeter & Strange Sauces",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Jazz Sampler",
+      "artist": "Kevin MacLeod",
+      "tracks": 16,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "The Meeting Place",
+      "artist": "Jesse Spillane",
+      "tracks": 12,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "We Were",
+      "artist": "Vic Dillahay",
+      "tracks": 14,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Pierce Murphy",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "1st Contact",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Songs About Water and Death",
+      "artist": "Lemon Knife",
+      "tracks": 13,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Song Bird (Part 2)",
+      "artist": "Jon Shuemaker",
+      "tracks": 16,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Song Bird (Part 1)",
+      "artist": "Jon Shuemaker",
+      "tracks": 16,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "VADE",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Survival Mode",
+      "artist": "Jon Shuemaker",
+      "tracks": 1,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Save Our Ship",
+      "artist": "Jon Shuemaker",
+      "tracks": 2,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Not Alone",
+      "artist": "Jon Shuemaker",
+      "tracks": 1,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "From the Highest Vantage",
+      "artist": "Jon Shuemaker",
+      "tracks": 1,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Overcome",
+      "artist": "Jon Shuemaker",
+      "tracks": 3,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Arcane Resonance",
+      "artist": "human gazpacho",
+      "tracks": 16,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Free Atmospheric Music",
+      "artist": "Amarent",
+      "tracks": 4,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Cycles Trax",
+      "artist": "Jangwa",
+      "tracks": 8,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Cycles Trax vol. VII - Loosening Bounds",
+      "artist": "Jangwa",
+      "tracks": 5,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Free Electronic Music",
+      "artist": "Amarent",
+      "tracks": 10,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Neither and Both",
+      "artist": "Brylie Christopher",
+      "tracks": 7,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Jangwa",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Tea K Pea",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Peace & Passion",
+      "artist": "Timo Versemann",
+      "tracks": 6,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Neural Awakening",
+      "artist": "Anisotropic Psyche",
+      "tracks": 5,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Summer Tour Remix v2 [V/A]",
+      "artist": "Marihiko Hara",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Elektrique",
+      "artist": "Itsensäsyöjät",
+      "tracks": 7,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Electronic Church Instrumentals",
+      "artist": "Timo Versemann",
+      "tracks": 4,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Summer Tour Remix v2 [V/A]",
+      "artist": "Ieva",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Magic Tortoise",
+      "artist": "Justin Tuijl",
+      "tracks": 7,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Power Pop!",
+      "artist": "HoliznaCC0",
+      "tracks": 14,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "♥",
+      "artist": "Zane Little",
+      "tracks": 6,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Adeline Yeo (HP)",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Andrey Petrov",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "IV",
+      "artist": "SUPERARE",
+      "tracks": 5,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "II",
+      "artist": "SUPERARE",
+      "tracks": 16,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "The Best Things In Life Are FREE: PASSION, HE₳Я₸, LOVE (Pt.2)",
+      "artist": "Tadz",
+      "tracks": 15,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "The Happy Puppy Collection",
+      "artist": "Origami Repetika",
+      "tracks": 12,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Pop Sensation",
+      "artist": "SUPERARE",
+      "tracks": 8,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "I",
+      "artist": "SUPERARE",
+      "tracks": 3,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Sunflower Orange",
+      "artist": "Kate Kody",
+      "tracks": 11,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "The Anthony Cooper ABM VI",
+      "artist": "A. Cooper",
+      "tracks": 10,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "The Quest For Love",
+      "artist": "Tadz",
+      "tracks": 2,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "TV Kills CreaTVity",
+      "artist": "Tadz",
+      "tracks": 6,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "IX",
+      "artist": "SUPERARE",
+      "tracks": 7,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "V",
+      "artist": "SUPERARE",
+      "tracks": 6,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "III",
+      "artist": "SUPERARE",
+      "tracks": 52,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Unnamed album",
+      "artist": "Greg Atkinson",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    },
+    {
+      "title": "A Speck of Dust in Space",
+      "artist": "Austin Moffa",
+      "tracks": 15,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "11-14-'58",
+      "artist": "Howie Mitchell & Charlotte Williams",
+      "tracks": 7,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "3",
+      "artist": "Katy Kirby",
+      "tracks": 3,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Dirty Wings",
+      "artist": "Josh Woodward",
+      "tracks": 12,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Dirty Wings (Instrumentals)",
+      "artist": "Josh Woodward",
+      "tracks": 12,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Instrumental Quaalude, vol. 1",
+      "artist": "Ben von Wildenhaus",
+      "tracks": 8,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Trails",
+      "artist": "Kelly Latimore",
+      "tracks": 12,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Early 70s",
+      "artist": "Howie Mitchell",
+      "tracks": 8,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Unaccountable odes",
+      "artist": "Kelly Latimore",
+      "tracks": 12,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Prelude",
+      "artist": "Kelly Latimore",
+      "tracks": 7,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "Decartes",
+      "artist": "The Midnight Sons",
+      "tracks": 6,
+      "has_cover": true,
+      "has_release_date": true
+    },
+    {
+      "title": "11-14-'58",
+      "artist": "Howie Mitchell",
+      "tracks": 0,
+      "has_cover": false,
+      "has_release_date": false
+    }
+  ],
+  "sample_tracks": [
+    {
+      "title": "Cherenzig",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 624,
+      "has_download_url": true
+    },
+    {
+      "title": "Pensamiento",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 94,
+      "has_download_url": true
+    },
+    {
+      "title": "The Dark Side Of Frigiliana",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 150,
+      "has_download_url": true
+    },
+    {
+      "title": "They Dwell On Other Planes",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 404,
+      "has_download_url": true
+    },
+    {
+      "title": "Ghosts",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 84,
+      "has_download_url": true
+    },
+    {
+      "title": "Mount Fuji",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 312,
+      "has_download_url": true
+    },
+    {
+      "title": "Tiempo Espacial",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 360,
+      "has_download_url": true
+    },
+    {
+      "title": "Persimmon",
+      "artist": "Pierce Murphy",
+      "album": "Fellow Traveler",
+      "duration": 167,
+      "has_download_url": true
+    },
+    {
+      "title": "Tsurugi",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 293,
+      "has_download_url": true
+    },
+    {
+      "title": "Zubaida",
+      "artist": "Breuss Arrizabalaga Quintet",
+      "album": "Nfamoudou-Boudougou",
+      "duration": 362,
+      "has_download_url": true
+    }
+  ]
+}

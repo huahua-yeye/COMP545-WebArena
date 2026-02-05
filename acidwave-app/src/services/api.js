@@ -292,6 +292,11 @@ export function transformSongData(backendSong) {
     ? new Date(backendSong.release_date).getFullYear()
     : backendSong.year || new Date().getFullYear();
 
+  const rawPlaybackUrl = backendSong.playback_url || backendSong.url;
+  const playbackUrl = rawPlaybackUrl && rawPlaybackUrl.startsWith('http')
+    ? `${API_BASE_URL}/stream?url=${encodeURIComponent(rawPlaybackUrl)}`
+    : rawPlaybackUrl;
+
   return {
     id: backendSong.id,
     title: backendSong.title.toUpperCase(),
@@ -302,6 +307,7 @@ export function transformSongData(backendSong) {
     cover: coverUrl,
     duration: backendSong.duration || 0,
     url: backendSong.url,
+    playback_url: playbackUrl,
     genre: backendSong.genre?.toUpperCase() || 'UNKNOWN',
     year: year,
     plays: backendSong.plays || 0,
@@ -315,6 +321,7 @@ export function transformSongData(backendSong) {
     requires_attribution: backendSong.requires_attribution,
     attribution: backendSong.attribution,
     license: backendSong.license,
+    source_url: backendSong.source_url,
   };
 }
 
